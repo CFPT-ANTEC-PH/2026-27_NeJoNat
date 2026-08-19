@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cpkgaucmhun2c"]
+
+[ext_resource type="Script" uid="uid://dyeoug7fi1q4b" path="res://Scripts/Constructor.cs" id="1_kgawm"]
+
+[node name="Constructor" type="Node3D" unique_id=1492425773]
+script = ExtResource("1_kgawm")
