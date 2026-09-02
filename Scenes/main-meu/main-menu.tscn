@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://checsya4dg4kq"]
+
+[ext_resource type="Script" uid="uid://cl8tif2shw6di" path="res://main-meu/MainMenu.cs" id="1_yhhve"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2343b"]
+bg_color = Color(0.28627452, 0.28627452, 0.28627452, 0.6431373)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vrlf"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5gy4"]
+bg_color = Color(0.5211406, 0.52114064, 0.52114046, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qbdty"]
+bg_color = Color(0.24477622, 0.24477646, 0.24477628, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
+shadow_size = 5
+
+[node name="MainMenu" type="Control" unique_id=993311309]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yhhve")
+
+[node name="Panel" type="Panel" parent="." unique_id=1899399554]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2343b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=835291835]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -122.0
+offset_right = 125.0
+offset_bottom = 122.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+
+[node name="NewRobot" type="Button" parent="VBoxContainer" unique_id=1505598721]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_8vrlf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_v5gy4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_qbdty")
+text = "Nouveau robot"
+
+[node name="LoadRobot" type="Button" parent="VBoxContainer" unique_id=1005115312]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_8vrlf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_v5gy4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_qbdty")
+text = "Charger un robot"
+
+[node name="Quit" type="Button" parent="VBoxContainer" unique_id=1493659297]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_8vrlf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_v5gy4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_qbdty")
+text = "Quiter"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=2065304907]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -178.0
+offset_top = 54.0
+offset_right = 182.0
+offset_bottom = 144.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 45
+text = "Robot Maker"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/NewRobot" to="." method="On_newRobot_pressed"]
+[connection signal="pressed" from="VBoxContainer/LoadRobot" to="." method="On_loadRobot_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="On_quit_pressed"]
