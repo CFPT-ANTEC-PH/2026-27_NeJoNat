@@ -2,7 +2,7 @@ using Godot;
 
 namespace RobotMaker.Scripts;
 
-public partial class Robot : VehicleBody3D
+public partial class TestRobot : VehicleBody3D
 {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -12,6 +12,8 @@ public partial class Robot : VehicleBody3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
-		EngineForce = Input.GetAxis("ui_up", "ui_down") * 300;
+		Steering = (float)Mathf.MoveToward(Steering, Input.GetAxis("right", "left") * 0.9f, delta * 10);
+        EngineForce = Input.GetAxis("down", "up") * 300;
+		
 	}
 }

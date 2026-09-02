@@ -1,53 +1,53 @@
 [gd_scene format=3 uid="uid://bphapsunm58vx"]
 
-[ext_resource type="Script" uid="uid://cexvcjnjxl36h" path="res://Scripts/Robot.cs" id="1_lp65t"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_m13ap"]
-size = Vector3(1, 1, 3.1756592)
+[ext_resource type="Script" uid="uid://cexvcjnjxl36h" path="res://Scripts/TestRobot.cs" id="1_lp65t"]
+[ext_resource type="PackedScene" uid="uid://ccke6k6j68r4r" path="res://Assets/Models/wagon_wheel.glb" id="2_2vrla"]
+[ext_resource type="PackedScene" uid="uid://bilw2b77d4dnd" path="res://Assets/Models/robot.fbx" id="2_6phhs"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m13ap"]
 size = Vector3(1, 1, 3.180664)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_m13ap"]
-top_radius = 0.9453125
-bottom_radius = 0.9453125
-height = 0.40734863
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lp65t"]
-albedo_color = Color(0.078431375, 1, 1, 1)
-
-[node name="Robot" type="VehicleBody3D" unique_id=183795887]
+[node name="TestRobot" type="VehicleBody3D" unique_id=183795887]
 script = ExtResource("1_lp65t")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=473683112]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0878296)
-mesh = SubResource("BoxMesh_m13ap")
+[node name="robot" parent="." unique_id=378658316 instance=ExtResource("2_6phhs")]
+transform = Transform3D(-2.1874226e-07, 0, -3, 0, 3, 0, 5.00424, 0, -1.3113416e-07, 0.014430881, 0.54038095, 1.1177206)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1322829599]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.090332)
 shape = SubResource("BoxShape3D_m13ap")
 
 [node name="VehicleWheel3D" type="VehicleWheel3D" parent="." unique_id=1751638991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7469065, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96587276, 0, 0)
 use_as_traction = true
 wheel_radius = 1.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleWheel3D" unique_id=1015382294]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.013039112, 3.9450704e-08, 0)
-mesh = SubResource("CylinderMesh_m13ap")
-surface_material_override/0 = SubResource("StandardMaterial3D_lp65t")
+[node name="Sketchfab_Scene" parent="VehicleWheel3D" unique_id=1352716808 instance=ExtResource("2_2vrla")]
+transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
 
 [node name="VehicleWheel3D4" type="VehicleWheel3D" parent="." unique_id=1749568864]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7469065, 0, 2.1512825)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9566822, 0, 2.1512825)
 use_as_steering = true
 wheel_radius = 1.0
+
+[node name="Sketchfab_Scene" parent="VehicleWheel3D4" unique_id=1683025289 instance=ExtResource("2_2vrla")]
+transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
 
 [node name="VehicleWheel3D2" type="VehicleWheel3D" parent="." unique_id=203958823]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0278937, 0, 0)
 use_as_traction = true
 wheel_radius = 1.0
 
+[node name="Sketchfab_Scene" parent="VehicleWheel3D2" unique_id=1137338643 instance=ExtResource("2_2vrla")]
+transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
+
 [node name="VehicleWheel3D3" type="VehicleWheel3D" parent="." unique_id=634589305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0278937, 0, 2.091487)
 use_as_steering = true
 wheel_radius = 1.0
+
+[node name="Sketchfab_Scene" parent="VehicleWheel3D3" unique_id=289787123 instance=ExtResource("2_2vrla")]
+transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=359795755]
+transform = Transform3D(-0.9999756, -0.0069812513, -8.694733e-08, -0.006947941, 0.99520314, 0.0975829, -0.00068116415, 0.09758052, -0.9952274, 0, 2.1608577, -3.7243185)

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bcca1ebjdnev1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1vivr"]
+
+[node name="CubePhysic" type="Node3D" unique_id=208351318]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=290426246]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="RigidBody3D" unique_id=430293411]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1795865284]
+shape = SubResource("BoxShape3D_1vivr")
