@@ -1,27 +1,131 @@
 [gd_scene format=3 uid="uid://uvq4gwk23821"]
 
 [ext_resource type="Script" uid="uid://dxc76u12wvbbb" path="res://Scripts/ConstructorUI.cs" id="1_30pre"]
+[ext_resource type="Texture2D" uid="uid://dav8xjdcxvbv4" path="res://Assets/icon.svg" id="2_sr7u7"]
 
 [node name="ConstructorUI" type="CanvasLayer" unique_id=30045958]
 script = ExtResource("1_30pre")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1899939270]
-offset_right = 112.0
-offset_bottom = 309.0
+offset_right = 363.0
+offset_bottom = 645.0
 
-[node name="Motor" type="Button" parent="VBoxContainer" unique_id=865889387]
+[node name="Body" type="VBoxContainer" parent="VBoxContainer" unique_id=1432128630]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Body" unique_id=319463585]
+layout_mode = 2
+text = "Body"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body" unique_id=234181769]
+layout_mode = 2
+alignment = 1
+
+[node name="Previous" type="Button" parent="VBoxContainer/Body/HBoxContainer" unique_id=1844964498]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Previous"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Body/HBoxContainer" unique_id=718564982]
+layout_mode = 2
+texture = ExtResource("2_sr7u7")
+
+[node name="Next" type="Button" parent="VBoxContainer/Body/HBoxContainer" unique_id=523668349]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
+
+[node name="Spacer" type="Control" parent="VBoxContainer" unique_id=1426991417]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="Wheels" type="VBoxContainer" parent="VBoxContainer" unique_id=994793319]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Wheels" unique_id=651597488]
+layout_mode = 2
+text = "Wheels"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Wheels" unique_id=1700405553]
+layout_mode = 2
+alignment = 1
+
+[node name="Previous" type="Button" parent="VBoxContainer/Wheels/HBoxContainer" unique_id=1903801943]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Previous"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Wheels/HBoxContainer" unique_id=367480680]
+layout_mode = 2
+texture = ExtResource("2_sr7u7")
+
+[node name="Next" type="Button" parent="VBoxContainer/Wheels/HBoxContainer" unique_id=2084902958]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
+
+[node name="Spacer2" type="Control" parent="VBoxContainer" unique_id=277509108]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Motor" type="VBoxContainer" parent="VBoxContainer" unique_id=2013491077]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Motor" unique_id=174748548]
+layout_mode = 2
 text = "Motor"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Wheel" type="Button" parent="VBoxContainer" unique_id=684163746]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Motor" unique_id=888558849]
+layout_mode = 2
+alignment = 1
+
+[node name="Previous" type="Button" parent="VBoxContainer/Motor/HBoxContainer" unique_id=1944986608]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Previous"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Motor/HBoxContainer" unique_id=156012306]
+layout_mode = 2
+texture = ExtResource("2_sr7u7")
+
+[node name="Next" type="Button" parent="VBoxContainer/Motor/HBoxContainer" unique_id=600218880]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
+
+[node name="Spacer3" type="Control" parent="VBoxContainer" unique_id=1411223960]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Wheel
-"
 
-[node name="Board" type="Button" parent="VBoxContainer" unique_id=1120692292]
+[node name="Sensor" type="VBoxContainer" parent="VBoxContainer" unique_id=1601542465]
 layout_mode = 2
-size_flags_vertical = 3
-text = "Board
-"
+
+[node name="Label" type="Label" parent="VBoxContainer/Sensor" unique_id=840190375]
+layout_mode = 2
+text = "Sensor"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Sensor" unique_id=127389080]
+layout_mode = 2
+alignment = 1
+
+[node name="Previous" type="Button" parent="VBoxContainer/Sensor/HBoxContainer" unique_id=1947134080]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Previous"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Sensor/HBoxContainer" unique_id=436934782]
+layout_mode = 2
+texture = ExtResource("2_sr7u7")
+
+[node name="Next" type="Button" parent="VBoxContainer/Sensor/HBoxContainer" unique_id=1645502177]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
