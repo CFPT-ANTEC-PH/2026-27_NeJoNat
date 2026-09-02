@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="RobotMaker"
-run/main_scene="uid://car5pdnc5ki14"
+run/main_scene="uid://checsya4dg4kq"
 config/features=PackedStringArray("4.7", "C#")
 config/icon="res://Assets/icon.svg"
 
