@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://uvq4gwk23821"]
+
+[ext_resource type="Script" uid="uid://dxc76u12wvbbb" path="res://Scripts/ConstructorUI.cs" id="1_30pre"]
+
+[node name="ConstructorUI" type="CanvasLayer" unique_id=30045958]
+script = ExtResource("1_30pre")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1899939270]
+offset_right = 112.0
+offset_bottom = 309.0
+
+[node name="Motor" type="Button" parent="VBoxContainer" unique_id=865889387]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Motor"
+
+[node name="Wheel" type="Button" parent="VBoxContainer" unique_id=684163746]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Wheel
+"
+
+[node name="Board" type="Button" parent="VBoxContainer" unique_id=1120692292]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Board
+"

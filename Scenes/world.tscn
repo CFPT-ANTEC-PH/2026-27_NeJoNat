@@ -1,6 +1,48 @@
 [gd_scene format=3 uid="uid://car5pdnc5ki14"]
 
 [ext_resource type="Script" uid="uid://beq6ncjyy87nu" path="res://Scripts/World.cs" id="1_a02cp"]
+[ext_resource type="PackedScene" uid="uid://bphapsunm58vx" path="res://Scenes/robot.tscn" id="2_go701"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_go701"]
+sky_material = SubResource("ProceduralSkyMaterial_a02cp")
+
+[sub_resource type="Environment" id="Environment_5a7ea"]
+background_mode = 2
+sky = SubResource("Sky_go701")
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a02cp"]
+size = Vector3(4.2852783, 1, 7.6220703)
+
+[sub_resource type="BoxMesh" id="BoxMesh_m13ap"]
+size = Vector3(4.314575, 1, 7.6262207)
 
 [node name="World" type="Node3D" unique_id=2047838017]
 script = ExtResource("1_a02cp")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=356450155]
+environment = SubResource("Environment_5a7ea")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1775884937]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1325273798]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=669675484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6426392, 0, -3.3110352)
+shape = SubResource("BoxShape3D_a02cp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=1830675157]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6572876, 0, -3.3131104)
+mesh = SubResource("BoxMesh_m13ap")
+
+[node name="Robot" parent="Ground" unique_id=183795887 instance=ExtResource("2_go701")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9474232, 1.8362231, -2.8655882)
+
+[node name="Camera3D" type="Camera3D" parent="Ground/Robot" unique_id=1779599226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5264015, 5.6493106)
