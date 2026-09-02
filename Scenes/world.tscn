@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://beq6ncjyy87nu" path="res://Scripts/World.cs" id="1_a02cp"]
 [ext_resource type="PackedScene" uid="uid://bphapsunm58vx" path="res://Scenes/robot.tscn" id="2_go701"]
+[ext_resource type="PackedScene" uid="uid://bcca1ebjdnev1" path="res://Assets/meshs3D/cube_physic.tscn" id="3_5a7ea"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -15,12 +16,6 @@ background_mode = 2
 sky = SubResource("Sky_go701")
 glow_enabled = true
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_a02cp"]
-size = Vector3(4.2852783, 1, 7.6220703)
-
-[sub_resource type="BoxMesh" id="BoxMesh_m13ap"]
-size = Vector3(4.314575, 1, 7.6262207)
-
 [node name="World" type="Node3D" unique_id=2047838017]
 script = ExtResource("1_a02cp")
 
@@ -31,18 +26,140 @@ environment = SubResource("Environment_5a7ea")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Ground" type="StaticBody3D" parent="." unique_id=1325273798]
+[node name="Ground" type="CSGBox3D" parent="." unique_id=462824699]
+transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, 0, 0, 0)
+use_collision = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=669675484]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6426392, 0, -3.3110352)
-shape = SubResource("BoxShape3D_a02cp")
+[node name="Robot" parent="." unique_id=183795887 instance=ExtResource("2_go701")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.097764015, 1.3151667, 6.692955)
+engine_force = 1024.0
+brake = 128.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=1830675157]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6572876, 0, -3.3131104)
-mesh = SubResource("BoxMesh_m13ap")
+[node name="Walls" type="Node3D" parent="." unique_id=2089986693]
 
-[node name="Robot" parent="Ground" unique_id=183795887 instance=ExtResource("2_go701")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9474232, 1.8362231, -2.8655882)
+[node name="CSGBox3D2" type="CSGBox3D" parent="Walls" unique_id=917367366]
+transform = Transform3D(-7.86805e-07, -1, 0, 18, -4.371139e-08, 0, 0, 0, 106.427, 39.141, 6, 0.426)
+use_collision = true
 
-[node name="Camera3D" type="Camera3D" parent="Ground/Robot" unique_id=1779599226]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5264015, 5.6493106)
+[node name="CSGBox3D3" type="CSGBox3D" parent="Walls" unique_id=1905432433]
+transform = Transform3D(-7.86805e-07, -1, 0, 18, -4.371139e-08, 0, 0, 0, 106.427, -38.734, 6, 0.426)
+use_collision = true
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Walls" unique_id=1333667573]
+transform = Transform3D(-9.350531e-14, 4.371139e-08, -85.142, 18, -4.371139e-08, -6.049701e-13, -7.86805e-07, -1, -3.721675e-06, 0.203, 6, 49.364)
+use_collision = true
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Walls" unique_id=834135848]
+transform = Transform3D(-9.350531e-14, 4.371139e-08, -82.239, 18, -4.371139e-08, -5.8434307e-13, -7.86805e-07, -1, -3.5947808e-06, 0.203, 6, -50.511)
+use_collision = true
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Walls" unique_id=1287167612]
+transform = Transform3D(0.6946148, 3.8734026e-08, 22.01147, 6.392945, -4.8177228e-08, -2.3916204, -2.810891e-07, -0.99999994, 9.678146e-07, -27.930107, 0.21298742, -41.56423)
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=137354716]
+transform = Transform3D(18.56, 0, 0, 0, 0.99368644, -5.5535383, 0, 0.112192675, 49.187477, 29.810751, 0, 0)
+use_collision = true
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=831402293]
+transform = Transform3D(18.226236, 0.1887923, 0, -3.5039854, 0.982017, 0, 0, 0, 10.3642845, -18.481289, 2.6995678, -44.667137)
+use_collision = true
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="." unique_id=865197486]
+transform = Transform3D(15.533943, 0, 0, 0, 0.99999994, 0, 0, 0, 12.763931, -35.22108, 4.4055924, -45.84448)
+use_collision = true
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="." unique_id=1648687860]
+transform = Transform3D(-7.9664693e-07, -8.265624e-09, 10.364284, -3.5096118, 0.9819587, 0, -18.225157, -0.18909544, -4.5303722e-07, -33.302406, 6.0844593, -31.066387)
+use_collision = true
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=457580225]
+transform = Transform3D(56.331665, 0, 0, 0, 6.2013254, 0, 0, 0, 26.607029, 10.127653, 0.15732384, -37.66773)
+use_collision = true
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="." unique_id=1313488795]
+transform = Transform3D(24.846363, 0, 0, 0, 0.6201323, 0, 0, 0, 87.572395, -25.957777, 7.9813766, 21.609915)
+use_collision = true
+
+[node name="cubes" type="Node3D" parent="." unique_id=810488502]
+
+[node name="CubePhysic" parent="cubes" unique_id=208351318 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5016584, 3.7579865, -26.09694)
+
+[node name="CubePhysic2" parent="cubes" unique_id=973402195 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5016584, 3.7579865, -26.09694)
+
+[node name="CubePhysic3" parent="cubes" unique_id=129471911 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5016584, 3.7579865, -26.09694)
+
+[node name="CubePhysic4" parent="cubes" unique_id=308079220 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5016584, 3.7579865, -26.09694)
+
+[node name="CubePhysic5" parent="cubes" unique_id=2093225608 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5016584, 4.7579865, -26.09694)
+
+[node name="CubePhysic6" parent="cubes" unique_id=43870773 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5016584, 4.7579865, -26.09694)
+
+[node name="CubePhysic7" parent="cubes" unique_id=192933255 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0016584, 5.7579865, -26.09694)
+
+[node name="CubePhysic8" parent="cubes" unique_id=210454746 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 7.8124413, 9.586661, -26.09694)
+
+[node name="CubePhysic9" parent="cubes" unique_id=1983958967 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 6.8124413, 9.586661, -26.09694)
+
+[node name="CubePhysic10" parent="cubes" unique_id=483188111 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 5.8124413, 9.58666, -26.09694)
+
+[node name="CubePhysic11" parent="cubes" unique_id=158689134 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 4.8124404, 9.58666, -26.09694)
+
+[node name="CubePhysic12" parent="cubes" unique_id=1925321133 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 6.8124404, 10.58666, -26.09694)
+
+[node name="CubePhysic13" parent="cubes" unique_id=138830466 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 5.8124413, 10.58666, -26.09694)
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1565365609]
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Node3D" unique_id=572472467]
+transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, -13.346279)
+use_collision = true
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Node3D" unique_id=538883052]
+transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, 2.6537209)
+use_collision = true
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Node3D" unique_id=995944293]
+transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, 18.65372)
+use_collision = true
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Node3D" unique_id=900666652]
+transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, 35.65372)
+use_collision = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Node3D" unique_id=337254056]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, 41.84994)
+light_energy = 9.865
+light_indirect_energy = 7.97
+spot_range = 22.017
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="Node3D" unique_id=1174425032]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, 27.085457)
+light_energy = 9.865
+light_indirect_energy = 7.97
+spot_range = 22.017
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="Node3D" unique_id=1886840264]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, 11.085457)
+light_energy = 9.865
+light_indirect_energy = 7.97
+spot_range = 22.017
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Node3D" unique_id=707339281]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, -4.914543)
+light_energy = 9.865
+light_indirect_energy = 7.97
+spot_range = 22.017
