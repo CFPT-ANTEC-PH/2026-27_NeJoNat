@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c6iwohuqvirgw"]
+
+[ext_resource type="PackedScene" uid="uid://1x4dlpanqjhi" path="res://Assets/Models/Wells/weel.fbx" id="1_stv6l"]
+
+[node name="Weel" type="Node3D" unique_id=255775534]
+
+[node name="weel" parent="." unique_id=1159359950 instance=ExtResource("1_stv6l")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

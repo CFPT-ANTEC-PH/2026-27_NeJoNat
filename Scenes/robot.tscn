@@ -1,53 +1,89 @@
 [gd_scene format=3 uid="uid://bphapsunm58vx"]
 
 [ext_resource type="Script" uid="uid://cexvcjnjxl36h" path="res://Scripts/TestRobot.cs" id="1_lp65t"]
-[ext_resource type="PackedScene" uid="uid://ccke6k6j68r4r" path="res://Assets/Models/wagon_wheel.glb" id="2_2vrla"]
-[ext_resource type="PackedScene" uid="uid://bilw2b77d4dnd" path="res://Assets/Models/robot.fbx" id="2_6phhs"]
+[ext_resource type="PackedScene" uid="uid://c6iwohuqvirgw" path="res://Assets/Models/Wells/Weel.tscn" id="2_ntbue"]
+[ext_resource type="PackedScene" uid="uid://d1tbq52jea0mn" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelMiddle.fbx" id="3_7cjo4"]
+[ext_resource type="ArrayMesh" uid="uid://dc46y33p0mdhq" path="res://Assets/Models/BaseRobot/base.obj" id="4_ntbue"]
+[ext_resource type="PackedScene" uid="uid://bjqxu7x121slh" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelTop.fbx" id="5_7cjo4"]
+[ext_resource type="ArrayMesh" uid="uid://bj31smjp460lb" path="res://Assets/Models/BaseRobot/supportCapt.obj" id="5_8s4wd"]
+[ext_resource type="PackedScene" uid="uid://cxnh33krkjyw" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelWeel.fbx" id="6_dcvsp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m13ap"]
-size = Vector3(1, 1, 3.180664)
+size = Vector3(1.8731995, 0.34960938, 0.48339844)
 
-[node name="TestRobot" type="VehicleBody3D" unique_id=183795887]
+[sub_resource type="BoxShape3D" id="BoxShape3D_1vivr"]
+size = Vector3(1.2523804, 0.38183594, 2.0111694)
+
+[node name="TestRobot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "CasterPivot", "CasterMesh")]
 script = ExtResource("1_lp65t")
+LeftWheel = NodePath("LeftWeel")
+RightWheel = NodePath("RightWeel")
+FrontWheel = NodePath("FrontWeel")
+CasterPivot = NodePath("CasterPivot")
+CasterMesh = NodePath("CasterPivot/WeelFront")
 
-[node name="robot" parent="." unique_id=378658316 instance=ExtResource("2_6phhs")]
-transform = Transform3D(-2.1874226e-07, 0, -3, 0, 3, 0, 5.00424, 0, -1.3113416e-07, 0.014430881, 0.54038095, 1.1177206)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1322829599]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.090332)
+[node name="ColisionFront" type="CollisionShape3D" parent="." unique_id=438888380]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.020767212, 0.79424906, 2.5029392)
 shape = SubResource("BoxShape3D_m13ap")
 
-[node name="VehicleWheel3D" type="VehicleWheel3D" parent="." unique_id=1751638991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96587276, 0, 0)
+[node name="ColisionBase" type="CollisionShape3D" parent="." unique_id=48840141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007232666, 0.79345703, 1.248011)
+shape = SubResource("BoxShape3D_1vivr")
+
+[node name="LeftWeel" type="VehicleWheel3D" parent="." unique_id=1751638991]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8087796, 0.5478494, 0.7703998)
 use_as_traction = true
-wheel_radius = 1.0
+wheel_roll_influence = 0.0
+wheel_rest_length = 0.2
+suspension_travel = 0.1
+suspension_stiffness = 60.0
+damping_compression = 3.5
+damping_relaxation = 4.0
 
-[node name="Sketchfab_Scene" parent="VehicleWheel3D" unique_id=1352716808 instance=ExtResource("2_2vrla")]
-transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
+[node name="Weel" parent="LeftWeel" unique_id=255775534 instance=ExtResource("2_ntbue")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
 
-[node name="VehicleWheel3D4" type="VehicleWheel3D" parent="." unique_id=1749568864]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9566822, 0, 2.1512825)
-use_as_steering = true
-wheel_radius = 1.0
-
-[node name="Sketchfab_Scene" parent="VehicleWheel3D4" unique_id=1683025289 instance=ExtResource("2_2vrla")]
-transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
-
-[node name="VehicleWheel3D2" type="VehicleWheel3D" parent="." unique_id=203958823]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0278937, 0, 0)
+[node name="RightWeel" type="VehicleWheel3D" parent="." unique_id=203958823]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82631636, 0.548, 0.77)
 use_as_traction = true
-wheel_radius = 1.0
+wheel_roll_influence = 0.0
+wheel_rest_length = 0.2
+suspension_travel = 0.1
+suspension_stiffness = 60.0
+damping_compression = 3.5
+damping_relaxation = 4.0
 
-[node name="Sketchfab_Scene" parent="VehicleWheel3D2" unique_id=1137338643 instance=ExtResource("2_2vrla")]
-transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
+[node name="Weel" parent="RightWeel" unique_id=1430954526 instance=ExtResource("2_ntbue")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 
-[node name="VehicleWheel3D3" type="VehicleWheel3D" parent="." unique_id=634589305]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0278937, 0, 2.091487)
-use_as_steering = true
-wheel_radius = 1.0
+[node name="FrontWeel" type="VehicleWheel3D" parent="." unique_id=1340931264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06208864, 0.33367905, 2.4795945)
+wheel_radius = 0.2
+wheel_rest_length = 0.2
+wheel_friction_slip = 0.05
+suspension_travel = 0.5
+suspension_stiffness = 60.0
+damping_compression = 3.5
+damping_relaxation = 4.0
 
-[node name="Sketchfab_Scene" parent="VehicleWheel3D3" unique_id=289787123 instance=ExtResource("2_2vrla")]
-transform = Transform3D(-6.5567085e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.5567085e-09, 0, 0, 0)
+[node name="CasterPivot" type="Node3D" parent="." unique_id=1664621064]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.06019184, 2.4751892)
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=359795755]
-transform = Transform3D(-0.9999756, -0.0069812513, -8.694733e-08, -0.006947941, 0.99520314, 0.0975829, -0.00068116415, 0.09758052, -0.9952274, 0, 2.1608577, -3.7243185)
+[node name="infiniteWeelMiddle" parent="CasterPivot" unique_id=998142326 instance=ExtResource("3_7cjo4")]
+
+[node name="WeelFront" type="Node3D" parent="CasterPivot" unique_id=227032114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22981396, 0)
+
+[node name="infiniteWeelWeel" parent="CasterPivot/WeelFront" unique_id=1070850769 instance=ExtResource("6_dcvsp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22981396, 0)
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=1596408748]
+transform = Transform3D(12, 0, 0, 0, -6.818976e-07, -12, 0, 15.599999, -5.2453663e-07, -0.0056907535, 0.9916206, 1.1695576)
+mesh = ExtResource("4_ntbue")
+
+[node name="SupportCapt" type="MeshInstance3D" parent="." unique_id=1910950160]
+transform = Transform3D(12, 0, 0, 0, -6.8189763e-07, 11.999999, 0, -15.6, -5.2453663e-07, -0.006052375, 0.75203973, 2.3034363)
+mesh = ExtResource("5_8s4wd")
+
+[node name="infiniteWeelTop" parent="." unique_id=166206661 instance=ExtResource("5_7cjo4")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.06019184, 2.4751892)
