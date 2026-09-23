@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://beq6ncjyy87nu" path="res://Scripts/World.cs" id="1_a02cp"]
 [ext_resource type="PackedScene" uid="uid://bphapsunm58vx" path="res://Scenes/robot.tscn" id="2_go701"]
 [ext_resource type="PackedScene" uid="uid://bcca1ebjdnev1" path="res://Assets/meshs3D/cube_physic.tscn" id="3_5a7ea"]
+[ext_resource type="Script" uid="uid://cbjqp17i0fbx3" path="res://Scripts/CameraOrbit.cs" id="4_8j60k"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a02cp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -15,6 +16,11 @@ sky_material = SubResource("ProceduralSkyMaterial_a02cp")
 background_mode = 2
 sky = SubResource("Sky_go701")
 glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8j60k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8vrlf"]
+albedo_color = Color(0, 0, 0, 1)
 
 [node name="World" type="Node3D" unique_id=2047838017]
 script = ExtResource("1_a02cp")
@@ -29,9 +35,25 @@ shadow_enabled = true
 [node name="Ground" type="CSGBox3D" parent="." unique_id=462824699]
 transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, 0, 0, 0)
 use_collision = true
+material = SubResource("StandardMaterial3D_8j60k")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1353931537]
+transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, -26.956, 0.001, 15.085306)
+size = Vector3(0.024047852, 1, 0.7514038)
+material = SubResource("StandardMaterial3D_8vrlf")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1631955341]
+transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, 27.179258, 0.001, 15.060892)
+size = Vector3(0.024047852, 1, 0.7518921)
+material = SubResource("StandardMaterial3D_8vrlf")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=2003867521]
+transform = Transform3D(-3.4969107e-06, 0, -99.99999, 0, 0.2, 0, 80, 0, -4.371139e-06, 0.0317955, 0.002, -21.687)
+size = Vector3(0.024047852, 1, 0.5493469)
+material = SubResource("StandardMaterial3D_8vrlf")
 
 [node name="Robot" parent="." unique_id=183795887 instance=ExtResource("2_go701")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.097764015, 1.3151667, 6.692955)
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -0.097764015, 0.4410708, 6.692955)
 engine_force = 1024.0
 brake = 128.0
 
@@ -51,34 +73,6 @@ use_collision = true
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="Walls" unique_id=834135848]
 transform = Transform3D(-9.350531e-14, 4.371139e-08, -82.239, 18, -4.371139e-08, -5.8434307e-13, -7.86805e-07, -1, -3.5947808e-06, 0.203, 6, -50.511)
-use_collision = true
-
-[node name="CSGBox3D6" type="CSGBox3D" parent="Walls" unique_id=1287167612]
-transform = Transform3D(0.6946148, 3.8734026e-08, 22.01147, 6.392945, -4.8177228e-08, -2.3916204, -2.810891e-07, -0.99999994, 9.678146e-07, -27.930107, 0.21298742, -41.56423)
-use_collision = true
-
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=137354716]
-transform = Transform3D(18.56, 0, 0, 0, 0.99368644, -5.5535383, 0, 0.112192675, 49.187477, 29.810751, 0, 0)
-use_collision = true
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=831402293]
-transform = Transform3D(18.226236, 0.1887923, 0, -3.5039854, 0.982017, 0, 0, 0, 10.3642845, -18.481289, 2.6995678, -44.667137)
-use_collision = true
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="." unique_id=865197486]
-transform = Transform3D(15.533943, 0, 0, 0, 0.99999994, 0, 0, 0, 12.763931, -35.22108, 4.4055924, -45.84448)
-use_collision = true
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="." unique_id=1648687860]
-transform = Transform3D(-7.9664693e-07, -8.265624e-09, 10.364284, -3.5096118, 0.9819587, 0, -18.225157, -0.18909544, -4.5303722e-07, -33.302406, 6.0844593, -31.066387)
-use_collision = true
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=457580225]
-transform = Transform3D(56.331665, 0, 0, 0, 6.2013254, 0, 0, 0, 26.607029, 10.127653, 0.15732384, -37.66773)
-use_collision = true
-
-[node name="CSGBox3D6" type="CSGBox3D" parent="." unique_id=1313488795]
-transform = Transform3D(24.846363, 0, 0, 0, 0.6201323, 0, 0, 0, 87.572395, -25.957777, 7.9813766, 21.609915)
 use_collision = true
 
 [node name="cubes" type="Node3D" parent="." unique_id=810488502]
@@ -124,42 +118,11 @@ transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 5.8124
 
 [node name="Node3D" type="Node3D" parent="." unique_id=1565365609]
 
-[node name="CSGBox3D7" type="CSGBox3D" parent="Node3D" unique_id=572472467]
-transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, -13.346279)
-use_collision = true
+[node name="CameraPivot" type="Node3D" parent="." unique_id=744969487 node_paths=PackedStringArray("Target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1)
+script = ExtResource("4_8j60k")
+Target = NodePath("../Robot")
 
-[node name="CSGBox3D8" type="CSGBox3D" parent="Node3D" unique_id=538883052]
-transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, 2.6537209)
-use_collision = true
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=994167586]
 
-[node name="CSGBox3D9" type="CSGBox3D" parent="Node3D" unique_id=995944293]
-transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, 18.65372)
-use_collision = true
-
-[node name="CSGBox3D10" type="CSGBox3D" parent="Node3D" unique_id=900666652]
-transform = Transform3D(1, 0, 0, 0, 8.19, 0, 0, 0, 1, -26.631844, 3.641993, 35.65372)
-use_collision = true
-
-[node name="SpotLight3D" type="SpotLight3D" parent="Node3D" unique_id=337254056]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, 41.84994)
-light_energy = 9.865
-light_indirect_energy = 7.97
-spot_range = 22.017
-
-[node name="SpotLight3D2" type="SpotLight3D" parent="Node3D" unique_id=1174425032]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, 27.085457)
-light_energy = 9.865
-light_indirect_energy = 7.97
-spot_range = 22.017
-
-[node name="SpotLight3D3" type="SpotLight3D" parent="Node3D" unique_id=1886840264]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, 11.085457)
-light_energy = 9.865
-light_indirect_energy = 7.97
-spot_range = 22.017
-
-[node name="SpotLight3D4" type="SpotLight3D" parent="Node3D" unique_id=707339281]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.193117, 6.901314, -4.914543)
-light_energy = 9.865
-light_indirect_energy = 7.97
-spot_range = 22.017
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=821566785]
