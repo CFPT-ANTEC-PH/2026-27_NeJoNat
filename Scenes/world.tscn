@@ -19,7 +19,14 @@ glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8j60k"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8vrlf"]
+[sub_resource type="Curve3D" id="Curve3D_8j60k"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 25.12168, 0.1, -30.452194, 0, 0, 0, 0, 0, 0, 7.916755, 0.1, -37.90799, 0, 0, 0, 0, 0, 0, -9.1389475, 0.1, -36.802002, 0, 0, 0, 0, 0, 0, -24.329563, 0.1, -25.163937, 0, 0, 0, 0, 0, 0, -27.805216, 0.1, -5.8547573, 0, 0, 0, 0, 0, 0, -29.543037, 0.1, 15.192242, 0, 0, 0, 0, 0, 0, -27.805212, 0.1, 33.922134, 0, 0, 0, 0, 0, 0, -19.695356, 0.1, 40.680344, 0, 0, 0, 0, 0, 0, -8.882222, 0.0999939, 34.694515, 0, 0, 0, 0, 0, 0, -11.778598, 0.1, 18.667892, 0, 0, 0, 0, 0, 0, -13.516424, 0.1, 6.8893, 0, 0, 0, 0, 0, 0, -12.744059, 0.0999939, -6.0478497, 0, 0, 0, 0, 0, 0, -4.827294, 0.1, -14.543885, 0, 0, 0, 0, 0, 0, 7.144388, 0.1, -17.054083, 0, 0, 0, 0, 0, 0, 15.061158, 0.1, -5.0823913, 0, 0, 0, 0, 0, 0, 12.744056, 0.1, 7.0823917, 0, 0, 0, 0, 0, 0, 11.778589, 0.1, 17.895525, 0, 0, 0, 0, 0, 0, 13.516421, 0.1000061, 24.846825, 0, 0, 0, 0, 0, 0, 16.605892, 0.0999939, 34.308323, 0, 0, 0, 0, 0, 0, 25.755207, 0.0999939, 33.983288, 0, 0, 0, 0, 0, 0, 28.912304, 0.1, 25.342829, 0, 0, 0, 0, 0, 0, 28.770666, 0.1, 15.192245, 0, 0, 0, 0, 0, 0, 27.032848, 0.1, -2.379106, 0, 0, 0, 0, 0, 0, 24.548225, 0.1, -31.33413),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 24
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1vivr"]
 albedo_color = Color(0, 0, 0, 1)
 
 [node name="World" type="Node3D" unique_id=2047838017]
@@ -37,23 +44,8 @@ transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, 0, 0, 0)
 use_collision = true
 material = SubResource("StandardMaterial3D_8j60k")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1353931537]
-transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, -26.956, 0.001, 15.085306)
-size = Vector3(0.024047852, 1, 0.7514038)
-material = SubResource("StandardMaterial3D_8vrlf")
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1631955341]
-transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, 27.179258, 0.001, 15.060892)
-size = Vector3(0.024047852, 1, 0.7518921)
-material = SubResource("StandardMaterial3D_8vrlf")
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=2003867521]
-transform = Transform3D(-3.4969107e-06, 0, -99.99999, 0, 0.2, 0, 80, 0, -4.371139e-06, 0.0317955, 0.002, -21.687)
-size = Vector3(0.024047852, 1, 0.5493469)
-material = SubResource("StandardMaterial3D_8vrlf")
-
 [node name="Robot" parent="." unique_id=183795887 instance=ExtResource("2_go701")]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -0.097764015, 0.4410708, 6.692955)
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -11.060814, 0.4410708, 6.692955)
 engine_force = 1024.0
 brake = 128.0
 
@@ -126,3 +118,22 @@ Target = NodePath("../Robot")
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=994167586]
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=821566785]
+
+[node name="Path3D" type="Path3D" parent="." unique_id=192042640]
+curve = SubResource("Curve3D_8j60k")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Path3D" unique_id=1210364009]
+transform = Transform3D(1.015, 0, 0, 0, 1.015, 0, 0, 0, 1.015, 0, 0.1, 0)
+polygon = PackedVector2Array(0, 0, 0.008081198, 0.08203641, 1.0001693, 0.0820364, 1, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 21.9
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 9.13
+path_joined = false
+material = SubResource("StandardMaterial3D_1vivr")
