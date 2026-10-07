@@ -38,43 +38,43 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007232666, 0.79345703, 1.2
 shape = SubResource("BoxShape3D_1vivr")
 
 [node name="LeftWeel" type="VehicleWheel3D" parent="." unique_id=1751638991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8087796, 0.698, 0.7703998)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8087796, 0.598, 0.7703998)
 use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.558
-wheel_rest_length = 0.15
-suspension_travel = 0.1
-suspension_stiffness = 60.0
-damping_compression = 3.5
-damping_relaxation = 4.0
+wheel_rest_length = 0.05
+suspension_travel = 0.03
+suspension_stiffness = 300.0
+damping_compression = 20.0
+damping_relaxation = 20.0
 
 [node name="Weel" parent="LeftWeel" unique_id=255775534 instance=ExtResource("2_ntbue")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
 
 [node name="RightWeel" type="VehicleWheel3D" parent="." unique_id=203958823]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82631636, 0.698, 0.77)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82631636, 0.598, 0.77)
 use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.558
-wheel_rest_length = 0.15
-suspension_travel = 0.1
-suspension_stiffness = 60.0
-damping_compression = 3.5
-damping_relaxation = 4.0
+wheel_rest_length = 0.05
+suspension_travel = 0.03
+suspension_stiffness = 300.0
+damping_compression = 20.0
+damping_relaxation = 20.0
 
 [node name="Weel" parent="RightWeel" unique_id=1430954526 instance=ExtResource("2_ntbue")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 
 [node name="FrontWeel" type="VehicleWheel3D" parent="." unique_id=1340931264]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.403, 2.4751892)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.303, 2.4751892)
 wheel_roll_influence = 0.0
 wheel_radius = 0.263
 wheel_friction_slip = 0.2
-wheel_rest_length = 0.15
-suspension_travel = 0.1
-suspension_stiffness = 60.0
-damping_compression = 3.5
-damping_relaxation = 4.0
+wheel_rest_length = 0.05
+suspension_travel = 0.03
+suspension_stiffness = 300.0
+damping_compression = 20.0
+damping_relaxation = 20.0
 
 [node name="CasterPivot" type="Node3D" parent="." unique_id=1664621064]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.018, 2.4751892)

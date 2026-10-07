@@ -40,8 +40,8 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 shadow_enabled = true
 
 [node name="Ground" type="CSGBox3D" parent="." unique_id=462824699]
-size = Vector3(160, 0.4, 200)
 use_collision = true
+size = Vector3(160, 0.4, 200)
 material = SubResource("StandardMaterial3D_8j60k")
 
 [node name="Robot" parent="." unique_id=183795887 instance=ExtResource("2_go701")]
@@ -135,3 +135,7 @@ path_continuous_u = true
 path_u_distance = 9.13
 path_joined = false
 material = SubResource("StandardMaterial3D_1vivr")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="." unique_id=24391287]
+transform = Transform3D(-3.3361797e-08, -0.095575206, -13.426232, 7.985631, -4.371138e-08, -2.8561906e-21, -3.4746506e-07, -0.9954221, 1.2891164, 1.8849564, 2.9852505, 21.135828)
+use_collision = true
