@@ -33,7 +33,7 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 shadow_enabled = true
 
 [node name="Ground" type="CSGBox3D" parent="." unique_id=462824699]
-transform = Transform3D(80, 0, 0, 0, 0.2, 0, 0, 0, 100, 0, 0, 0)
+size = Vector3(160, 0.4, 200)
 use_collision = true
 material = SubResource("StandardMaterial3D_8j60k")
 
@@ -54,8 +54,6 @@ material = SubResource("StandardMaterial3D_8vrlf")
 
 [node name="Robot" parent="." unique_id=183795887 instance=ExtResource("2_go701")]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -0.097764015, 0.4410708, 6.692955)
-engine_force = 1024.0
-brake = 128.0
 
 [node name="Walls" type="Node3D" parent="." unique_id=2089986693]
 
@@ -116,8 +114,6 @@ transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 6.8124
 [node name="CubePhysic13" parent="cubes" unique_id=138830466 instance=ExtResource("3_5a7ea")]
 transform = Transform3D(1, -7.351371e-08, 0, 7.351371e-08, 1, 0, 0, 0, 1, 5.8124413, 10.58666, -26.09694)
 
-[node name="Node3D" type="Node3D" parent="." unique_id=1565365609]
-
 [node name="CameraPivot" type="Node3D" parent="." unique_id=744969487 node_paths=PackedStringArray("Target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1)
 script = ExtResource("4_8j60k")
@@ -126,3 +122,8 @@ Target = NodePath("../Robot")
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot" unique_id=994167586]
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=821566785]
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="." unique_id=956947390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.1084657, 14.900021)
+use_collision = true
+size = Vector3(5, 4, 1)
