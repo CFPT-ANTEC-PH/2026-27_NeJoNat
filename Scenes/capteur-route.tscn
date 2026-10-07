@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ta2nmyaj730i"]
+
+[ext_resource type="Script" uid="uid://c2qk7ceimt355" path="res://Scenes/CapteurRoute.cs" id="1_y8sd8"]
+
+[node name="CapteurRoute" type="RayCast3D" unique_id=2092425028]
+script = ExtResource("1_y8sd8")

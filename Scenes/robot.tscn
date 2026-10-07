@@ -8,6 +8,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bj31smjp460lb" path="res://Assets/Models/BaseRobot/supportCapt.obj" id="5_8s4wd"]
 [ext_resource type="PackedScene" uid="uid://cxnh33krkjyw" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelWeel.fbx" id="6_dcvsp"]
 [ext_resource type="PackedScene" uid="uid://cadqn72soyvwr" path="res://Scenes/CapteurAvant.tscn" id="8_dcvsp"]
+[ext_resource type="PackedScene" uid="uid://ta2nmyaj730i" path="res://Scenes/capteur-route.tscn" id="9_m0m82"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m13ap"]
 size = Vector3(1.8731995, 0.34960938, 0.48339844)
@@ -15,19 +16,15 @@ size = Vector3(1.8731995, 0.34960938, 0.48339844)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1vivr"]
 size = Vector3(1.2523804, 0.38183594, 2.0111694)
 
-[node name="TestRobot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "CasterPivot", "CasterMesh", "CapteurGauche", "CapteurCentre", "CapteurDroite")]
+[node name="TestRobot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "CasterPivot", "CasterMesh")]
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, 0.45, 1.25)
 script = ExtResource("1_lp65t")
 LeftWheel = NodePath("LeftWeel")
 RightWheel = NodePath("RightWeel")
 FrontWheel = NodePath("FrontWeel")
 CasterPivot = NodePath("CasterPivot")
 CasterMesh = NodePath("CasterPivot/WeelFront")
-CapteurGauche = NodePath("CapteurAvant_Left")
-CapteurCentre = NodePath("CapteurAvant_Front")
-CapteurDroite = NodePath("CapteurAvant_Right")
-center_of_mass_mode = 1
-center_of_mass = Vector3(0, 0.45, 1.25)
-DistanceArret = 0.5
 
 [node name="ColisionFront" type="CollisionShape3D" parent="." unique_id=438888380]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.020767212, 0.79424906, 2.5029392)
@@ -42,7 +39,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8087796, 0.698, 0.7703998)
 use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.558
-wheel_rest_length = 0.15
 suspension_travel = 0.1
 suspension_stiffness = 60.0
 damping_compression = 3.5
@@ -56,7 +52,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82631636, 0.698, 0.77)
 use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.558
-wheel_rest_length = 0.15
 suspension_travel = 0.1
 suspension_stiffness = 60.0
 damping_compression = 3.5
@@ -70,7 +65,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.403, 2.4751892)
 wheel_roll_influence = 0.0
 wheel_radius = 0.263
 wheel_friction_slip = 0.2
-wheel_rest_length = 0.15
 suspension_travel = 0.1
 suspension_stiffness = 60.0
 damping_compression = 3.5
@@ -106,3 +100,6 @@ transform = Transform3D(0.5998056, 0, -0.8001458, 0, 1, 0, 0.8001458, 0, 0.59980
 
 [node name="CapteurAvant_Left" parent="." unique_id=1130778428 instance=ExtResource("8_dcvsp")]
 transform = Transform3D(0.61253077, 0, 0.7904467, 0, 1, 0, -0.7904467, 0, 0.61253077, 0.81518257, 0.8765275, 2.5608602)
+
+[node name="CapteurRoute" parent="." unique_id=2092425028 instance=ExtResource("9_m0m82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.038816, 0.20000005, 8.181704)
