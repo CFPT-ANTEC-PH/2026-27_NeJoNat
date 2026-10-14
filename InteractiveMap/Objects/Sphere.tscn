@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat"]
+albedo_color = Color(0.2, 0.4, 0.9, 1)
+
+[sub_resource type="SphereMesh" id="Mesh"]
+material = SubResource("Mat")
+
+[sub_resource type="SphereShape3D" id="Shape"]
+
+[node name="Sphere" type="RigidBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape")

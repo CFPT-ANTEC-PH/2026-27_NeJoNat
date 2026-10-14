@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dtwdbiffuvwfg" path="res://InteractiveMap/Camera/FreeCamera.cs" id="1_cam"]
+
+[node name="FreeCamera" type="Camera3D"]
+script = ExtResource("1_cam")

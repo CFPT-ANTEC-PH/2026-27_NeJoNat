@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="SolMat"]
+albedo_color = Color(0.9, 0.9, 0.88, 1)
+
+[sub_resource type="StandardMaterial3D" id="MurMat"]
+albedo_color = Color(0.45, 0.32, 0.2, 1)
+
+[node name="Table" type="Node3D"]
+
+[node name="Sol" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+use_collision = true
+size = Vector3(40, 0.5, 60)
+material = SubResource("SolMat")
+
+[node name="MurOuest" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1.75, 0)
+use_collision = true
+size = Vector3(1, 4, 60)
+material = SubResource("MurMat")
+
+[node name="MurEst" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.75, 0)
+use_collision = true
+size = Vector3(1, 4, 60)
+material = SubResource("MurMat")
+
+[node name="MurNord" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, -30)
+use_collision = true
+size = Vector3(40, 4, 1)
+material = SubResource("MurMat")
+
+[node name="MurSud" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 30)
+use_collision = true
+size = Vector3(40, 4, 1)
+material = SubResource("MurMat")

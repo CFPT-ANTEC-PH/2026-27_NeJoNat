@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dj2pw3xl5yfqg" path="res://InteractiveMap/UI/SidePanel.cs" id="1_menu"]
+
+[node name="SidePanel" type="CanvasLayer"]
+script = ExtResource("1_menu")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 220.0
+grow_vertical = 2
+
+[node name="Marge" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Boite" type="VBoxContainer" parent="Panel/Marge"]
+layout_mode = 2
+
+[node name="TitreObjets" type="Label" parent="Panel/Marge/Boite"]
+layout_mode = 2
+theme_type_variation = &"HeaderSmall"
+text = "Objets"
+
+[node name="ListeObjets" type="VBoxContainer" parent="Panel/Marge/Boite"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ViderObjets" type="Button" parent="Panel/Marge/Boite"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Supprimer les objets"
+
+[node name="Separateur1" type="HSeparator" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="TitreLigne" type="Label" parent="Panel/Marge/Boite"]
+layout_mode = 2
+theme_type_variation = &"HeaderSmall"
+text = "Ligne à suivre"
+
+[node name="Dessiner" type="Button" parent="Panel/Marge/Boite"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Dessiner"
+
+[node name="EffacerLigne" type="Button" parent="Panel/Marge/Boite"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Effacer la ligne"
+
+[node name="Separateur2" type="HSeparator" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="Mode" type="Label" parent="Panel/Marge/Boite"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Outil : Aucun"
+
+[node name="Aide" type="Label" parent="Panel/Marge/Boite"]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+text = "Clic droit : regarder
+WASD/ZQSD : bouger
+E / Q : monter / descendre
+Shift : rapide
+Molette : vitesse
+Échap : aucun outil"
