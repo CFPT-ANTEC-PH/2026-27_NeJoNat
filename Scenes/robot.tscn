@@ -14,7 +14,7 @@ size = Vector3(1.8731995, 0.34960938, 0.48339844)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1vivr"]
 size = Vector3(1.2523804, 0.38183594, 2.0111694)
 
-[node name="TestRobot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "RoueFolle", "Glisseur", "CasterPivot", "CasterMesh", "SupportAvant", "SupportBas", "CapteurGauche", "CapteurCentre", "CapteurDroite")]
+[node name="TestRobot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "RoueFolle", "Glisseur", "CasterPivot", "CasterMesh", "ChassisMesh", "ChassisCollision", "AvantCollision", "SupportAvant", "SupportBas", "CapteurGauche", "CapteurCentre", "CapteurDroite")]
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.45, 1.25)
 script = ExtResource("1_lp65t")
@@ -25,6 +25,9 @@ RoueFolle = NodePath("FlyWeel")
 Glisseur = NodePath("Glisseur")
 CasterPivot = NodePath("FlyWeel/Pivot")
 CasterMesh = NodePath("FlyWeel/Pivot/WeelFront")
+ChassisMesh = NodePath("Base")
+ChassisCollision = NodePath("ColisionBase")
+AvantCollision = NodePath("ColisionFront")
 SupportAvant = NodePath("CapteursAvant")
 SupportBas = NodePath("CapteursDown")
 CapteurGauche = NodePath("CapteursAvant/CapteurAvant_Left")

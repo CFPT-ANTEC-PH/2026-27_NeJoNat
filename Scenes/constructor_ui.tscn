@@ -1,131 +1,377 @@
 [gd_scene format=3 uid="uid://uvq4gwk23821"]
 
 [ext_resource type="Script" uid="uid://dxc76u12wvbbb" path="res://Scripts/ConstructorUI.cs" id="1_30pre"]
-[ext_resource type="Texture2D" uid="uid://dav8xjdcxvbv4" path="res://Assets/icon.svg" id="2_sr7u7"]
 
 [node name="ConstructorUI" type="CanvasLayer" unique_id=30045958]
 script = ExtResource("1_30pre")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1899939270]
-offset_right = 363.0
-offset_bottom = 645.0
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=1899939271]
+anchor_bottom = 1.0
+offset_right = 380.0
+grow_vertical = 2
+horizontal_scroll_mode = 0
 
-[node name="Body" type="VBoxContainer" parent="VBoxContainer" unique_id=1432128630]
+[node name="VBoxContainer" type="VBoxContainer" parent="Scroll" unique_id=1899939270]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="VBoxContainer/Body" unique_id=319463585]
+[node name="Section1900000001" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000001]
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Body"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body" unique_id=234181769]
+[node name="Body" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000002]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Body" unique_id=1900000003]
+layout_mode = 2
+text = "Color"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Body" unique_id=1900000004]
 layout_mode = 2
 alignment = 1
 
-[node name="Previous" type="Button" parent="VBoxContainer/Body/HBoxContainer" unique_id=1844964498]
+[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Body/HBoxContainer" unique_id=1900000005]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Previous"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Body/HBoxContainer" unique_id=718564982]
+[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Body/HBoxContainer" unique_id=1900000006]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-texture = ExtResource("2_sr7u7")
+horizontal_alignment = 1
 
-[node name="Next" type="Button" parent="VBoxContainer/Body/HBoxContainer" unique_id=523668349]
+[node name="Next" type="Button" parent="Scroll/VBoxContainer/Body/HBoxContainer" unique_id=1900000007]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Next"
 
-[node name="Spacer" type="Control" parent="VBoxContainer" unique_id=1426991417]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Wheels" type="VBoxContainer" parent="VBoxContainer" unique_id=994793319]
+[node name="Length" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000008]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Wheels" unique_id=651597488]
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Length" unique_id=1900000009]
 layout_mode = 2
+text = "Length"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Length" unique_id=1900000010]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Length/HBoxContainer" unique_id=1900000011]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.7
+max_value = 1.6
+step = 0.05
+value = 0.7
+metadata/reglage = "EchelleLongueur"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Length/HBoxContainer" unique_id=1900000012]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Width" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000013]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Width" unique_id=1900000014]
+layout_mode = 2
+text = "Width"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Width" unique_id=1900000015]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Width/HBoxContainer" unique_id=1900000016]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.7
+max_value = 1.6
+step = 0.05
+value = 0.7
+metadata/reglage = "EchelleLargeur"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Width/HBoxContainer" unique_id=1900000017]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Mass" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000018]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Mass" unique_id=1900000019]
+layout_mode = 2
+text = "Mass (kg)"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Mass" unique_id=1900000020]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Mass/HBoxContainer" unique_id=1900000021]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 3.0
+step = 0.1
+value = 0.5
+metadata/reglage = "mass"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Mass/HBoxContainer" unique_id=1900000022]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Section1900000023" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000023]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Wheels"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Wheels" unique_id=1700405553]
+[node name="WheelColor" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000024]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/WheelColor" unique_id=1900000025]
+layout_mode = 2
+text = "Color"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/WheelColor" unique_id=1900000026]
 layout_mode = 2
 alignment = 1
 
-[node name="Previous" type="Button" parent="VBoxContainer/Wheels/HBoxContainer" unique_id=1903801943]
+[node name="Previous" type="Button" parent="Scroll/VBoxContainer/WheelColor/HBoxContainer" unique_id=1900000027]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Previous"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Wheels/HBoxContainer" unique_id=367480680]
+[node name="Choix" type="Label" parent="Scroll/VBoxContainer/WheelColor/HBoxContainer" unique_id=1900000028]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-texture = ExtResource("2_sr7u7")
+horizontal_alignment = 1
 
-[node name="Next" type="Button" parent="VBoxContainer/Wheels/HBoxContainer" unique_id=2084902958]
+[node name="Next" type="Button" parent="Scroll/VBoxContainer/WheelColor/HBoxContainer" unique_id=1900000029]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Next"
 
-[node name="Spacer2" type="Control" parent="VBoxContainer" unique_id=277509108]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Motor" type="VBoxContainer" parent="VBoxContainer" unique_id=2013491077]
+[node name="WheelSize" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000030]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Motor" unique_id=174748548]
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/WheelSize" unique_id=1900000031]
 layout_mode = 2
+text = "Size"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/WheelSize" unique_id=1900000032]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/WheelSize/HBoxContainer" unique_id=1900000033]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.7
+max_value = 1.4
+step = 0.05
+value = 0.7
+metadata/reglage = "EchelleRoues"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/WheelSize/HBoxContainer" unique_id=1900000034]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Grip" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000035]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Grip" unique_id=1900000036]
+layout_mode = 2
+text = "Grip"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Grip" unique_id=1900000037]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Grip/HBoxContainer" unique_id=1900000038]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.2
+max_value = 2.0
+step = 0.05
+value = 0.2
+metadata/reglage = "EchelleAdherence"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Grip/HBoxContainer" unique_id=1900000039]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Wheels" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000040]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Wheels" unique_id=1900000041]
+layout_mode = 2
+text = "Front wheel"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Wheels" unique_id=1900000042]
+layout_mode = 2
+alignment = 1
+
+[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Wheels/HBoxContainer" unique_id=1900000043]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Previous"
+
+[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Wheels/HBoxContainer" unique_id=1900000044]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Next" type="Button" parent="Scroll/VBoxContainer/Wheels/HBoxContainer" unique_id=1900000045]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
+
+[node name="Section1900000046" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000046]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Motor"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Motor" unique_id=888558849]
+[node name="Motor" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000047]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Motor" unique_id=1900000048]
+layout_mode = 2
+text = "Power"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Motor" unique_id=1900000049]
 layout_mode = 2
 alignment = 1
 
-[node name="Previous" type="Button" parent="VBoxContainer/Motor/HBoxContainer" unique_id=1944986608]
+[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Motor/HBoxContainer" unique_id=1900000050]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Previous"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Motor/HBoxContainer" unique_id=156012306]
+[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Motor/HBoxContainer" unique_id=1900000051]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-texture = ExtResource("2_sr7u7")
+horizontal_alignment = 1
 
-[node name="Next" type="Button" parent="VBoxContainer/Motor/HBoxContainer" unique_id=600218880]
+[node name="Next" type="Button" parent="Scroll/VBoxContainer/Motor/HBoxContainer" unique_id=1900000052]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Next"
 
-[node name="Spacer3" type="Control" parent="VBoxContainer" unique_id=1411223960]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Sensor" type="VBoxContainer" parent="VBoxContainer" unique_id=1601542465]
+[node name="Turn" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000053]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Sensor" unique_id=840190375]
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Turn" unique_id=1900000054]
 layout_mode = 2
-text = "Sensor"
+text = "Turn speed"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Sensor" unique_id=127389080]
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Turn" unique_id=1900000055]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Turn/HBoxContainer" unique_id=1900000056]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.1
+max_value = 0.8
+step = 0.05
+value = 0.1
+metadata/reglage = "TurnFactor"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Turn/HBoxContainer" unique_id=1900000057]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Section1900000058" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000058]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Sensors"
+
+[node name="Sensor" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000059]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Sensor" unique_id=1900000060]
+layout_mode = 2
+text = "Type"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Sensor" unique_id=1900000061]
 layout_mode = 2
 alignment = 1
 
-[node name="Previous" type="Button" parent="VBoxContainer/Sensor/HBoxContainer" unique_id=1947134080]
+[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Sensor/HBoxContainer" unique_id=1900000062]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Previous"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Sensor/HBoxContainer" unique_id=436934782]
+[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Sensor/HBoxContainer" unique_id=1900000063]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-texture = ExtResource("2_sr7u7")
+horizontal_alignment = 1
 
-[node name="Next" type="Button" parent="VBoxContainer/Sensor/HBoxContainer" unique_id=1645502177]
+[node name="Next" type="Button" parent="Scroll/VBoxContainer/Sensor/HBoxContainer" unique_id=1900000064]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Next"
+
+[node name="Range" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000065]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/Range" unique_id=1900000066]
+layout_mode = 2
+text = "Range (m)"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Range" unique_id=1900000067]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Range/HBoxContainer" unique_id=1900000068]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 8.0
+step = 0.25
+value = 0.5
+metadata/reglage = "PorteeCapteurs"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Range/HBoxContainer" unique_id=1900000069]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="StopDistance" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000070]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/VBoxContainer/StopDistance" unique_id=1900000071]
+layout_mode = 2
+text = "Stop distance (m)"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/StopDistance" unique_id=1900000072]
+layout_mode = 2
+
+[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/StopDistance/HBoxContainer" unique_id=1900000073]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.1
+max_value = 1.5
+step = 0.05
+value = 0.1
+metadata/reglage = "DistanceArret"
+
+[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/StopDistance/HBoxContainer" unique_id=1900000074]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Play" type="Button" parent="Scroll/VBoxContainer" unique_id=1517390226]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Play"

@@ -1,4 +1,6 @@
 using Godot;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RobotMaker.Scripts;
 
@@ -23,7 +25,29 @@ public partial class TestRobot : VehicleBody3D
     [Export] public Node3D CasterMesh;           // petite roue, enfant du pivot
     [Export] public float CasterSwivelSpeed = 10f;
 
+    // Dimensions : le châssis s'allonge vers l'avant (l'arrière ne bouge pas) et s'élargit des deux côtés.
+    // Tout l'avant (roue avant, supports capteurs, pare-chocs) suit le bout du châssis,
+    // les roues motrices gardent leur distance au bord du châssis.
+    [ExportGroup("Dimensions")]
+    [Export(PropertyHint.Range, "0.7,1.6,0.05")] public float EchelleLongueur = 1f;  // 1 = taille d'origine
+    [Export(PropertyHint.Range, "0.7,1.6,0.05")] public float EchelleLargeur = 1f;
+    [Export(PropertyHint.Range, "0.7,1.4,0.05")] public float EchelleRoues = 1f;     // roues motrices : le châssis garde sa hauteur
+    [Export] public Node3D ChassisMesh;
+    [Export] public CollisionShape3D ChassisCollision;   // doit être une BoxShape3D : sert de référence de taille
+    [Export] public CollisionShape3D AvantCollision;
+
+    [ExportGroup("Apparence")]
+    [Export] public Color CouleurChassis = new(0.62f, 0.81f, 0.93f);
+    [Export] public Color CouleurRoues = Colors.Transparent;   // transparent = couleur d'origine du modèle
+
+    [ExportGroup("Adhérence")]
+    [Export(PropertyHint.Range, "0.2,2,0.05")] public float EchelleAdherence = 1f;  // multiplie l'adhérence des roues motrices de la scène
+
+    // Moteur : multiplie MaxSpeed et Force réglés dans l'inspecteur
+    public enum TypeMoteur { Lent, Normal, Rapide }
+
     [ExportGroup("Conduite")]
+    [Export] public TypeMoteur Moteur = TypeMoteur.Normal;
     [Export] public float MaxSpeed = 5f;         // m/s
     [Export] public float TurnFactor = 0.4f;     // part de MaxSpeed donnée à chaque roue pour tourner
     [Export] public float Acceleration = 4f;     // m/s² : montée progressive de la consigne
@@ -45,6 +69,7 @@ public partial class TestRobot : VehicleBody3D
     [Export] public CapteurAvant CapteurDroite;
     [Export] public bool AntiCollision = true;
     [Export] public float DistanceArret = 0.4f;  // m
+    [Export(PropertyHint.Range, "0.5,8,0.25")] public float PorteeCapteurs = 3f;  // m, appliquée aux 3 capteurs avant
 
     // NOUVEAU : infos utilisables partout dans le robot
     public bool ObstacleDevant => DistanceObstacle < float.PositiveInfinity;
@@ -55,10 +80,31 @@ public partial class TestRobot : VehicleBody3D
     private static float DistanceCapteur(CapteurAvant c) =>
         c != null && c.Detecte ? c.Distance : float.PositiveInfinity;
 
+    // Réglages modifiables dans le constructeur. Sauver() les copie en quittant le constructeur,
+    // et le robot de la scène de jeu les reprend à la place de ceux de l'inspecteur.
+    public static readonly string[] Reglages =
+    {
+        nameof(RoueAvant), nameof(Capteurs), nameof(Moteur), nameof(CouleurChassis), nameof(CouleurRoues),
+        nameof(EchelleLongueur), nameof(EchelleLargeur), nameof(EchelleRoues), nameof(EchelleAdherence),
+        nameof(PorteeCapteurs), nameof(TurnFactor), nameof(DistanceArret), "mass",
+    };
+
+    public static Dictionary<string, Variant> Choix;
+
+    public void Sauver() => Choix = Reglages.ToDictionary(nom => nom, nom => Get(nom));
+
+    private float _adherenceRoueFolle, _adherenceRoues;
+
+    // Valeurs de la scène, pour recalculer les dimensions depuis l'origine à chaque changement
+    private readonly Dictionary<Node3D, Transform3D> _origines = new();
+    private BoxShape3D _boxChassis, _boxAvant;
+    private Vector3 _tailleChassis, _tailleAvant, _centreMasse;
+    private float _rayonRoues;
+    private float _vitesseBase, _forceBase;
+
     private float _vitesseCible;   // m/s, avance
     private float _virageCible;    // m/s, différence ajoutée/retirée à chaque roue
     private Vector3 _casterOffset; // position du pivot par rapport au centre de la roue avant
-    private float _voie;           // m, distance entre les deux roues motrices
 
     public override void _Ready()
     {
@@ -83,16 +129,16 @@ public partial class TestRobot : VehicleBody3D
         Steering = 0f;
         Brake = 0f;
 
-        Activer(SupportAvant, Capteurs == TypeCapteurs.Avant);
-        Activer(SupportBas, Capteurs == TypeCapteurs.Bas);
+        if (Choix != null)
+            foreach ((string nom, Variant valeur) in Choix)
+                Set(nom, valeur);
 
-        // Le glisseur garde la suspension de FrontWheel (il porte le robot) mais n'accroche pas le sol
-        Activer(RoueFolle, RoueAvant == TypeRoueAvant.RoueFolle);
-        Activer(Glisseur, RoueAvant == TypeRoueAvant.Glisseur);
-        if (RoueAvant == TypeRoueAvant.Glisseur)
-            FrontWheel.WheelFrictionSlip = AdherenceGlisseur;
-
-        _voie = LeftWheel.Position.DistanceTo(RightWheel.Position);
+        _adherenceRoueFolle = FrontWheel.WheelFrictionSlip;
+        _adherenceRoues = LeftWheel.WheelFrictionSlip;
+        _vitesseBase = MaxSpeed;
+        _forceBase = Force;
+        PreparerDimensions();
+        Appliquer();
 
         // Dans la scène, le pivot est placé pour une suspension au repos
         if (CasterPivot != null)
@@ -124,7 +170,7 @@ public partial class TestRobot : VehicleBody3D
         // et vitesse de rotation = 2 × virage / voie. On réduit le virage quand on va vite.
         float virageMax = MaxSpeed * TurnFactor;
         if (Mathf.Abs(_vitesseCible) > 0.01f)
-            virageMax = Mathf.Min(virageMax, AccelLaterale * _voie / (2f * Mathf.Abs(_vitesseCible)));
+            virageMax = Mathf.Min(virageMax, AccelLaterale * Voie / (2f * Mathf.Abs(_vitesseCible)));
         _virageCible = Mathf.MoveToward(_virageCible, tourne * virageMax, Acceleration * dt);
 
         // Conduite différentielle asservie en vitesse (comme un moteur avec encodeur) :
@@ -141,6 +187,158 @@ public partial class TestRobot : VehicleBody3D
             UpdateCaster(dt);
     }
 
+    // Rappelée par le constructeur à chaque changement de réglage
+    public void Appliquer()
+    {
+        AppliquerChoix();
+        AppliquerDimensions();
+    }
+
+    private void AppliquerChoix()
+    {
+        Activer(SupportAvant, Capteurs == TypeCapteurs.Avant);
+        Activer(SupportBas, Capteurs == TypeCapteurs.Bas);
+
+        // Le glisseur garde la suspension de FrontWheel (il porte le robot) mais n'accroche pas le sol
+        Activer(RoueFolle, RoueAvant == TypeRoueAvant.RoueFolle);
+        Activer(Glisseur, RoueAvant == TypeRoueAvant.Glisseur);
+        FrontWheel.WheelFrictionSlip = RoueAvant == TypeRoueAvant.Glisseur ? AdherenceGlisseur : _adherenceRoueFolle;
+
+        float puissance = Moteur switch { TypeMoteur.Lent => 0.6f, TypeMoteur.Rapide => 1.6f, _ => 1f };
+        MaxSpeed = _vitesseBase * puissance;
+        Force = _forceBase * puissance;
+
+        LeftWheel.WheelFrictionSlip = _adherenceRoues * EchelleAdherence;
+        RightWheel.WheelFrictionSlip = _adherenceRoues * EchelleAdherence;
+
+        foreach (CapteurAvant capteur in new[] { CapteurGauche, CapteurCentre, CapteurDroite })
+            if (capteur != null)
+                capteur.Portee = PorteeCapteurs;
+
+        if (ChassisMesh is GeometryInstance3D chassis)
+            chassis.MaterialOverride = new StandardMaterial3D { AlbedoColor = CouleurChassis };
+
+        // Tous les modèles 3D des roues motrices ; transparent = on remet leur matériau d'origine
+        var matRoues = CouleurRoues.A > 0f ? new StandardMaterial3D { AlbedoColor = CouleurRoues } : null;
+        foreach (VehicleWheel3D roue in new[] { LeftWheel, RightWheel })
+            foreach (Node n in roue.FindChildren("*", nameof(MeshInstance3D), true, false))
+                ((MeshInstance3D)n).MaterialOverride = matRoues;
+    }
+
+    private void PreparerDimensions()
+    {
+        if (ChassisCollision?.Shape is not BoxShape3D)
+        {
+            GD.PushWarning($"{Name} : ChassisCollision doit avoir une BoxShape3D pour pouvoir changer les dimensions.");
+            return;
+        }
+
+        foreach (Node3D n in new Node3D[] { LeftWheel, RightWheel, FrontWheel, RoueFolle, Glisseur, SupportAvant, SupportBas, ChassisMesh, ChassisCollision, AvantCollision })
+            if (n != null)
+                _origines[n] = n.Transform;
+
+        // Contenu des supports capteurs (le modèle s'élargit, les capteurs s'écartent) et visuel des roues motrices
+        _rayonRoues = LeftWheel.WheelRadius;
+        foreach (Node3D support in new[] { SupportAvant, SupportBas, LeftWheel, RightWheel })
+            if (support != null)
+                foreach (Node enfant in support.GetChildren())
+                    if (enfant is Node3D n)
+                        _origines[n] = n.Transform;
+
+        // Formes propres à ce robot, sinon tous les robots de la partie changeraient de taille ensemble
+        _boxChassis = (BoxShape3D)ChassisCollision.Shape.Duplicate();
+        ChassisCollision.Shape = _boxChassis;
+        _tailleChassis = _boxChassis.Size;
+
+        if (AvantCollision?.Shape is BoxShape3D avant)
+        {
+            _boxAvant = (BoxShape3D)avant.Duplicate();
+            AvantCollision.Shape = _boxAvant;
+            _tailleAvant = _boxAvant.Size;
+        }
+
+        _centreMasse = CenterOfMass;
+    }
+
+    private void AppliquerDimensions()
+    {
+        if (_boxChassis == null)
+            return;
+
+        float allonge = _tailleChassis.Z * (EchelleLongueur - 1f);
+        float elargit = _tailleChassis.X * (EchelleLargeur - 1f);
+
+        // Châssis étiré vers l'avant : son centre avance de la moitié de l'allongement
+        _boxChassis.Size = _tailleChassis + new Vector3(elargit, 0f, allonge);
+        Deplacer(ChassisCollision, new Vector3(0f, 0f, allonge / 2f));
+
+        if (ChassisMesh != null)
+        {
+            float centreZ = _origines[ChassisCollision].Origin.Z;
+            Transform3D t = _origines[ChassisMesh];
+            t.Basis = Basis.FromScale(new Vector3(EchelleLargeur, 1f, EchelleLongueur)) * t.Basis;
+            t.Origin.X *= EchelleLargeur;
+            t.Origin.Z = centreZ + allonge / 2f + (t.Origin.Z - centreZ) * EchelleLongueur;
+            ChassisMesh.Transform = t;
+        }
+
+        // L'avant suit le bout du châssis
+        if (_boxAvant != null)
+            _boxAvant.Size = _tailleAvant + new Vector3(elargit, 0f, 0f);
+        foreach (Node3D n in new Node3D[] { AvantCollision, SupportAvant, SupportBas, RoueFolle, Glisseur, FrontWheel })
+            Deplacer(n, new Vector3(0f, 0f, allonge));
+
+        // Supports capteurs : le modèle est étiré en largeur, les capteurs gardent leur taille mais s'écartent
+        foreach (Node3D support in new[] { SupportAvant, SupportBas })
+        {
+            if (support == null)
+                continue;
+            foreach (Node enfant in support.GetChildren())
+            {
+                if (enfant is not Node3D n || !_origines.TryGetValue(n, out Transform3D t))
+                    continue;
+                if (n is MeshInstance3D)
+                    t.Basis = Basis.FromScale(new Vector3(EchelleLargeur, 1f, 1f)) * t.Basis;
+                t.Origin.X *= EchelleLargeur;
+                n.Transform = t;
+            }
+        }
+
+        // Roues motrices : chacune s'écarte de la moitié de l'élargissement. Une roue plus grande
+        // est fixée plus haut d'autant, pour que le châssis reste à la même hauteur du sol.
+        float rayon = _rayonRoues * EchelleRoues;
+        foreach (VehicleWheel3D roue in new[] { LeftWheel, RightWheel })
+        {
+            roue.WheelRadius = rayon;
+            Deplacer(roue, new Vector3(Mathf.Sign(_origines[roue].Origin.X) * elargit / 2f, rayon - _rayonRoues, 0f));
+            foreach (Node enfant in roue.GetChildren())
+            {
+                if (enfant is not Node3D n || !_origines.TryGetValue(n, out Transform3D t))
+                    continue;
+                t.Basis = Basis.FromScale(Vector3.One * EchelleRoues) * t.Basis;
+                n.Transform = t;
+            }
+        }
+
+        CenterOfMass = _centreMasse + new Vector3(0f, 0f, allonge / 2f);
+
+        // Une VehicleWheel3D ne lit sa position qu'en entrant dans l'arbre : on la ressort et on la remet
+        foreach (VehicleWheel3D roue in new[] { LeftWheel, RightWheel, FrontWheel })
+        {
+            RemoveChild(roue);
+            AddChild(roue);
+        }
+    }
+
+    private void Deplacer(Node3D noeud, Vector3 decalage)
+    {
+        if (noeud == null)
+            return;
+        Transform3D t = _origines[noeud];
+        t.Origin += decalage;
+        noeud.Transform = t;
+    }
+
     // L'élément non choisi est caché et arrêté (les capteurs gardent Detecte à false)
     private static void Activer(Node3D noeud, bool actif)
     {
@@ -149,6 +347,9 @@ public partial class TestRobot : VehicleBody3D
         noeud.Visible = actif;
         noeud.ProcessMode = actif ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
     }
+
+    // m, distance entre les deux roues motrices (change avec la largeur)
+    private float Voie => LeftWheel.Position.DistanceTo(RightWheel.Position);
 
     private float ForceMoteur(VehicleWheel3D roue, float vitesseVoulue)
     {

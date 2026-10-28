@@ -7,6 +7,7 @@ public partial class CameraOrbit : Node3D
     [Export] public Node3D Target;
 
     [ExportGroup("Souris")]
+    [Export] public bool CapturerSouris = true;  // false : la souris reste libre (menus), on tourne en glissant clic gauche ou droit
     [Export] public float Sensibilite = 0.003f;
     [Export] public float PitchMin = -70f;   // regarder vers le bas (degrés)
     [Export] public float PitchMax = 20f;    // regarder vers le haut (degrés)
@@ -37,13 +38,16 @@ public partial class CameraOrbit : Node3D
             _arm.AddExcludedObject(corps.GetRid());
 
         _pitch = Mathf.DegToRad(-20f);
-        Input.MouseMode = Input.MouseModeEnum.Captured;
+        if (CapturerSouris)
+            Input.MouseMode = Input.MouseModeEnum.Captured;
     }
 
     public override void _UnhandledInput(InputEvent e)
     {
         // Rotation avec la souris
-        if (e is InputEventMouseMotion souris && Input.MouseMode == Input.MouseModeEnum.Captured)
+        if (e is InputEventMouseMotion souris && (CapturerSouris
+                ? Input.MouseMode == Input.MouseModeEnum.Captured
+                : (souris.ButtonMask & (MouseButtonMask.Left | MouseButtonMask.Right)) != 0))
         {
             _yaw -= souris.Relative.X * Sensibilite;
             _pitch -= souris.Relative.Y * Sensibilite;
@@ -57,7 +61,7 @@ public partial class CameraOrbit : Node3D
             else if (bouton.ButtonIndex == MouseButton.WheelDown)
                 Distance += 0.5f;
             // Clic gauche pour recapturer la souris
-            else if (bouton.ButtonIndex == MouseButton.Left)
+            else if (bouton.ButtonIndex == MouseButton.Left && CapturerSouris)
                 Input.MouseMode = Input.MouseModeEnum.Captured;
 
             Distance = Mathf.Clamp(Distance, DistanceMin, DistanceMax);
