@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://d1tbq52jea0mn" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelMiddle.fbx" id="1_middle"]
+[ext_resource type="PackedScene" uid="uid://bjqxu7x121slh" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelTop.fbx" id="2_top"]
+[ext_resource type="PackedScene" uid="uid://cxnh33krkjyw" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelWeel.fbx" id="3_weel"]
+
+[node name="FlyWeel" type="Node3D" unique_id=581204733]
+
+[node name="Pivot" type="Node3D" parent="." unique_id=1664621064]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.018, 0)
+
+[node name="infiniteWeelMiddle" parent="Pivot" unique_id=998142326 instance=ExtResource("1_middle")]
+
+[node name="WeelFront" type="Node3D" parent="Pivot" unique_id=227032114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23501, 0)
+
+[node name="infiniteWeelWeel" parent="Pivot/WeelFront" unique_id=1070850769 instance=ExtResource("3_weel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.23501, 0)
+
+[node name="infiniteWeelTop" parent="." unique_id=166206661 instance=ExtResource("2_top")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0.06019184, 0)

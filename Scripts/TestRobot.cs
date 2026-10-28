@@ -9,6 +9,15 @@ public partial class TestRobot : VehicleBody3D
     [Export] public VehicleWheel3D RightWheel;
     [Export] public VehicleWheel3D FrontWheel;   // roue folle : orientée automatiquement par le code
 
+    // Roue avant : roue folle qui pivote, ou capsule qui glisse au sol
+    public enum TypeRoueAvant { RoueFolle, Glisseur }
+
+    [ExportGroup("Roue avant")]
+    [Export] public TypeRoueAvant RoueAvant = TypeRoueAvant.RoueFolle;
+    [Export] public Node3D RoueFolle;
+    [Export] public Node3D Glisseur;
+    [Export] public float AdherenceGlisseur = 0f; // wheel_friction_slip du glisseur : 0 = glisse sans aucune accroche
+
     [ExportGroup("Visuel roue libre (optionnel)")]
     [Export] public Node3D CasterPivot;          // fourche qui pivote
     [Export] public Node3D CasterMesh;           // petite roue, enfant du pivot
@@ -74,14 +83,20 @@ public partial class TestRobot : VehicleBody3D
         Steering = 0f;
         Brake = 0f;
 
-        ActiverSupport(SupportAvant, Capteurs == TypeCapteurs.Avant);
-        ActiverSupport(SupportBas, Capteurs == TypeCapteurs.Bas);
+        Activer(SupportAvant, Capteurs == TypeCapteurs.Avant);
+        Activer(SupportBas, Capteurs == TypeCapteurs.Bas);
+
+        // Le glisseur garde la suspension de FrontWheel (il porte le robot) mais n'accroche pas le sol
+        Activer(RoueFolle, RoueAvant == TypeRoueAvant.RoueFolle);
+        Activer(Glisseur, RoueAvant == TypeRoueAvant.Glisseur);
+        if (RoueAvant == TypeRoueAvant.Glisseur)
+            FrontWheel.WheelFrictionSlip = AdherenceGlisseur;
 
         _voie = LeftWheel.Position.DistanceTo(RightWheel.Position);
 
         // Dans la scène, le pivot est placé pour une suspension au repos
         if (CasterPivot != null)
-            _casterOffset = CasterPivot.Position - (FrontWheel.Position + Vector3.Down * FrontWheel.WheelRestLength);
+            _casterOffset = ToLocal(CasterPivot.GlobalPosition) - (FrontWheel.Position + Vector3.Down * FrontWheel.WheelRestLength);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -122,16 +137,17 @@ public partial class TestRobot : VehicleBody3D
         LeftWheel.Brake = arrete ? BrakeForce : 0f;
         RightWheel.Brake = arrete ? BrakeForce : 0f;
 
-        UpdateCaster(dt);
+        if (RoueAvant == TypeRoueAvant.RoueFolle)
+            UpdateCaster(dt);
     }
 
-    // Le support non choisi est caché et ses capteurs arrêtés (Detecte reste false)
-    private static void ActiverSupport(Node3D support, bool actif)
+    // L'élément non choisi est caché et arrêté (les capteurs gardent Detecte à false)
+    private static void Activer(Node3D noeud, bool actif)
     {
-        if (support == null)
+        if (noeud == null)
             return;
-        support.Visible = actif;
-        support.ProcessMode = actif ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
+        noeud.Visible = actif;
+        noeud.ProcessMode = actif ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
     }
 
     private float ForceMoteur(VehicleWheel3D roue, float vitesseVoulue)
@@ -169,7 +185,7 @@ public partial class TestRobot : VehicleBody3D
             return;
 
         // Le pivot suit la suspension pour que la roue visuelle touche le sol
-        CasterPivot.Position = FrontWheel.Position + _casterOffset;
+        CasterPivot.GlobalPosition = ToGlobal(FrontWheel.Position + _casterOffset);
 
         if (vitesse > 0.1f)
         {

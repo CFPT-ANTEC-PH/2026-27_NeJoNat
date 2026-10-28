@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cyn45uwfi0lm6"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_glisseur"]
+albedo_color = Color(0.75, 0.75, 0.78, 1)
+metallic = 0.6
+roughness = 0.3
+
+[node name="Glisseur" type="Node3D" unique_id=926481530]
+
+[node name="Corps" type="CSGCylinder3D" parent="." unique_id=926481531]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4644551, 0)
+radius = 0.17041016
+height = 0.68475527
+sides = 24
+material = SubResource("Mat_glisseur")
+
+[node name="Bout" type="CSGSphere3D" parent="Corps" unique_id=926481532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.29379213, 0)
+radius = 0.17874297
+radial_segments = 24
+rings = 12
+material = SubResource("Mat_glisseur")

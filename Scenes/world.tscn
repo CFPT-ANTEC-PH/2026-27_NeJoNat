@@ -48,6 +48,7 @@ material = SubResource("StandardMaterial3D_8j60k")
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -11.060814, 0.4410708, 6.692955)
 engine_force = 1024.0
 brake = 128.0
+RoueAvant = 1
 Capteurs = 1
 DistanceArret = 0.4
 
