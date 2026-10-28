@@ -48,6 +48,8 @@ material = SubResource("StandardMaterial3D_8j60k")
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -11.060814, 0.4410708, 6.692955)
 engine_force = 1024.0
 brake = 128.0
+Capteurs = 1
+DistanceArret = 0.4
 
 [node name="Walls" type="Node3D" parent="." unique_id=2089986693]
 

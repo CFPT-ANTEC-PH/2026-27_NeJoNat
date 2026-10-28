@@ -25,7 +25,12 @@ public partial class TestRobot : VehicleBody3D
     [Export] public float AccelLaterale = 4f;    // m/s² max en virage (au-delà, risque de se renverser)
 
     // NOUVEAU : capteurs
+    public enum TypeCapteurs { Avant, Bas }
+
     [ExportGroup("Capteurs")]
+    [Export] public TypeCapteurs Capteurs = TypeCapteurs.Avant;
+    [Export] public Node3D SupportAvant;
+    [Export] public Node3D SupportBas;
     [Export] public CapteurAvant CapteurGauche;
     [Export] public CapteurAvant CapteurCentre;
     [Export] public CapteurAvant CapteurDroite;
@@ -68,6 +73,9 @@ public partial class TestRobot : VehicleBody3D
         EngineForce = 0f;
         Steering = 0f;
         Brake = 0f;
+
+        ActiverSupport(SupportAvant, Capteurs == TypeCapteurs.Avant);
+        ActiverSupport(SupportBas, Capteurs == TypeCapteurs.Bas);
 
         _voie = LeftWheel.Position.DistanceTo(RightWheel.Position);
 
@@ -115,6 +123,15 @@ public partial class TestRobot : VehicleBody3D
         RightWheel.Brake = arrete ? BrakeForce : 0f;
 
         UpdateCaster(dt);
+    }
+
+    // Le support non choisi est caché et ses capteurs arrêtés (Detecte reste false)
+    private static void ActiverSupport(Node3D support, bool actif)
+    {
+        if (support == null)
+            return;
+        support.Visible = actif;
+        support.ProcessMode = actif ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
     }
 
     private float ForceMoteur(VehicleWheel3D roue, float vitesseVoulue)

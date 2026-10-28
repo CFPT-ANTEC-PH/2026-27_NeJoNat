@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://InteractiveMap/Objects/Cube.tscn" id="7_cube"]
 [ext_resource type="PackedScene" path="res://InteractiveMap/Objects/Sphere.tscn" id="8_sphere"]
 [ext_resource type="PackedScene" path="res://InteractiveMap/Objects/Cylindre.tscn" id="9_cyl"]
+[ext_resource type="PackedScene" uid="uid://bphapsunm58vx" path="res://Scenes/robot.tscn" id="9_enim8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_enim8"]
 
@@ -41,3 +42,6 @@ transform = Transform3D(1, 0, 0, 0, 0.8001412, 0.5998118, 0, -0.5998118, 0.80014
 Objets = Array[PackedScene]([ExtResource("7_cube"), ExtResource("8_sphere"), ExtResource("9_cyl")])
 Ligne = NodePath("../Ligne")
 Spawner = NodePath("../Objets")
+
+[node name="TestRobot" parent="." unique_id=183795887 instance=ExtResource("9_enim8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1452208, 0.010264665, 9.938099)

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bhqhflk7spe5x"]
+
+[ext_resource type="ArrayMesh" uid="uid://bj31smjp460lb" path="res://Assets/Models/BaseRobot/supportCapt.obj" id="1_supp"]
+[ext_resource type="PackedScene" uid="uid://cadqn72soyvwr" path="res://Scenes/Cappteurs/CapteurAvant.tscn" id="2_capt"]
+
+[node name="CapteursAvant" type="Node3D" unique_id=702915384]
+
+[node name="SupportCapt_Front" type="MeshInstance3D" parent="." unique_id=1910950160]
+transform = Transform3D(12, 0, 0, 0, -6.8189763e-07, 11.999999, 0, -15.6, -5.2453663e-07, 0, 0, 0)
+mesh = ExtResource("1_supp")
+
+[node name="CapteurAvant_Front" parent="." unique_id=113778952 instance=ExtResource("2_capt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.006052375, 0.12448782, 0.5186901)
+
+[node name="CapteurAvant_Right" parent="." unique_id=1664836262 instance=ExtResource("2_capt")]
+transform = Transform3D(0.5998056, 0, -0.8001458, 0, 1, 0, 0.8001458, 0, 0.5998056, -0.8103462, 0.12448782, 0.2688757)
+
+[node name="CapteurAvant_Left" parent="." unique_id=1130778428 instance=ExtResource("2_capt")]
+transform = Transform3D(0.61253077, 0, 0.7904467, 0, 1, 0, -0.7904467, 0, 0.61253077, 0.82123494, 0.12448777, 0.2574239)

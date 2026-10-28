@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dlnm3mtnjvngw"]
+
+[ext_resource type="ArrayMesh" uid="uid://bax5k3y2sya01" path="res://Assets/Models/BaseRobot/supportCapt_Down.obj" id="1_cenrn"]
+[ext_resource type="PackedScene" uid="uid://ta2nmyaj730i" path="res://Scenes/Cappteurs/capteur-route.tscn" id="2_route"]
+
+[node name="CapteursDown" type="Node3D" unique_id=31504777]
+
+[node name="SupportCapt_Down" type="MeshInstance3D" parent="." unique_id=415661158]
+transform = Transform3D(12, 0, 0, 0, -6.818977e-07, 11.999999, 0, -15.6, -5.2453663e-07, 0, 0, 0)
+mesh = ExtResource("1_cenrn")
+
+[node name="CapteurRoute_1" parent="." unique_id=1730254101 instance=ExtResource("2_route")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.04, 0.65)
+
+[node name="CapteurRoute_2" parent="." unique_id=1730254102 instance=ExtResource("2_route")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.04, 0.65)
+
+[node name="CapteurRoute_3" parent="." unique_id=1730254103 instance=ExtResource("2_route")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0.65)
+
+[node name="CapteurRoute_4" parent="." unique_id=1730254104 instance=ExtResource("2_route")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.04, 0.65)
+
+[node name="CapteurRoute_5" parent="." unique_id=1730254105 instance=ExtResource("2_route")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.04, 0.65)
