@@ -2,64 +2,154 @@
 
 [ext_resource type="Script" uid="uid://dxc76u12wvbbb" path="res://Scripts/ConstructorUI.cs" id="1_30pre"]
 
-[node name="ConstructorUI" type="CanvasLayer" unique_id=30045958]
+[sub_resource type="StyleBoxFlat" id="Fond"]
+bg_color = Color(0.09, 0.1, 0.12, 0.93)
+
+[sub_resource type="StyleBoxFlat" id="Jouer"]
+bg_color = Color(0.16, 0.6, 0.32, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="JouerSurvol"]
+bg_color = Color(0.2, 0.7, 0.38, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Aide"]
+bg_color = Color(0.09, 0.1, 0.12, 0.75)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+
+
+[node name="ConstructorUI" type="CanvasLayer"]
+unique_id = 30045958
 script = ExtResource("1_30pre")
 
-[node name="Scroll" type="ScrollContainer" parent="." unique_id=1899939271]
+[node name="Panneau" type="PanelContainer" parent="."]
+anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 380.0
+offset_right = 400.0
 grow_vertical = 2
-horizontal_scroll_mode = 0
+theme_override_styles/panel = SubResource("Fond")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Scroll" unique_id=1899939270]
+[node name="Marge" type="MarginContainer" parent="Panneau"]
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Contenu" type="VBoxContainer" parent="Panneau/Marge"]
+layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Section1900000001" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000001]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Body"
-
-[node name="Body" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000002]
+[node name="Haut" type="HBoxContainer" parent="Panneau/Marge/Contenu"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Body" unique_id=1900000003]
-layout_mode = 2
-text = "Color"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Body" unique_id=1900000004]
-layout_mode = 2
-alignment = 1
-
-[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Body/HBoxContainer" unique_id=1900000005]
+[node name="Titre" type="Label" parent="Panneau/Marge/Contenu/Haut"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Previous"
+theme_override_font_sizes/font_size = 24
+text = "Constructeur"
 
-[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Body/HBoxContainer" unique_id=1900000006]
-custom_minimum_size = Vector2(110, 0)
+[node name="Menu" type="Button" parent="Panneau/Marge/Contenu/Haut"]
+unique_name_in_owner = true
 layout_mode = 2
-horizontal_alignment = 1
+tooltip_text = "Revenir au menu principal"
+text = "Menu"
 
-[node name="Next" type="Button" parent="Scroll/VBoxContainer/Body/HBoxContainer" unique_id=1900000007]
+[node name="SousTitre" type="Label" parent="Panneau/Marge/Contenu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+text = "Règle ton robot, l'aperçu change en direct."
+
+[node name="Scroll" type="ScrollContainer" parent="Panneau/Marge/Contenu"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Espace" type="MarginContainer" parent="Panneau/Marge/Contenu/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Next"
+theme_override_constants/margin_right = 14
 
-[node name="Length" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000008]
+[node name="Reglages" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="Section1" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Châssis"
+
+[node name="Trait1" type="HSeparator" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Length" unique_id=1900000009]
+[node name="Body" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
 layout_mode = 2
-text = "Length"
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Body"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Couleur"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Body"]
+layout_mode = 2
+
+[node name="Previous" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Body/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Précédent"
+text = "<"
+
+[node name="Choix" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Body/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Length" unique_id=1900000010]
+[node name="Next" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Body/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Suivant"
+text = ">"
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Couleur de la carrosserie."
+autowrap_mode = 3
+
+[node name="Length" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Length"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Longueur"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Length"]
 layout_mode = 2
 
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Length/HBoxContainer" unique_id=1900000011]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Length/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -68,23 +158,33 @@ max_value = 1.6
 step = 0.05
 value = 0.7
 metadata/reglage = "EchelleLongueur"
+metadata/format = "×{0:0.00}"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Length/HBoxContainer" unique_id=1900000012]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Length/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Length"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Allonge le châssis vers l'avant. La roue avant et les capteurs suivent."
+autowrap_mode = 3
+
+[node name="Width" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Width"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Largeur"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Width"]
 layout_mode = 2
 
-[node name="Width" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000013]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Width" unique_id=1900000014]
-layout_mode = 2
-text = "Width"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Width" unique_id=1900000015]
-layout_mode = 2
-
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Width/HBoxContainer" unique_id=1900000016]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Width/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -93,23 +193,33 @@ max_value = 1.6
 step = 0.05
 value = 0.7
 metadata/reglage = "EchelleLargeur"
+metadata/format = "×{0:0.00}"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Width/HBoxContainer" unique_id=1900000017]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Width/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Width"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Écarte les roues motrices : plus stable, mais tourne moins vite."
+autowrap_mode = 3
+
+[node name="Mass" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Mass"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Masse"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Mass"]
 layout_mode = 2
 
-[node name="Mass" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000018]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Mass" unique_id=1900000019]
-layout_mode = 2
-text = "Mass (kg)"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Mass" unique_id=1900000020]
-layout_mode = 2
-
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Mass/HBoxContainer" unique_id=1900000021]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Mass/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -118,55 +228,79 @@ max_value = 3.0
 step = 0.1
 value = 0.5
 metadata/reglage = "mass"
+metadata/format = "{0:0.0} kg"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Mass/HBoxContainer" unique_id=1900000022]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Mass/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Mass"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Plus lourd : plus stable, mais les moteurs peinent davantage à accélérer."
+autowrap_mode = 3
+
+[node name="Section2" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Roues"
+
+[node name="Trait2" type="HSeparator" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
 layout_mode = 2
 
-[node name="Section1900000023" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000023]
+[node name="WheelColor" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Wheels"
+theme_override_constants/separation = 4
 
-[node name="WheelColor" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000024]
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelColor"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Couleur"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelColor"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/WheelColor" unique_id=1900000025]
+[node name="Previous" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelColor/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
-text = "Color"
-horizontal_alignment = 1
+tooltip_text = "Précédent"
+text = "<"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/WheelColor" unique_id=1900000026]
-layout_mode = 2
-alignment = 1
-
-[node name="Previous" type="Button" parent="Scroll/VBoxContainer/WheelColor/HBoxContainer" unique_id=1900000027]
+[node name="Choix" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelColor/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Previous"
-
-[node name="Choix" type="Label" parent="Scroll/VBoxContainer/WheelColor/HBoxContainer" unique_id=1900000028]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
+theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="Next" type="Button" parent="Scroll/VBoxContainer/WheelColor/HBoxContainer" unique_id=1900000029]
+[node name="Next" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelColor/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Next"
+tooltip_text = "Suivant"
+text = ">"
 
-[node name="WheelSize" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000030]
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelColor"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Couleur des deux roues motrices (Origine = couleur du modèle)."
+autowrap_mode = 3
+
+[node name="WheelSize" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelSize"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Taille"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelSize"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/WheelSize" unique_id=1900000031]
-layout_mode = 2
-text = "Size"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/WheelSize" unique_id=1900000032]
-layout_mode = 2
-
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/WheelSize/HBoxContainer" unique_id=1900000033]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelSize/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -175,23 +309,33 @@ max_value = 1.4
 step = 0.05
 value = 0.7
 metadata/reglage = "EchelleRoues"
+metadata/format = "×{0:0.00}"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/WheelSize/HBoxContainer" unique_id=1900000034]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelSize/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/WheelSize"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Diamètre des roues motrices. Le châssis reste à la même hauteur."
+autowrap_mode = 3
+
+[node name="Grip" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Grip"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Adhérence"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Grip"]
 layout_mode = 2
 
-[node name="Grip" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000035]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Grip" unique_id=1900000036]
-layout_mode = 2
-text = "Grip"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Grip" unique_id=1900000037]
-layout_mode = 2
-
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Grip/HBoxContainer" unique_id=1900000038]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Grip/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -200,82 +344,116 @@ max_value = 2.0
 step = 0.05
 value = 0.2
 metadata/reglage = "EchelleAdherence"
+metadata/format = "×{0:0.00}"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Grip/HBoxContainer" unique_id=1900000039]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Grip/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Grip"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Accroche des roues au sol. Trop faible : le robot patine et dérape dans les virages."
+autowrap_mode = 3
+
+[node name="Wheels" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Wheels"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Roue avant"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Wheels"]
 layout_mode = 2
 
-[node name="Wheels" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000040]
+[node name="Previous" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Wheels/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
+tooltip_text = "Précédent"
+text = "<"
 
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Wheels" unique_id=1900000041]
-layout_mode = 2
-text = "Front wheel"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Wheels" unique_id=1900000042]
-layout_mode = 2
-alignment = 1
-
-[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Wheels/HBoxContainer" unique_id=1900000043]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Previous"
-
-[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Wheels/HBoxContainer" unique_id=1900000044]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-horizontal_alignment = 1
-
-[node name="Next" type="Button" parent="Scroll/VBoxContainer/Wheels/HBoxContainer" unique_id=1900000045]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Next"
-
-[node name="Section1900000046" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000046]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Motor"
-
-[node name="Motor" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000047]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Motor" unique_id=1900000048]
-layout_mode = 2
-text = "Power"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Motor" unique_id=1900000049]
-layout_mode = 2
-alignment = 1
-
-[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Motor/HBoxContainer" unique_id=1900000050]
+[node name="Choix" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Wheels/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Previous"
-
-[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Motor/HBoxContainer" unique_id=1900000051]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
+theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="Next" type="Button" parent="Scroll/VBoxContainer/Motor/HBoxContainer" unique_id=1900000052]
+[node name="Next" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Wheels/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Suivant"
+text = ">"
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Wheels"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = ""
+autowrap_mode = 3
+
+[node name="Section3" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Moteur"
+
+[node name="Trait3" type="HSeparator" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+
+[node name="Motor" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Motor"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Puissance"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Motor"]
+layout_mode = 2
+
+[node name="Previous" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Motor/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Précédent"
+text = "<"
+
+[node name="Choix" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Motor/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Next"
-
-[node name="Turn" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000053]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Turn" unique_id=1900000054]
-layout_mode = 2
-text = "Turn speed"
+theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Turn" unique_id=1900000055]
+[node name="Next" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Motor/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Suivant"
+text = ">"
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Motor"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = ""
+autowrap_mode = 3
+
+[node name="Turn" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Turn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Vitesse de virage"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Turn"]
 layout_mode = 2
 
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Turn/HBoxContainer" unique_id=1900000056]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Turn/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -284,55 +462,79 @@ max_value = 0.8
 step = 0.05
 value = 0.1
 metadata/reglage = "TurnFactor"
+metadata/format = "{0:0%}"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Turn/HBoxContainer" unique_id=1900000057]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Turn/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Turn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Part de la vitesse donnée aux roues pour tourner. Trop haut : virages brusques."
+autowrap_mode = 3
+
+[node name="Section4" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Capteurs"
+
+[node name="Trait4" type="HSeparator" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
 layout_mode = 2
 
-[node name="Section1900000058" type="Label" parent="Scroll/VBoxContainer" unique_id=1900000058]
+[node name="Sensor" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Sensors"
+theme_override_constants/separation = 4
 
-[node name="Sensor" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000059]
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Sensor"]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Sensor" unique_id=1900000060]
-layout_mode = 2
+theme_override_font_sizes/font_size = 15
 text = "Type"
-horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Sensor" unique_id=1900000061]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Sensor"]
 layout_mode = 2
-alignment = 1
 
-[node name="Previous" type="Button" parent="Scroll/VBoxContainer/Sensor/HBoxContainer" unique_id=1900000062]
+[node name="Previous" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Sensor/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Previous"
+tooltip_text = "Précédent"
+text = "<"
 
-[node name="Choix" type="Label" parent="Scroll/VBoxContainer/Sensor/HBoxContainer" unique_id=1900000063]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-horizontal_alignment = 1
-
-[node name="Next" type="Button" parent="Scroll/VBoxContainer/Sensor/HBoxContainer" unique_id=1900000064]
+[node name="Choix" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Sensor/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Next"
-
-[node name="Range" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000065]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/Range" unique_id=1900000066]
-layout_mode = 2
-text = "Range (m)"
+theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/Range" unique_id=1900000067]
+[node name="Next" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Sensor/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Suivant"
+text = ">"
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Sensor"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = ""
+autowrap_mode = 3
+
+[node name="Range" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Range"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Portée"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Range"]
 layout_mode = 2
 
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/Range/HBoxContainer" unique_id=1900000068]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Range/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -341,23 +543,33 @@ max_value = 8.0
 step = 0.25
 value = 0.5
 metadata/reglage = "PorteeCapteurs"
+metadata/format = "{0:0.00} m"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/Range/HBoxContainer" unique_id=1900000069]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Range/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Range"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Jusqu'où les capteurs voient un obstacle (rayons bleus, rouges quand ils touchent)."
+autowrap_mode = 3
+
+[node name="StopDistance" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/StopDistance"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Distance d'arrêt"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/StopDistance"]
 layout_mode = 2
 
-[node name="StopDistance" type="VBoxContainer" parent="Scroll/VBoxContainer" unique_id=1900000070]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Scroll/VBoxContainer/StopDistance" unique_id=1900000071]
-layout_mode = 2
-text = "Stop distance (m)"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Scroll/VBoxContainer/StopDistance" unique_id=1900000072]
-layout_mode = 2
-
-[node name="Curseur" type="HSlider" parent="Scroll/VBoxContainer/StopDistance/HBoxContainer" unique_id=1900000073]
+[node name="Curseur" type="HSlider" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/StopDistance/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -366,12 +578,44 @@ max_value = 1.5
 step = 0.05
 value = 0.1
 metadata/reglage = "DistanceArret"
+metadata/format = "{0:0.00} m"
 
-[node name="Valeur" type="Label" parent="Scroll/VBoxContainer/StopDistance/HBoxContainer" unique_id=1900000074]
-custom_minimum_size = Vector2(50, 0)
+[node name="Valeur" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/StopDistance/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
+horizontal_alignment = 2
 
-[node name="Play" type="Button" parent="Scroll/VBoxContainer" unique_id=1517390226]
-custom_minimum_size = Vector2(0, 40)
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/StopDistance"]
 layout_mode = 2
-text = "Play"
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Le robot freine pour s'arrêter à cette distance d'un obstacle."
+autowrap_mode = 3
+
+[node name="Play" type="Button" parent="Panneau/Marge/Contenu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+tooltip_text = "Le robot part tout seul dans la carte interactive"
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("Jouer")
+theme_override_styles/hover = SubResource("JouerSurvol")
+theme_override_styles/pressed = SubResource("Jouer")
+text = "Lancer dans la carte  ▶"
+
+[node name="Commandes" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -44.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("Aide")
+horizontal_alignment = 1
+text = "Glisser : tourner la vue    Molette : zoom"
