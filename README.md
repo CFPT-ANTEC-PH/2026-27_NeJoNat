@@ -31,7 +31,7 @@ Les robots se personnalisent dans la scène **Constructor** (Main Menu → New R
 | Motor | puissance (Lent / Normal / Rapide), vitesse de virage |
 | Sensors | type (avant / bas), portée, distance d'arrêt |
 
-Le bouton **Play** lance la scène de jeu avec le robot configuré. Quand on change la taille du robot, tout suit : roues (physique comprise), collisions, supports capteurs, roue avant.
+Le bouton **Play** lance la carte interactive avec le robot configuré, en pilotage automatique (`Pilotage` dans l'inspecteur : Manuel / Auto). Quand on change la taille du robot, tout suit : roues (physique comprise), collisions, supports capteurs, roue avant.
 
 ## Commandes
 
@@ -71,7 +71,8 @@ Le bouton **Play** lance la scène de jeu avec le robot configuré. Quand on cha
 - [x] Capteurs avant d'obstacle et anti-collision
 - [x] Carte interactive (dessin de ligne, objets, caméra libre)
 - [x] Capteurs de ligne (détection)
-- [ ] Suivi de ligne automatique
+- [x] Suivi de ligne automatique
+- [x] Pilotage automatique dans la carte interactive (évitement d'obstacles ou suivi de ligne selon les capteurs)
 - [x] Deux types de roue avant (roue folle / glisseur)
 - [x] Constructeur : personnalisation du robot (apparence, dimensions, moteur, capteurs)
 - [ ] Sauvegarde / chargement d'un robot (Load Robot)

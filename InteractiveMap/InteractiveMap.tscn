@@ -45,3 +45,4 @@ Spawner = NodePath("../Objets")
 
 [node name="TestRobot" parent="." unique_id=183795887 instance=ExtResource("9_enim8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1452208, 0.010264665, 9.938099)
+Pilotage = 1

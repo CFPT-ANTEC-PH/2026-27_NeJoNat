@@ -7,7 +7,7 @@ namespace RobotMaker.Scripts;
 public partial class Constructor : Node3D
 {
 	[Export] public TestRobot Robot;
-	[Export(PropertyHint.File, "*.tscn")] public string SceneJeu = "res://Scenes/world.tscn";
+	[Export(PropertyHint.File, "*.tscn")] public string SceneJeu = "res://InteractiveMap/InteractiveMap.tscn";
 
 	private static readonly (string Nom, Color Couleur)[] CouleursChassis =
 	{

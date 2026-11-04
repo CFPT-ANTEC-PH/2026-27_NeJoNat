@@ -149,8 +149,10 @@ public partial class TestRobot : VehicleBody3D
     {
         float dt = (float)delta;
 
-        float avance = Input.GetAxis("down", "up");
-        float tourne = Input.GetAxis("right", "left");
+        // Manuel : clavier. Auto : décidé par les capteurs (TestRobotAuto.cs)
+        (float avance, float tourne) = Pilotage == TypePilotage.Auto
+            ? CommandeAuto()
+            : (Input.GetAxis("down", "up"), Input.GetAxis("right", "left"));
 
         // NOUVEAU : ralentit à l'approche d'un obstacle pour pouvoir s'arrêter à DistanceArret
         // (v² = 2 × décélération × distance restante ; reculer et tourner restent possibles).
