@@ -4,7 +4,7 @@ namespace RobotMaker.Scripts;
 
 public partial class CapteurAvant : CsgBox3D
 {
-    [Export] public float Portee = 3f;                           // distance de détection en mètres
+    [Export] public float Portee = 3f;                           // distance de détection en unités (1 u = 10 cm)
     [Export] public Vector3 DirectionLocale = Vector3.Back;      // +Z local du capteur
     [Export(PropertyHint.Layers3DPhysics)] public uint Masque = 1;
 

@@ -4,7 +4,7 @@ using RobotMaker.Scripts;
 namespace RobotMaker.InteractiveMap;
 
 // Glisser-déposer des robots : clic gauche sur un robot, glisser, relâcher.
-// Molette pendant le glisser : tourne le robot. Prioritaire sur les autres outils
+// Un simple clic (sans bouger) sélectionne le robot. Molette pendant le glisser : tourne le robot. Prioritaire sur les autres outils
 // (ce nœud est le dernier de la carte, il reçoit donc les clics avant eux).
 public partial class DeplaceurRobots : Node3D
 {
@@ -12,9 +12,14 @@ public partial class DeplaceurRobots : Node3D
     [Export] public float Levee = 0.5f;          // hauteur du robot pendant qu'on le porte
     [Export] public float PasRotation = 15f;     // degrés par cran de molette
 
+    [Export] public float SeuilGlisser = 6f;     // pixels : en dessous, c'est un clic
+
     public bool Porte => _robot != null;
+    public event System.Action<Robot> Selectionne;   // clic sur un robot, ou robot qu'on vient de lâcher
 
     private Robot _robot;
+    private Robot _clique;       // robot sous le clic, pas encore glissé
+    private Vector2 _souris;     // position de la souris au clic
     private Vector3 _point;      // point du sol sous la souris
     private Vector3 _decalage;   // de ce point à l'origine du robot, à plat
     private Transform3D _prise;  // où il était quand on l'a saisi : on l'y remet si le dépôt est impossible
@@ -22,10 +27,10 @@ public partial class DeplaceurRobots : Node3D
 
     public override void _UnhandledInput(InputEvent e)
     {
-        if (_robot == null && e is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }
-            && Pick.ObjetSousLaSouris(this) is Robot robot && Pick.SousLaSouris(this, MasqueSol) is Vector3 point)
+        if (_robot == null && _clique == null && e is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true } clic
+            && Pick.ObjetSousLaSouris(this, 1, clic.Position) is Robot robot && Pick.SousLaSouris(this, MasqueSol, clic.Position) is Vector3 point)
         {
-            Prendre(robot, point);
+            (_clique, _souris, _point) = (robot, clic.Position, point);
             GetViewport().SetInputAsHandled();
         }
     }
@@ -33,12 +38,30 @@ public partial class DeplaceurRobots : Node3D
     // Dans _Input : le relâcher doit être vu même si la souris est au-dessus du panneau
     public override void _Input(InputEvent e)
     {
+        if (_clique != null)
+        {
+            // La souris bouge assez : on commence à glisser. Relâchée sur place : simple clic.
+            if (e is InputEventMouseMotion m && m.Position.DistanceTo(_souris) > SeuilGlisser && IsInstanceValid(_clique))
+                Prendre(_clique, _point);
+            else if (e is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: false })
+            {
+                if (IsInstanceValid(_clique))
+                    Selectionne?.Invoke(_clique);
+                _clique = null;
+                GetViewport().SetInputAsHandled();
+                return;
+            }
+            else
+                return;
+            _clique = null;
+        }
+
         if (_robot == null)
             return;
 
-        if (e is InputEventMouseMotion)
+        if (e is InputEventMouseMotion souris)
         {
-            if (Pick.SousLaSouris(this, MasqueSol) is Vector3 point)
+            if (Pick.SousLaSouris(this, MasqueSol, souris.Position) is Vector3 point)
                 Bouger(point);
         }
         else if (e is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.WheelUp or MouseButton.WheelDown } molette)
@@ -94,6 +117,7 @@ public partial class DeplaceurRobots : Node3D
         }
         else
             _robot.Deposer(t);
+        Selectionne?.Invoke(_robot);
         _robot = null;
         Input.SetDefaultCursorShape();
     }

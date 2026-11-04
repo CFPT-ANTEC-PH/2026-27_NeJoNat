@@ -6,7 +6,7 @@ namespace RobotMaker.Scripts;
 // La ligne de l'InteractiveMap est sur le calque de collision 2, le sol non.
 public partial class CapteurRoute : CsgBox3D
 {
-    [Export] public float Portee = 1f;                           // distance max jusqu'au sol en mètres
+    [Export] public float Portee = 1f;                           // distance max jusqu'au sol en unités (1 u = 10 cm)
     [Export(PropertyHint.Layers3DPhysics)] public uint Masque = 2;
 
     [ExportGroup("Couleurs")]

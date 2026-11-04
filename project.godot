@@ -48,6 +48,10 @@ right={
 3d_physics/layer_2="ligne"
 3d_physics/layer_4="sol"
 
+[physics]
+
+3d/default_gravity=98.0
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

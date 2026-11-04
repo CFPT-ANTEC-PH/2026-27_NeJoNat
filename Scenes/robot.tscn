@@ -49,9 +49,9 @@ use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.558
 suspension_travel = 0.1
-suspension_stiffness = 60.0
-damping_compression = 3.5
-damping_relaxation = 4.0
+suspension_stiffness = 600.0
+damping_compression = 11.0
+damping_relaxation = 12.6
 
 [node name="Weel" parent="LeftWeel" unique_id=255775534 instance=ExtResource("2_ntbue")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
@@ -62,9 +62,9 @@ use_as_traction = true
 wheel_roll_influence = 0.0
 wheel_radius = 0.558
 suspension_travel = 0.1
-suspension_stiffness = 60.0
-damping_compression = 3.5
-damping_relaxation = 4.0
+suspension_stiffness = 600.0
+damping_compression = 11.0
+damping_relaxation = 12.6
 
 [node name="Weel" parent="RightWeel" unique_id=1430954526 instance=ExtResource("2_ntbue")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
@@ -75,9 +75,9 @@ wheel_roll_influence = 0.0
 wheel_radius = 0.263
 wheel_friction_slip = 0.2
 suspension_travel = 0.1
-suspension_stiffness = 60.0
-damping_compression = 3.5
-damping_relaxation = 4.0
+suspension_stiffness = 600.0
+damping_compression = 11.0
+damping_relaxation = 12.6
 
 [node name="FlyWeel" parent="." unique_id=581204733 instance=ExtResource("9_fly")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4751892)

@@ -14,9 +14,9 @@ public partial class Robot
     [Export] public TypePilotage Pilotage = TypePilotage.Auto;
     [Export(PropertyHint.Range, "0.1,1,0.05")] public float VitesseAuto = 0.4f;  // part de MaxSpeed
     [Export] public float GainLigne = 1.5f;          // force du virage par rapport à l'écart de la ligne
-    [Export] public float DistanceEvitement = 2f;    // m : en dessous, le robot tourne pour éviter l'obstacle
+    [Export] public float DistanceEvitement = 2f;    // u : en dessous, le robot tourne pour éviter l'obstacle
 
-    [Export] public float VitessePivot = 0.8f;       // m/s de chaque roue quand le robot cherche la ligne en pivotant
+    [Export] public float VitessePivot = 0.8f;       // u/s de chaque roue quand le robot cherche la ligne en pivotant
     [Export] public float RetourAllure = 0.5f;       // par seconde : vitesse à laquelle le robot réaccélère après un virage
     [Export] public float TempsTrou = 0.8f;          // s : ligne perdue bien centrée = trou dans le tracé, on continue tout droit
 
@@ -29,6 +29,10 @@ public partial class Robot
     private bool _ligneVue;
     private float _allure = 1f;     // part de VitesseAuto : chute d'un coup en virage, remonte doucement en ligne droite
     private float _sensEvitement;   // garde le même sens tant que l'obstacle est là, sinon le robot hésite
+
+    // Capteurs de ligne vus de dessus, de gauche à droite : # = sur la ligne
+    public string EtatLigne => string.Concat(SupportBas.GetChildren().OfType<CapteurRoute>()
+        .OrderByDescending(c => c.Position.X).Select(c => c.SurLigne ? '#' : '·'));
 
     private void ReinitialiserAuto()
     {

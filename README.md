@@ -42,6 +42,7 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | Tourner la caméra | glisser clic gauche ou droit (constructeur) / clic droit maintenu (carte) |
 | Bouger la caméra (carte) | clic droit maintenu + `ZQSD` / `WASD`, `E` / `Q` monter / descendre |
 | Zoom | molette |
+| Infos d'un robot (carte) | clic sur le robot : vitesse, temps, distance, capteurs ; **Suivre** (caméra), **Supprimer** |
 | Déplacer un robot (carte) | glisser-déposer au clic gauche, molette pendant le glisser pour le tourner (lâché sur un autre robot, un objet ou un mur : il revient où on l'a pris) |
 | Désélectionner l'outil (carte) | `Échap` |
 
@@ -55,11 +56,11 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | `Scripts/` | `Robot.cs` (conduite, réglages, dimensions), `RobotAuto.cs` (pilotage automatique), constructeur, sauvegarde, caméra |
 | `InteractiveMap/` | carte interactive : dessin de ligne au sol, ajout d'objets, caméra libre |
 | `Assets/` | modèles 3D (Blender) |
-| `Tests/` | tests automatiques (rotation, suivi de ligne, pose et déplacement de robots, sauvegarde) |
+| `Tests/` | tests automatiques (rotation, stabilité, suivi de ligne, pose, déplacement et infos des robots, sauvegarde) |
 
 ### Échelle
 
-**1 unité Godot = 10 cm** : la table fait 30 × 60 unités (3 m × 6 m) avec des rebords de 1 unité (10 cm), le robot environ 1,7 × 2,8 unités (17 × 28 cm).
+**1 unité Godot = 10 cm** : la table fait 30 × 60 unités (3 m × 6 m) avec des rebords de 1 unité (10 cm), le robot environ 1,7 × 2,8 unités (17 × 28 cm). La gravité est donc de 98 unités/s² (= 9,8 m/s²).
 
 ### Tests
 
@@ -69,6 +70,8 @@ godot --headless --fixed-fps 60 res://Tests/TestSuiviLigne.tscn   # 9 parcours, 
 godot --headless res://Tests/TestPoseRobots.tscn
 godot --headless res://Tests/TestDeplacerRobot.tscn
 godot --headless res://Tests/TestGlisserSurRobot.tscn
+godot --headless res://Tests/TestInfosRobot.tscn
+godot --headless --fixed-fps 60 res://Tests/TestStabilite.tscn
 godot --headless res://Tests/TestSauvegarde.tscn
 ```
 
@@ -101,7 +104,7 @@ Chaque test affiche `OK` ou `ECHEC` et quitte avec le code 0 ou 1.
 
 | Bug | Statut | Sources |
 |---|---|---|
-| La gravité (9,8) n'est pas mise à l'échelle 1 unité = 10 cm : les chutes sont environ 3 fois plus lentes qu'en vrai | Ouvert : passer à 98 demande de réaccorder suspensions, forces et freinage | — |
+| La gravité (9,8) n'était pas mise à l'échelle 1 unité = 10 cm : les chutes étaient environ 3 fois plus lentes qu'en vrai | Fixé : gravité 98, suspensions 10 × plus raides, amortisseurs × √10 (`TestStabilite`) | — |
 | Les roues passent à travers le sol | Fixé | [Vidéo YouTube](https://www.youtube.com/watch?v=Wj1FfilAe2Y), [Doc VehicleBody3D](https://docs.godotengine.org/en/stable/classes/class_vehiclebody3d.html), [Asset Library](https://godotengine.org/asset-library/asset/1879) |
 
 ## Journal de bord

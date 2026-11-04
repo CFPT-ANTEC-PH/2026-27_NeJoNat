@@ -1,4 +1,5 @@
 using Godot;
+using RobotMaker.Scripts;
 
 namespace RobotMaker.InteractiveMap;
 
@@ -10,6 +11,22 @@ public partial class FreeCamera : Camera3D
     [Export] public float Vitesse = 10f;
     [Export] public float MultiplicateurRapide = 3f;
     [Export] public float Sensibilite = 0.003f;
+
+    // Robot suivi : la caméra reste braquée sur lui, le clic droit tourne autour, la molette règle la distance
+    public Robot Suivi
+    {
+        get => _suivi;
+        set
+        {
+            _suivi = value;
+            if (value != null)
+                DistanceSuivi = Mathf.Clamp(GlobalPosition.DistanceTo(Centre(value)), 4f, 40f);
+        }
+    }
+    public float DistanceSuivi = 15f;
+    private Robot _suivi;
+
+    private static Vector3 Centre(Robot r) => r.ToGlobal(r.CenterOfMass);
 
     private float _yaw;
     private float _pitch;
@@ -26,10 +43,14 @@ public partial class FreeCamera : Camera3D
         {
             if (bouton.ButtonIndex == MouseButton.Right)
                 Input.MouseMode = bouton.Pressed ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible;
-            else if (bouton.Pressed && bouton.ButtonIndex == MouseButton.WheelUp)
-                Vitesse *= 1.1f;
-            else if (bouton.Pressed && bouton.ButtonIndex == MouseButton.WheelDown)
-                Vitesse /= 1.1f;
+            else if (bouton.Pressed && bouton.ButtonIndex is MouseButton.WheelUp or MouseButton.WheelDown)
+            {
+                bool avant = bouton.ButtonIndex == MouseButton.WheelUp;
+                if (_suivi != null)
+                    DistanceSuivi = Mathf.Clamp(DistanceSuivi * (avant ? 0.9f : 1.1f), 3f, 60f);
+                else
+                    Vitesse *= avant ? 1.1f : 1f / 1.1f;
+            }
         }
         else if (e is InputEventMouseMotion souris && Input.MouseMode == Input.MouseModeEnum.Captured)
         {
@@ -41,6 +62,16 @@ public partial class FreeCamera : Camera3D
 
     public override void _Process(double delta)
     {
+        if (_suivi != null && !IsInstanceValid(_suivi))
+            _suivi = null;   // robot supprimé
+        if (_suivi != null)
+        {
+            // Basis.Z pointe derrière la caméra : on se place à DistanceSuivi derrière le robot, dans l'axe du regard
+            Vector3 voulu = Centre(_suivi) + Basis.Z * DistanceSuivi;
+            GlobalPosition = GlobalPosition.Lerp(voulu, 1f - Mathf.Exp(-8f * (float)delta));
+            return;
+        }
+
         if (Input.MouseMode != Input.MouseModeEnum.Captured)
             return;
 

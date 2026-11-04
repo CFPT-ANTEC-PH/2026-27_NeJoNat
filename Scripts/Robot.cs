@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace RobotMaker.Scripts;
 
+// Unités : 1 u = 10 cm (table 30 × 60 u = 3 m × 6 m), gravité 98 u/s² = 9,8 m/s², masses en kg.
 public partial class Robot : VehicleBody3D
 {
     [ExportGroup("Roues")]
@@ -49,14 +50,14 @@ public partial class Robot : VehicleBody3D
 
     [ExportGroup("Conduite")]
     [Export] public TypeMoteur Moteur = TypeMoteur.Normal;
-    [Export] public float MaxSpeed = 5f;         // m/s
+    [Export] public float MaxSpeed = 5f;         // u/s (5 u/s = 50 cm/s)
     [Export] public float TurnFactor = 0.4f;     // part de MaxSpeed donnée à chaque roue pour tourner
-    [Export] public float Acceleration = 4f;     // m/s² : montée progressive de la consigne
-    [Export] public float Deceleration = 6f;     // m/s² au freinage (au-delà de ~9, risque de basculer en freinant en marche arrière)
-    [Export] public float Force = 300f;          // force max d'un moteur (N)
-    [Export] public float Gain = 800f;           // N par m/s d'écart entre consigne et vitesse réelle
+    [Export] public float Acceleration = 4f;     // u/s² : montée progressive de la consigne
+    [Export] public float Deceleration = 6f;     // u/s² au freinage
+    [Export] public float Force = 300f;          // force max d'un moteur (kg·u/s²)
+    [Export] public float Gain = 800f;           // force par u/s d'écart entre consigne et vitesse réelle
     [Export] public float BrakeForce = 2f;       // frein de parking quand le robot est arrêté
-    [Export] public float AccelLaterale = 4f;    // m/s² max en virage (au-delà, risque de se renverser)
+    [Export] public float AccelLaterale = 4f;    // u/s² max en virage (au-delà, risque de se renverser)
     [Export(PropertyHint.Range, "0,1,0.05")] public float GripLateral = 1f;  // 1 = les roues motrices ne glissent jamais de côté, 0 = physique de Godot seule
 
     // Capteurs
@@ -70,8 +71,8 @@ public partial class Robot : VehicleBody3D
     [Export] public CapteurAvant CapteurCentre;
     [Export] public CapteurAvant CapteurDroite;
     [Export] public bool AntiCollision = true;
-    [Export] public float DistanceArret = 0.4f;  // m
-    [Export(PropertyHint.Range, "0.5,8,0.25")] public float PorteeCapteurs = 3f;  // m, appliquée aux 3 capteurs avant
+    [Export] public float DistanceArret = 0.4f;  // u
+    [Export(PropertyHint.Range, "0.5,8,0.25")] public float PorteeCapteurs = 3f;  // u, appliquée aux 3 capteurs avant
 
     // Infos utilisables partout dans le robot
     public bool ObstacleDevant => DistanceObstacle < float.PositiveInfinity;
@@ -79,7 +80,7 @@ public partial class Robot : VehicleBody3D
     public float DistanceObstacle => Mathf.Min(DistanceCapteur(CapteurCentre),
         Mathf.Min(DistanceCapteur(CapteurGauche), DistanceCapteur(CapteurDroite)));
 
-    private static float DistanceCapteur(CapteurAvant c) =>
+    public static float DistanceCapteur(CapteurAvant c) =>
         c != null && c.Detecte ? c.Distance : float.PositiveInfinity;
 
     // Réglages modifiables dans le constructeur. Sauver() les copie en quittant le constructeur,
@@ -96,6 +97,11 @@ public partial class Robot : VehicleBody3D
     // Réglages propres à ce robot (robot posé depuis une sauvegarde dans la carte), sinon ceux de Choix
     public Dictionary<string, Variant> Config;
     [Export] public bool AfficherNom;   // étiquette avec NomRobot au-dessus du robot (carte avec plusieurs robots)
+    public Label3D Etiquette { get; private set; }
+
+    // Mesures affichées dans la carte : remises à zéro par « Replacer » (et donc quand on déplace le robot)
+    public float TempsEnMarche { get; private set; }   // s
+    public float DistanceParcourue { get; private set; }   // u
 
     public void Sauver() => Choix = Reglages.ToDictionary(nom => nom, nom => Get(nom));
 
@@ -113,8 +119,8 @@ public partial class Robot : VehicleBody3D
     private float _rayonRoues;
     private float _vitesseBase, _forceBase;
 
-    private float _vitesseCible;   // m/s, avance
-    private float _virageCible;    // m/s, différence ajoutée/retirée à chaque roue
+    private float _vitesseCible;   // u/s, avance
+    private float _virageCible;    // u/s, différence ajoutée/retirée à chaque roue
     private Vector3 _casterOffset; // position du pivot par rapport au centre de la roue avant
 
     public override void _Ready()
@@ -153,11 +159,14 @@ public partial class Robot : VehicleBody3D
 
         AddToGroup(Groupe);
         if (AfficherNom)
-            AddChild(new Label3D
+        {
+            Etiquette = new Label3D
             {
                 Text = NomRobot, Position = CenterOfMass + Vector3.Up * 1.5f, FontSize = 64, OutlineSize = 16,
                 Billboard = BaseMaterial3D.BillboardModeEnum.Enabled, NoDepthTest = true,
-            });
+            };
+            AddChild(Etiquette);
+        }
         _depart = GlobalTransform;
         if (Arret)
             Freeze = true;
@@ -179,6 +188,8 @@ public partial class Robot : VehicleBody3D
         }
 
         float dt = (float)delta;
+        TempsEnMarche += dt;
+        DistanceParcourue += new Vector2(LinearVelocity.X, LinearVelocity.Z).Length() * dt;
 
         // Manuel : clavier. Auto : décidé par les capteurs (RobotAuto.cs)
         (float avance, float tourne) = Pilotage == TypePilotage.Auto
@@ -194,7 +205,7 @@ public partial class Robot : VehicleBody3D
             avance = Mathf.Min(avance, vitesseSure / MaxSpeed);
         }
 
-        // Consigne lissée, en m/s (on freine plus fort qu'on accélère)
+        // Consigne lissée, en u/s (on freine plus fort qu'on accélère)
         float cible = avance * MaxSpeed;
         bool ralentit = Mathf.Abs(cible) < Mathf.Abs(_vitesseCible) || cible * _vitesseCible < 0f;
         _vitesseCible = Mathf.MoveToward(_vitesseCible, cible, (ralentit ? Deceleration : Acceleration) * dt);
@@ -229,6 +240,7 @@ public partial class Robot : VehicleBody3D
         LinearVelocity = Vector3.Zero;
         AngularVelocity = Vector3.Zero;
         _vitesseCible = _virageCible = 0f;
+        TempsEnMarche = DistanceParcourue = 0f;
         ReinitialiserAuto();
     }
 
@@ -418,7 +430,7 @@ public partial class Robot : VehicleBody3D
         noeud.ProcessMode = actif ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
     }
 
-    // m, distance entre les deux roues motrices (change avec la largeur)
+    // u, distance entre les deux roues motrices (change avec la largeur)
     private float Voie => LeftWheel.Position.DistanceTo(RightWheel.Position);
 
     // Une roue motrice ne glisse pas de côté : on annule la vitesse latérale du milieu de l'essieu

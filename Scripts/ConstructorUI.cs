@@ -79,18 +79,20 @@ public partial class ConstructorUI : CanvasLayer
         GetNode<Button>(chemin + "Next").Pressed += () => Afficher(changer(1));
     }
 
-    // Ligne de curseur : sa meta "reglage" est la propriété du robot, "format" l'affichage de la valeur
+    // Ligne de curseur : sa meta "reglage" est la propriété du robot, "format" l'affichage de la valeur,
+    // "echelle" multiplie la valeur affichée (10 pour afficher des unités en cm)
     private void BrancherCurseur(HSlider curseur)
     {
         string reglage = curseur.GetMeta("reglage").AsString();
         string format = curseur.GetMeta("format", "{0:0.##}").AsString();
+        double echelle = curseur.GetMeta("echelle", 1.0).AsDouble();
         var texte = curseur.GetParent().GetNode<Label>("Valeur");
 
         curseur.Value = _constructeur.Robot.Get(reglage).AsDouble();
-        texte.Text = string.Format(format, curseur.Value);
+        texte.Text = string.Format(format, curseur.Value * echelle);
         curseur.ValueChanged += v =>
         {
-            texte.Text = string.Format(format, v);
+            texte.Text = string.Format(format, v * echelle);
             _constructeur.Changer(reglage, v);
         };
     }
