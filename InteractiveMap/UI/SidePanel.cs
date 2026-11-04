@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 namespace RobotMaker.InteractiveMap;
 
@@ -11,35 +12,50 @@ public partial class SidePanel : CanvasLayer
     [Export] public ObjectSpawner Spawner;
 
     private Label _mode;
+    private readonly List<Button> _outils = new();   // boutons à bascule : celui de l'outil actif reste enfoncé
 
     public override void _Ready()
     {
         _mode = GetNode<Label>("%Mode");
 
-        var liste = GetNode<VBoxContainer>("%ListeObjets");
+        var liste = GetNode<HBoxContainer>("%ListeObjets");
         foreach (PackedScene scene in Objets)
         {
             string nom = scene.ResourcePath.GetFile().GetBaseName();
-            var bouton = new Button { Text = nom, FocusMode = Control.FocusModeEnum.None };
-            bouton.Pressed += () => Choisir(scene, false, nom);
+            var bouton = new Button { Text = nom, FocusMode = Control.FocusModeEnum.None, ToggleMode = true,
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+            bouton.Pressed += () => Choisir(scene, false, nom, bouton);
             liste.AddChild(bouton);
+            _outils.Add(bouton);
         }
 
+        var dessiner = GetNode<Button>("%Dessiner");
+        _outils.Add(dessiner);
+        dessiner.Pressed += () => Choisir(null, true, "Dessin de ligne", dessiner);
+
         GetNode<Button>("%ViderObjets").Pressed += () => Spawner.Vider();
-        GetNode<Button>("%Dessiner").Pressed += () => Choisir(null, true, "Dessin");
         GetNode<Button>("%EffacerLigne").Pressed += () => Ligne.Effacer();
+        GetNode<Button>("%Constructeur").Pressed += () => GetTree().ChangeSceneToFile("res://Scenes/constructor.tscn");
+        Choisir(null, false, "Aucun", null);
     }
 
     public override void _UnhandledInput(InputEvent e)
     {
         if (e.IsActionPressed("ui_cancel"))
-            Choisir(null, false, "Aucun");
+            Choisir(null, false, "Aucun", null);
     }
 
-    private void Choisir(PackedScene objet, bool dessin, string nom)
+    // Recliquer sur l'outil actif le désactive
+    private void Choisir(PackedScene objet, bool dessin, string nom, Button bouton)
     {
+        if (bouton != null && !bouton.ButtonPressed)
+            (objet, dessin, nom, bouton) = (null, false, "Aucun", null);
+
         Spawner.Selection = objet;
         Ligne.Actif = dessin;
         _mode.Text = "Outil : " + nom;
+        _mode.SelfModulate = bouton == null ? new Color(1f, 1f, 1f, 0.35f) : Colors.White;
+        foreach (Button b in _outils)
+            b.SetPressedNoSignal(b == bouton);
     }
 }

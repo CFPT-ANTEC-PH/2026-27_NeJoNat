@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://uvq4gwk23821"]
 
+[ext_resource type="Theme" path="res://Assets/ThemeMenu.tres" id="2_theme"]
 [ext_resource type="Script" uid="uid://dxc76u12wvbbb" path="res://Scripts/ConstructorUI.cs" id="1_30pre"]
 
 [sub_resource type="StyleBoxFlat" id="Fond"]
@@ -36,6 +37,7 @@ unique_id = 30045958
 script = ExtResource("1_30pre")
 
 [node name="Panneau" type="PanelContainer" parent="."]
+theme = ExtResource("2_theme")
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 400.0

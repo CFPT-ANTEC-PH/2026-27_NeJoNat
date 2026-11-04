@@ -1,32 +1,103 @@
 [gd_scene format=3]
 
+[ext_resource type="Theme" path="res://Assets/ThemeMenu.tres" id="2_theme"]
 [ext_resource type="Script" uid="uid://dj2pw3xl5yfqg" path="res://InteractiveMap/UI/SidePanel.cs" id="1_menu"]
+
+[sub_resource type="StyleBoxFlat" id="Fond"]
+bg_color = Color(0.09, 0.1, 0.12, 0.93)
+
+[sub_resource type="StyleBoxFlat" id="Outil"]
+bg_color = Color(0.16, 0.6, 0.32, 1)
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Aide"]
+bg_color = Color(0.09, 0.1, 0.12, 0.75)
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="SidePanel" type="CanvasLayer"]
 script = ExtResource("1_menu")
 
 [node name="Panel" type="PanelContainer" parent="."]
+theme = ExtResource("2_theme")
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 220.0
+offset_right = 300.0
 grow_vertical = 2
+theme_override_styles/panel = SubResource("Fond")
 
 [node name="Marge" type="MarginContainer" parent="Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
 [node name="Boite" type="VBoxContainer" parent="Panel/Marge"]
 layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Haut" type="HBoxContainer" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="Titre" type="Label" parent="Panel/Marge/Boite/Haut"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Carte"
+
+[node name="Constructeur" type="Button" parent="Panel/Marge/Boite/Haut"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Revenir au constructeur pour modifier le robot"
+text = "Constructeur"
+
+[node name="SousTitre" type="Label" parent="Panel/Marge/Boite"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 13
+text = "Le robot roule tout seul : prépare-lui le terrain."
+autowrap_mode = 3
+
+[node name="Mode" type="Label" parent="Panel/Marge/Boite"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Outil")
+text = "Outil : Aucun"
+horizontal_alignment = 1
 
 [node name="TitreObjets" type="Label" parent="Panel/Marge/Boite"]
 layout_mode = 2
-theme_type_variation = &"HeaderSmall"
-text = "Objets"
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Obstacles"
 
-[node name="ListeObjets" type="VBoxContainer" parent="Panel/Marge/Boite"]
+[node name="Trait1" type="HSeparator" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="AideObjets" type="Label" parent="Panel/Marge/Boite"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Choisis une forme puis clique sur la table pour la poser. Les capteurs avant les détectent."
+autowrap_mode = 3
+
+[node name="ListeObjets" type="HBoxContainer" parent="Panel/Marge/Boite"]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -34,20 +105,29 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "Supprimer les objets"
-
-[node name="Separateur1" type="HSeparator" parent="Panel/Marge/Boite"]
-layout_mode = 2
+text = "Supprimer les obstacles"
 
 [node name="TitreLigne" type="Label" parent="Panel/Marge/Boite"]
 layout_mode = 2
-theme_type_variation = &"HeaderSmall"
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
 text = "Ligne à suivre"
+
+[node name="Trait2" type="HSeparator" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="AideLigne" type="Label" parent="Panel/Marge/Boite"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Maintiens le clic gauche pour tracer. Un robot avec capteurs bas la suit tout seul."
+autowrap_mode = 3
 
 [node name="Dessiner" type="Button" parent="Panel/Marge/Boite"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
+toggle_mode = true
 text = "Dessiner"
 
 [node name="EffacerLigne" type="Button" parent="Panel/Marge/Boite"]
@@ -56,20 +136,22 @@ layout_mode = 2
 focus_mode = 0
 text = "Effacer la ligne"
 
-[node name="Separateur2" type="HSeparator" parent="Panel/Marge/Boite"]
-layout_mode = 2
-
-[node name="Mode" type="Label" parent="Panel/Marge/Boite"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Outil : Aucun"
-
-[node name="Aide" type="Label" parent="Panel/Marge/Boite"]
-modulate = Color(1, 1, 1, 0.6)
-layout_mode = 2
-text = "Clic droit : regarder
-WASD/ZQSD : bouger
+[node name="Commandes" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -150.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("Aide")
+text = "Clic droit maintenu : regarder
+ZQSD / WASD : bouger
 E / Q : monter / descendre
-Shift : rapide
-Molette : vitesse
+Shift : rapide    Molette : vitesse
 Échap : aucun outil"
