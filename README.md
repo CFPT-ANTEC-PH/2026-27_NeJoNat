@@ -18,7 +18,7 @@ Les robots évoluent sur une table de **3 mètres par 6 mètres**, bordée de re
   - **glisseur** : capsule qui glisse au sol
 - 1 support capteurs, au choix :
   - **capteurs avant** : 3 capteurs d'obstacle (raycast), avec anti-collision qui ralentit et s'arrête avant l'obstacle
-  - **capteurs bas** : 5 capteurs de ligne qui détectent la ligne noire dessinée dans la carte interactive
+  - **capteurs bas** : 5 capteurs de ligne qui détectent la ligne noire dessinée dans la carte interactive. Le suivi gère les virages serrés et en épingle, les trous dans le tracé et les croisements (il garde la ligne qu'il suivait)
 
 ### Personnalisation
 
@@ -31,7 +31,7 @@ Les robots se personnalisent dans la scène **Constructor** (Main Menu → New R
 | Motor | puissance (Lent / Normal / Rapide), vitesse de virage, pilotage (Automatique / Manuel) |
 | Sensors | type (avant / bas), portée, distance d'arrêt |
 
-Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robots y attendent **▶ Démarrer** pour qu'on puisse d'abord tracer la ligne et poser les obstacles ; **↺ Replacer** les remet à leur point de départ, et l'outil **Robot** en pose d'autres (même configuration). Quand on change la taille du robot, tout suit : roues (physique comprise), collisions, supports capteurs, roue avant.
+Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robots y attendent **▶ Démarrer** pour qu'on puisse d'abord tracer la ligne et poser les obstacles ; **↺ Replacer** les remet à leur point de départ, et **Poser** ajoute un robot sauvegardé au choix, avec ses propres réglages (son nom s'affiche au-dessus). Quand on change la taille du robot, tout suit : roues (physique comprise), collisions, supports capteurs, roue avant.
 
 ## Commandes
 
@@ -54,7 +54,7 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | `Scripts/` | `Robot.cs` (conduite, réglages, dimensions), `RobotAuto.cs` (pilotage automatique), constructeur, sauvegarde, caméra |
 | `InteractiveMap/` | carte interactive : dessin de ligne au sol, ajout d'objets, caméra libre |
 | `Assets/` | modèles 3D (Blender) |
-| `Tests/` | tests automatiques (rotation, suivi de ligne, sauvegarde) |
+| `Tests/` | tests automatiques (rotation, suivi de ligne, pose de robots, sauvegarde) |
 
 ### Échelle
 
@@ -64,7 +64,8 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 
 ```
 godot --headless res://Tests/TestRotation.tscn
-godot --headless res://Tests/TestSuiviLigne.tscn
+godot --headless --fixed-fps 60 res://Tests/TestSuiviLigne.tscn   # 9 parcours, --fixed-fps les fait tourner en accéléré
+godot --headless res://Tests/TestPoseRobots.tscn
 godot --headless res://Tests/TestSauvegarde.tscn
 ```
 

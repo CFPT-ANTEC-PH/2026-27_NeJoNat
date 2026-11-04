@@ -39,10 +39,12 @@ transform = Transform3D(1, 0, 0, 0, 0.8001412, 0.5998118, 0, -0.5998118, 0.80014
 [node name="Objets" parent="." unique_id=1829962268 instance=ExtResource("5_spawn")]
 
 [node name="SidePanel" parent="." unique_id=1083073047 node_paths=PackedStringArray("Ligne", "Spawner") instance=ExtResource("6_ui")]
-Objets = Array[PackedScene]([ExtResource("7_cube"), ExtResource("8_sphere"), ExtResource("9_cyl"), ExtResource("9_enim8")])
+Objets = Array[PackedScene]([ExtResource("7_cube"), ExtResource("8_sphere"), ExtResource("9_cyl")])
+SceneRobot = ExtResource("9_enim8")
 Ligne = NodePath("../Ligne")
 Spawner = NodePath("../Objets")
 
 [node name="Robot" parent="." unique_id=183795887 instance=ExtResource("9_enim8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1452208, 0.010264665, 9.938099)
 Pilotage = 1
+AfficherNom = true

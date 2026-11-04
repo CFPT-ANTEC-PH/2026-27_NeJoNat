@@ -93,6 +93,10 @@ public partial class Robot : VehicleBody3D
 
     public static Dictionary<string, Variant> Choix;
 
+    // Réglages propres à ce robot (robot posé depuis une sauvegarde dans la carte), sinon ceux de Choix
+    public Dictionary<string, Variant> Config;
+    [Export] public bool AfficherNom;   // étiquette avec NomRobot au-dessus du robot (carte avec plusieurs robots)
+
     public void Sauver() => Choix = Reglages.ToDictionary(nom => nom, nom => Get(nom));
 
     // Carte interactive : les robots attendent « Démarrer » (gelés) pour qu'on prépare le terrain
@@ -136,8 +140,8 @@ public partial class Robot : VehicleBody3D
         Steering = 0f;
         Brake = 0f;
 
-        if (Choix != null)
-            foreach ((string nom, Variant valeur) in Choix)
+        if ((Config ?? Choix) is { } reglages)
+            foreach ((string nom, Variant valeur) in reglages)
                 Set(nom, valeur);
 
         _adherenceRoueFolle = FrontWheel.WheelFrictionSlip;
@@ -148,6 +152,12 @@ public partial class Robot : VehicleBody3D
         Appliquer();
 
         AddToGroup(Groupe);
+        if (AfficherNom)
+            AddChild(new Label3D
+            {
+                Text = NomRobot, Position = CenterOfMass + Vector3.Up * 1.5f, FontSize = 64, OutlineSize = 16,
+                Billboard = BaseMaterial3D.BillboardModeEnum.Enabled, NoDepthTest = true,
+            });
         _depart = GlobalTransform;
         if (Arret)
             Freeze = true;
@@ -210,6 +220,7 @@ public partial class Robot : VehicleBody3D
         LinearVelocity = Vector3.Zero;
         AngularVelocity = Vector3.Zero;
         _vitesseCible = _virageCible = 0f;
+        ReinitialiserAuto();
     }
 
     // Rappelée par le constructeur à chaque changement de réglage

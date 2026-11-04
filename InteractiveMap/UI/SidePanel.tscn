@@ -110,6 +110,25 @@ focus_mode = 0
 tooltip_text = "Remet chaque robot là où il a été posé"
 text = "↺ Replacer"
 
+[node name="PoseRobot" type="HBoxContainer" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="ChoixRobot" type="OptionButton" parent="Panel/Marge/Boite/PoseRobot"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+tooltip_text = "Robot sauvegardé à poser"
+fit_to_longest_item = false
+
+[node name="PoserRobot" type="Button" parent="Panel/Marge/Boite/PoseRobot"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+tooltip_text = "Clique sur la table pour poser ce robot (avec ses propres réglages)"
+text = "Poser"
+
 [node name="TitreObjets" type="Label" parent="Panel/Marge/Boite"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
@@ -123,7 +142,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
 theme_override_font_sizes/font_size = 12
-text = "Choisis une forme (ou un robot de plus) puis clique sur la table pour la poser. Les capteurs avant détectent les obstacles."
+text = "Choisis une forme puis clique sur la table pour la poser. Les capteurs avant la détectent."
 autowrap_mode = 3
 
 [node name="ListeObjets" type="HBoxContainer" parent="Panel/Marge/Boite"]
@@ -134,7 +153,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "Supprimer les objets posés"
+text = "Supprimer les objets et robots posés"
 
 [node name="TitreLigne" type="Label" parent="Panel/Marge/Boite"]
 layout_mode = 2

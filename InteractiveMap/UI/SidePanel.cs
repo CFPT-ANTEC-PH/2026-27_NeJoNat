@@ -11,6 +11,7 @@ public partial class SidePanel : CanvasLayer
     [Export] public Godot.Collections.Array<PackedScene> Objets = new();
     [Export] public LineDrawer Ligne;
     [Export] public ObjectSpawner Spawner;
+    [Export] public PackedScene SceneRobot;
 
     private Label _mode;
     private readonly List<Button> _outils = new();   // boutons à bascule : celui de l'outil actif reste enfoncé
@@ -39,6 +40,8 @@ public partial class SidePanel : CanvasLayer
         GetNode<Button>("%Constructeur").Pressed += () => GetTree().ChangeSceneToFile("res://Scenes/constructor.tscn");
         Choisir(null, false, "Aucun", null);
 
+        BrancherPoseRobot();
+
         // Les robots attendent « Démarrer » : on peut d'abord tracer la ligne et poser les obstacles
         var demarrer = GetNode<Button>("%Demarrer");
         demarrer.Toggled += Marche;
@@ -56,6 +59,42 @@ public partial class SidePanel : CanvasLayer
             foreach (Node n in GetTree().GetNodesInGroup(Robot.Groupe))
                 ((Robot)n).Freeze = !enMarche;
         }
+    }
+
+    // Liste des robots sauvegardés : celui choisi est posé au clic, avec ses propres réglages
+    private void BrancherPoseRobot()
+    {
+        var choix = GetNode<OptionButton>("%ChoixRobot");
+        var poser = GetNode<Button>("%PoserRobot");
+        var configs = new List<Dictionary<string, Variant>>();
+
+        string actuel = Robot.Choix != null && Robot.Choix.TryGetValue(nameof(Robot.NomRobot), out Variant n) ? n.AsString() : null;
+        foreach ((string fichier, string nom) in Sauvegarde.Liste())
+        {
+            if (Sauvegarde.Lire(fichier) is not { } config)
+                continue;
+            choix.AddItem(nom);
+            configs.Add(config);
+            if (nom == actuel)
+                choix.Select(configs.Count - 1);
+        }
+        if (configs.Count == 0)
+        {
+            choix.AddItem("Robot du constructeur");
+            configs.Add(null);
+        }
+
+        void Prendre(long i)
+        {
+            Spawner.ConfigRobot = configs[(int)i];
+            if (poser.ButtonPressed)
+                Choisir(SceneRobot, false, $"Poser « {choix.Text} »", poser);
+        }
+        Prendre(choix.Selected);
+        choix.ItemSelected += Prendre;
+
+        _outils.Add(poser);
+        poser.Pressed += () => Choisir(SceneRobot, false, $"Poser « {choix.Text} »", poser);
     }
 
     public override void _UnhandledInput(InputEvent e)
