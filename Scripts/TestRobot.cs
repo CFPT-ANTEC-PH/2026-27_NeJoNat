@@ -57,6 +57,7 @@ public partial class TestRobot : VehicleBody3D
     [Export] public float Gain = 800f;           // N par m/s d'écart entre consigne et vitesse réelle
     [Export] public float BrakeForce = 2f;       // frein de parking quand le robot est arrêté
     [Export] public float AccelLaterale = 4f;    // m/s² max en virage (au-delà, risque de se renverser)
+    [Export(PropertyHint.Range, "0,1,0.05")] public float GripLateral = 1f;  // 1 = les roues motrices ne glissent jamais de côté, 0 = physique de Godot seule
 
     // NOUVEAU : capteurs
     public enum TypeCapteurs { Avant, Bas }
@@ -185,6 +186,8 @@ public partial class TestRobot : VehicleBody3D
         bool arrete = avance == 0f && tourne == 0f && LinearVelocity.Length() < 0.1f;
         LeftWheel.Brake = arrete ? BrakeForce : 0f;
         RightWheel.Brake = arrete ? BrakeForce : 0f;
+
+        TenirEssieu();
 
         if (RoueAvant == TypeRoueAvant.RoueFolle)
             UpdateCaster(dt);
@@ -353,6 +356,31 @@ public partial class TestRobot : VehicleBody3D
 
     // m, distance entre les deux roues motrices (change avec la largeur)
     private float Voie => LeftWheel.Position.DistanceTo(RightWheel.Position);
+
+    // Une roue motrice ne glisse pas de côté : on annule la vitesse latérale du milieu de l'essieu
+    // (au sol) par une impulsion. Le robot pivote alors sur ses roues motrices.
+    // Nécessaire car le frottement latéral de VehicleWheel3D calcule les vitesses depuis l'origine
+    // du robot (à l'arrière) au lieu de son centre de masse décalé (center_of_mass) : il pousse
+    // l'essieu de côté et le robot pivotait vers l'avant en glissant.
+    // ponytail: pas de limite de frottement, ajouter μ × poids si on veut des dérapages réalistes
+    private void TenirEssieu()
+    {
+        if (GripLateral <= 0f || !(LeftWheel.IsInContact() || RightWheel.IsInContact()))
+            return;
+
+        var etat = PhysicsServer3D.BodyGetDirectState(GetRid());
+        Vector3 point = (Contact(LeftWheel) + Contact(RightWheel)) / 2f - GlobalPosition;  // relatif au robot, axes du monde
+        Vector3 cote = GlobalBasis.X.Normalized();
+        float vLat = etat.GetVelocityAtLocalPosition(point).Dot(cote);
+
+        // Masse « vue » par une impulsion latérale en ce point (translation + rotation)
+        Vector3 r = point - etat.CenterOfMass;
+        float k = etat.InverseMass + cote.Dot((etat.InverseInertiaTensor * r.Cross(cote)).Cross(r));
+        ApplyImpulse(cote * (-vLat / k * GripLateral), point);
+    }
+
+    private static Vector3 Contact(VehicleWheel3D roue) =>
+        roue.IsInContact() ? roue.GetContactPoint() : roue.GlobalPosition - roue.GlobalBasis.Y * (roue.WheelRestLength + roue.WheelRadius);
 
     private float ForceMoteur(VehicleWheel3D roue, float vitesseVoulue)
     {
