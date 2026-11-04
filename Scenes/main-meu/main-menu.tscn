@@ -121,10 +121,8 @@ text = "Nouveau robot"
 [node name="LoadRobot" type="Button" parent="Centre/Carte/Contenu/Accueil"]
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-tooltip_text = "Bientôt : sauvegarde et chargement des robots"
-disabled = true
 theme_override_font_sizes/font_size = 16
-text = "Charger un robot (bientôt)"
+text = "Charger un robot"
 
 [node name="Quit" type="Button" parent="Centre/Carte/Contenu/Accueil"]
 custom_minimum_size = Vector2(0, 44)
@@ -153,11 +151,12 @@ theme_override_styles/focus = SubResource("Champ")
 placeholder_text = "Ex. : Rover"
 max_length = 24
 
-[node name="Aide" type="Label" parent="Centre/Carte/Contenu/Nommer"]
+[node name="AideNom" type="Label" parent="Centre/Carte/Contenu/Nommer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
 theme_override_font_sizes/font_size = 12
-text = "Il servira à retrouver ton robot quand la sauvegarde sera disponible."
+text = "Il sert à retrouver ton robot dans « Charger un robot ». La sauvegarde est automatique."
 autowrap_mode = 3
 
 [node name="Boutons" type="HBoxContainer" parent="Centre/Carte/Contenu/Nommer"]
@@ -183,6 +182,44 @@ theme_override_styles/normal = SubResource("Jouer")
 theme_override_styles/hover = SubResource("JouerSurvol")
 theme_override_styles/pressed = SubResource("Jouer")
 text = "Créer  ▶"
+
+[node name="Charger" type="VBoxContainer" parent="Centre/Carte/Contenu"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Centre/Carte/Contenu/Charger"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Charger un robot"
+
+[node name="AucunRobot" type="Label" parent="Centre/Carte/Contenu/Charger"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 13
+text = "Aucun robot sauvegardé pour l'instant. Crée-en un avec « Nouveau robot »."
+autowrap_mode = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Centre/Carte/Contenu/Charger"]
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="ListeRobots" type="VBoxContainer" parent="Centre/Carte/Contenu/Charger/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="RetourCharger" type="Button" parent="Centre/Carte/Contenu/Charger"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Retour"
 
 [connection signal="pressed" from="Centre/Carte/Contenu/Accueil/NewRobot" to="." method="On_newRobot_pressed"]
 [connection signal="pressed" from="Centre/Carte/Contenu/Accueil/LoadRobot" to="." method="On_loadRobot_pressed"]

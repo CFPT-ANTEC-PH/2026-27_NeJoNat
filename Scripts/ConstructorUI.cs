@@ -30,7 +30,7 @@ public partial class ConstructorUI : CanvasLayer
 
 		_constructeur = GetParent<Constructor>();
 		GetNode<Label>("Panneau/Marge/Contenu/SousTitre").Text =
-			$"Règle « {_constructeur.Robot.NomRobot} » : l'aperçu change en direct.";
+			$"Règle « {_constructeur.Robot.NomRobot} » : l'aperçu change en direct, la sauvegarde est automatique.";
 		Brancher("Body", _constructeur.ChangerCouleurChassis);
 		Brancher("WheelColor", _constructeur.ChangerCouleurRoues);
 		Brancher("Wheels", _constructeur.ChangerRoueAvant);
@@ -50,7 +50,11 @@ public partial class ConstructorUI : CanvasLayer
 			BrancherCurseur((HSlider)n);
 
 		GetNode<Button>("%Play").Pressed += _constructeur.Jouer;
-		GetNode<Button>("%Menu").Pressed += () => GetTree().ChangeSceneToFile("res://Scenes/main-meu/main-menu.tscn");
+		GetNode<Button>("%Menu").Pressed += () =>
+		{
+			_constructeur.Enregistrer();
+			GetTree().ChangeSceneToFile("res://Scenes/main-meu/main-menu.tscn");
+		};
 	}
 
 	// Relie < / > d'une ligne à son choix, affiche le nom dans Choix et son explication dans Aide

@@ -48,8 +48,15 @@ public partial class Constructor : Node3D
 
 	public void Jouer()
 	{
-		Robot.Sauver();
+		Enregistrer();
 		GetTree().ChangeSceneToFile(SceneJeu);
+	}
+
+	// Garde les réglages pour la scène suivante et les sauvegarde sur le disque
+	public void Enregistrer()
+	{
+		Robot.Sauver();
+		Sauvegarde.Ecrire(TestRobot.Choix);
 	}
 
 	// Valeur suivante ou précédente de l'enum, en boucle

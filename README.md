@@ -75,7 +75,7 @@ Le bouton **Play** lance la carte interactive avec le robot configuré, en pilot
 - [x] Pilotage automatique dans la carte interactive (évitement d'obstacles ou suivi de ligne selon les capteurs)
 - [x] Deux types de roue avant (roue folle / glisseur)
 - [x] Constructeur : personnalisation du robot (apparence, dimensions, moteur, capteurs)
-- [ ] Sauvegarde / chargement d'un robot (Load Robot)
+- [x] Sauvegarde / chargement des robots (automatique, fichiers `user://robots/*.cfg`)
 
 ## Bugs connus
 
