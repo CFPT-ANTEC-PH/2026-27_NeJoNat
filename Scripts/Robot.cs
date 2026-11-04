@@ -169,6 +169,15 @@ public partial class Robot : VehicleBody3D
 
     public override void _PhysicsProcess(double delta)
     {
+        // Gelé (pause, porté à la souris) : la vitesse d'un corps gelé n'est pas définie (NaN),
+        // on ne pilote rien, sinon la roue folle, les moteurs et l'essieu deviennent NaN pour de bon
+        if (Freeze)
+        {
+            LeftWheel.EngineForce = RightWheel.EngineForce = 0f;
+            _vitesseCible = _virageCible = 0f;
+            return;
+        }
+
         float dt = (float)delta;
 
         // Manuel : clavier. Auto : décidé par les capteurs (RobotAuto.cs)
@@ -221,6 +230,31 @@ public partial class Robot : VehicleBody3D
         AngularVelocity = Vector3.Zero;
         _vitesseCible = _virageCible = 0f;
         ReinitialiserAuto();
+    }
+
+    // Vrai si le robot, placé en t, rentrerait dans un autre corps (robot, objet, mur)
+    public bool Chevauche(Transform3D t)
+    {
+        var espace = GetWorld3D().DirectSpaceState;
+        foreach (CollisionShape3D forme in GetChildren().OfType<CollisionShape3D>())
+        {
+            var requete = new PhysicsShapeQueryParameters3D
+            {
+                Shape = forme.Shape, Transform = t * forme.Transform, CollisionMask = 1,
+                Exclude = new Godot.Collections.Array<Rid> { GetRid() },
+            };
+            if (espace.IntersectShape(requete, 1).Count > 0)
+                return true;
+        }
+        return false;
+    }
+
+    // Déplacé à la souris : ce nouvel endroit devient son point de départ pour « Replacer »
+    public void Deposer(Transform3D t)
+    {
+        _depart = t;
+        Replacer();
+        Freeze = Arret;   // reste gelé si la carte est en pause
     }
 
     // Rappelée par le constructeur à chaque changement de réglage

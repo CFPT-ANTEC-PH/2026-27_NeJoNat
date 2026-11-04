@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://InteractiveMap/Objects/Sphere.tscn" id="8_sphere"]
 [ext_resource type="PackedScene" path="res://InteractiveMap/Objects/Cylindre.tscn" id="9_cyl"]
 [ext_resource type="PackedScene" uid="uid://bphapsunm58vx" path="res://Scenes/robot.tscn" id="9_enim8"]
+[ext_resource type="Script" path="res://InteractiveMap/Deplacer/DeplaceurRobots.cs" id="10_depl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_enim8"]
 
@@ -48,3 +49,6 @@ Spawner = NodePath("../Objets")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1452208, 0.010264665, 9.938099)
 Pilotage = 1
 AfficherNom = true
+
+[node name="DeplaceurRobots" type="Node3D" parent="."]
+script = ExtResource("10_depl")

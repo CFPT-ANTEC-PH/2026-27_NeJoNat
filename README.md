@@ -42,6 +42,7 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | Tourner la caméra | glisser clic gauche ou droit (constructeur) / clic droit maintenu (carte) |
 | Bouger la caméra (carte) | clic droit maintenu + `ZQSD` / `WASD`, `E` / `Q` monter / descendre |
 | Zoom | molette |
+| Déplacer un robot (carte) | glisser-déposer au clic gauche, molette pendant le glisser pour le tourner (lâché sur un autre robot, un objet ou un mur : il revient où on l'a pris) |
 | Désélectionner l'outil (carte) | `Échap` |
 
 ## Organisation du projet
@@ -54,7 +55,7 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | `Scripts/` | `Robot.cs` (conduite, réglages, dimensions), `RobotAuto.cs` (pilotage automatique), constructeur, sauvegarde, caméra |
 | `InteractiveMap/` | carte interactive : dessin de ligne au sol, ajout d'objets, caméra libre |
 | `Assets/` | modèles 3D (Blender) |
-| `Tests/` | tests automatiques (rotation, suivi de ligne, pose de robots, sauvegarde) |
+| `Tests/` | tests automatiques (rotation, suivi de ligne, pose et déplacement de robots, sauvegarde) |
 
 ### Échelle
 
@@ -66,6 +67,8 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 godot --headless res://Tests/TestRotation.tscn
 godot --headless --fixed-fps 60 res://Tests/TestSuiviLigne.tscn   # 9 parcours, --fixed-fps les fait tourner en accéléré
 godot --headless res://Tests/TestPoseRobots.tscn
+godot --headless res://Tests/TestDeplacerRobot.tscn
+godot --headless res://Tests/TestGlisserSurRobot.tscn
 godot --headless res://Tests/TestSauvegarde.tscn
 ```
 

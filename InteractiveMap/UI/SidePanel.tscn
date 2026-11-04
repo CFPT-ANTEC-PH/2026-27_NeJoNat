@@ -191,7 +191,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -300.0
-offset_top = -150.0
+offset_top = -190.0
 offset_right = -16.0
 offset_bottom = -16.0
 grow_horizontal = 0
@@ -202,4 +202,6 @@ text = "Clic droit maintenu : regarder
   + ZQSD / WASD : bouger
 E / Q : monter / descendre
 Shift : rapide    Molette : vitesse
+Glisser un robot : le déplacer
+  + molette : le tourner
 Échap : aucun outil"
