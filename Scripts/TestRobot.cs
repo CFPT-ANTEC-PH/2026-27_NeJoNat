@@ -37,6 +37,7 @@ public partial class TestRobot : VehicleBody3D
     [Export] public CollisionShape3D AvantCollision;
 
     [ExportGroup("Apparence")]
+    [Export] public string NomRobot = "Robot";   // choisi dans le menu principal
     [Export] public Color CouleurChassis = new(0.62f, 0.81f, 0.93f);
     [Export] public Color CouleurRoues = Colors.Transparent;   // transparent = couleur d'origine du modèle
 
@@ -84,7 +85,7 @@ public partial class TestRobot : VehicleBody3D
     // et le robot de la scène de jeu les reprend à la place de ceux de l'inspecteur.
     public static readonly string[] Reglages =
     {
-        nameof(RoueAvant), nameof(Capteurs), nameof(Moteur), nameof(CouleurChassis), nameof(CouleurRoues),
+        nameof(NomRobot), nameof(RoueAvant), nameof(Capteurs), nameof(Moteur), nameof(CouleurChassis), nameof(CouleurRoues),
         nameof(EchelleLongueur), nameof(EchelleLargeur), nameof(EchelleRoues), nameof(EchelleAdherence),
         nameof(PorteeCapteurs), nameof(TurnFactor), nameof(DistanceArret), "mass",
     };

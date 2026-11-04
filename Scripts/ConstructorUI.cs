@@ -29,6 +29,8 @@ public partial class ConstructorUI : CanvasLayer
 			return;
 
 		_constructeur = GetParent<Constructor>();
+		GetNode<Label>("Panneau/Marge/Contenu/SousTitre").Text =
+			$"Règle « {_constructeur.Robot.NomRobot} » : l'aperçu change en direct.";
 		Brancher("Body", _constructeur.ChangerCouleurChassis);
 		Brancher("WheelColor", _constructeur.ChangerCouleurRoues);
 		Brancher("Wheels", _constructeur.ChangerRoueAvant);
