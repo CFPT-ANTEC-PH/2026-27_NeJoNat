@@ -1,16 +1,18 @@
 using Godot;
 using RobotMaker.Scripts;
 
+namespace RobotMaker.Tests;
+
 // Le robot tourne sur place : il doit pivoter autour du milieu de ses roues motrices,
 // pas autour de son centre de masse. Lancer : godot --headless res://Tests/TestRotation.tscn
 // Passer GripLateral à 0 sur le robot de la scène montre l'ancien comportement (le test échoue).
 public partial class TestRotation : Node3D
 {
-    private TestRobot _robot;
+    private Robot _robot;
     private Vector3 _depart;
     private float _temps, _tour, _ecartMax;
 
-    public override void _Ready() => _robot = GetNode<TestRobot>("Robot");
+    public override void _Ready() => _robot = GetNode<Robot>("Robot");
 
     private Vector3 Essieu() => (_robot.LeftWheel.GlobalPosition + _robot.RightWheel.GlobalPosition) / 2f;
 

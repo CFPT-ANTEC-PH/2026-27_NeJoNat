@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c6iwohuqvirgw"]
 
-[ext_resource type="PackedScene" uid="uid://1x4dlpanqjhi" path="res://Assets/Models/Wells/weel.fbx" id="1_stv6l"]
+[ext_resource type="PackedScene" uid="uid://1x4dlpanqjhi" path="res://Assets/Models/Wheels/weel.fbx" id="1_stv6l"]
 
 [node name="Weel" type="Node3D" unique_id=255775534]
 

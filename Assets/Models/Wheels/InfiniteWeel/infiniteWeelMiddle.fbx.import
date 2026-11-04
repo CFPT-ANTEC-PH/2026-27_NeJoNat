@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cxnh33krkjyw"
-path="res://.godot/imported/infiniteWeelWeel.fbx-59d276b16b85765b681f997db287d6a0.scn"
+uid="uid://d1tbq52jea0mn"
+path="res://.godot/imported/infiniteWeelMiddle.fbx-a4ec49cf82ba53273575470d191743b2.scn"
 
 [deps]
 
-source_file="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelWeel.fbx"
-dest_files=["res://.godot/imported/infiniteWeelWeel.fbx-59d276b16b85765b681f997db287d6a0.scn"]
+source_file="res://Assets/Models/Wheels/InfiniteWeel/infiniteWeelMiddle.fbx"
+dest_files=["res://.godot/imported/infiniteWeelMiddle.fbx-a4ec49cf82ba53273575470d191743b2.scn"]
 
 [params]
 
@@ -39,7 +39,15 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"ShapeMat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://Assets/Models/Wheels/InfiniteWeel/ShapeMat.tres",
+"use_external/path": "uid://bok0ai6f40l1t"
+}
+}
+}
 fbx/importer=0
 fbx/allow_geometry_helper_nodes=false
 fbx/embedded_image_handling=1

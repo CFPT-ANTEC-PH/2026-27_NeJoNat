@@ -1,8 +1,8 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://d1tbq52jea0mn" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelMiddle.fbx" id="1_middle"]
-[ext_resource type="PackedScene" uid="uid://bjqxu7x121slh" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelTop.fbx" id="2_top"]
-[ext_resource type="PackedScene" uid="uid://cxnh33krkjyw" path="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelWeel.fbx" id="3_weel"]
+[ext_resource type="PackedScene" uid="uid://d1tbq52jea0mn" path="res://Assets/Models/Wheels/InfiniteWeel/infiniteWeelMiddle.fbx" id="1_middle"]
+[ext_resource type="PackedScene" uid="uid://bjqxu7x121slh" path="res://Assets/Models/Wheels/InfiniteWeel/infiniteWeelTop.fbx" id="2_top"]
+[ext_resource type="PackedScene" uid="uid://cxnh33krkjyw" path="res://Assets/Models/Wheels/InfiniteWeel/infiniteWeelWeel.fbx" id="3_weel"]
 
 [node name="FlyWeel" type="Node3D" unique_id=581204733]
 

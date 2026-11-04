@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://bphapsunm58vx"]
 
-[ext_resource type="Script" uid="uid://cexvcjnjxl36h" path="res://Scripts/TestRobot.cs" id="1_lp65t"]
-[ext_resource type="PackedScene" uid="uid://c6iwohuqvirgw" path="res://Assets/Models/Wells/Weel.tscn" id="2_ntbue"]
+[ext_resource type="Script" uid="uid://cexvcjnjxl36h" path="res://Scripts/Robot.cs" id="1_lp65t"]
+[ext_resource type="PackedScene" uid="uid://c6iwohuqvirgw" path="res://Assets/Models/Wheels/Weel.tscn" id="2_ntbue"]
 [ext_resource type="ArrayMesh" uid="uid://dc46y33p0mdhq" path="res://Assets/Models/BaseRobot/base.obj" id="4_ntbue"]
-[ext_resource type="PackedScene" uid="uid://dlnm3mtnjvngw" path="res://Scenes/Cappteurs/CapteursDown.tscn" id="7_7cjo4"]
-[ext_resource type="PackedScene" uid="uid://bhqhflk7spe5x" path="res://Scenes/Cappteurs/CapteursAvant.tscn" id="8_capts"]
-[ext_resource type="PackedScene" path="res://Scenes/FrontWeels/FlyWeel.tscn" id="9_fly"]
-[ext_resource type="PackedScene" uid="uid://cyn45uwfi0lm6" path="res://Scenes/FrontWeels/Glisseur.tscn" id="10_gliss"]
+[ext_resource type="PackedScene" uid="uid://dlnm3mtnjvngw" path="res://Scenes/Capteurs/CapteursDown.tscn" id="7_7cjo4"]
+[ext_resource type="PackedScene" uid="uid://bhqhflk7spe5x" path="res://Scenes/Capteurs/CapteursAvant.tscn" id="8_capts"]
+[ext_resource type="PackedScene" path="res://Scenes/FrontWheels/FlyWeel.tscn" id="9_fly"]
+[ext_resource type="PackedScene" uid="uid://cyn45uwfi0lm6" path="res://Scenes/FrontWheels/Glisseur.tscn" id="10_gliss"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m13ap"]
 size = Vector3(1.8731995, 0.34960938, 0.48339844)
@@ -14,7 +14,7 @@ size = Vector3(1.8731995, 0.34960938, 0.48339844)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1vivr"]
 size = Vector3(1.2523804, 0.38183594, 2.0111694)
 
-[node name="TestRobot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "RoueFolle", "Glisseur", "CasterPivot", "CasterMesh", "ChassisMesh", "ChassisCollision", "AvantCollision", "SupportAvant", "SupportBas", "CapteurGauche", "CapteurCentre", "CapteurDroite")]
+[node name="Robot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "RoueFolle", "Glisseur", "CasterPivot", "CasterMesh", "ChassisMesh", "ChassisCollision", "AvantCollision", "SupportAvant", "SupportBas", "CapteurGauche", "CapteurCentre", "CapteurDroite")]
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.45, 1.25)
 script = ExtResource("1_lp65t")

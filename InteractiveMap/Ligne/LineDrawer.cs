@@ -10,6 +10,7 @@ public partial class LineDrawer : StaticBody3D
     [Export] public float Largeur = 0.4f;
     [Export] public float Epaisseur = 0.01f;
     [Export] public float Pas = 0.2f;   // distance mini entre deux points du tracé
+    [Export(PropertyHint.Layers3DPhysics)] public uint MasqueSol = 8;   // calque 4 : seul le sol de la table, pas les objets ni le robot
 
     public bool Actif;
 
@@ -23,10 +24,10 @@ public partial class LineDrawer : StaticBody3D
 
         if (e is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true })
         {
-            _dernier = Pick.SousLaSouris(this);
+            _dernier = Pick.SousLaSouris(this, MasqueSol);
         }
         else if (e is InputEventMouseMotion souris && souris.ButtonMask.HasFlag(MouseButtonMask.Left)
-                 && _dernier is Vector3 a && Pick.SousLaSouris(this) is Vector3 b && a.DistanceTo(b) >= Pas)
+                 && _dernier is Vector3 a && Pick.SousLaSouris(this, MasqueSol) is Vector3 b && a.DistanceTo(b) >= Pas)
         {
             AjouterSegment(a, b);
             _dernier = b;
@@ -34,7 +35,7 @@ public partial class LineDrawer : StaticBody3D
     }
 
     // ponytail: un nœud par segment, fusionner en un seul mesh si de très longs tracés font ramer
-    private void AjouterSegment(Vector3 a, Vector3 b)
+    public void AjouterSegment(Vector3 a, Vector3 b)
     {
         Vector3 direction = b - a;
         direction.Y = 0f;

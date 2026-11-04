@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RobotMaker.Scripts;
 
-public partial class TestRobot : VehicleBody3D
+public partial class Robot : VehicleBody3D
 {
     [ExportGroup("Roues")]
     [Export] public VehicleWheel3D LeftWheel;
@@ -59,7 +59,7 @@ public partial class TestRobot : VehicleBody3D
     [Export] public float AccelLaterale = 4f;    // m/s² max en virage (au-delà, risque de se renverser)
     [Export(PropertyHint.Range, "0,1,0.05")] public float GripLateral = 1f;  // 1 = les roues motrices ne glissent jamais de côté, 0 = physique de Godot seule
 
-    // NOUVEAU : capteurs
+    // Capteurs
     public enum TypeCapteurs { Avant, Bas }
 
     [ExportGroup("Capteurs")]
@@ -73,7 +73,7 @@ public partial class TestRobot : VehicleBody3D
     [Export] public float DistanceArret = 0.4f;  // m
     [Export(PropertyHint.Range, "0.5,8,0.25")] public float PorteeCapteurs = 3f;  // m, appliquée aux 3 capteurs avant
 
-    // NOUVEAU : infos utilisables partout dans le robot
+    // Infos utilisables partout dans le robot
     public bool ObstacleDevant => DistanceObstacle < float.PositiveInfinity;
 
     public float DistanceObstacle => Mathf.Min(DistanceCapteur(CapteurCentre),
@@ -88,12 +88,17 @@ public partial class TestRobot : VehicleBody3D
     {
         nameof(NomRobot), nameof(RoueAvant), nameof(Capteurs), nameof(Moteur), nameof(CouleurChassis), nameof(CouleurRoues),
         nameof(EchelleLongueur), nameof(EchelleLargeur), nameof(EchelleRoues), nameof(EchelleAdherence),
-        nameof(PorteeCapteurs), nameof(TurnFactor), nameof(DistanceArret), "mass",
+        nameof(PorteeCapteurs), nameof(TurnFactor), nameof(DistanceArret), nameof(Pilotage), "mass",
     };
 
     public static Dictionary<string, Variant> Choix;
 
     public void Sauver() => Choix = Reglages.ToDictionary(nom => nom, nom => Get(nom));
+
+    // Carte interactive : les robots attendent « Démarrer » (gelés) pour qu'on prépare le terrain
+    public static bool Arret;
+    public const string Groupe = "robots";
+    private Transform3D _depart;
 
     private float _adherenceRoueFolle, _adherenceRoues;
 
@@ -142,6 +147,11 @@ public partial class TestRobot : VehicleBody3D
         PreparerDimensions();
         Appliquer();
 
+        AddToGroup(Groupe);
+        _depart = GlobalTransform;
+        if (Arret)
+            Freeze = true;
+
         // Dans la scène, le pivot est placé pour une suspension au repos
         if (CasterPivot != null)
             _casterOffset = ToLocal(CasterPivot.GlobalPosition) - (FrontWheel.Position + Vector3.Down * FrontWheel.WheelRestLength);
@@ -151,15 +161,15 @@ public partial class TestRobot : VehicleBody3D
     {
         float dt = (float)delta;
 
-        // Manuel : clavier. Auto : décidé par les capteurs (TestRobotAuto.cs)
+        // Manuel : clavier. Auto : décidé par les capteurs (RobotAuto.cs)
         (float avance, float tourne) = Pilotage == TypePilotage.Auto
             ? CommandeAuto()
             : (Input.GetAxis("down", "up"), Input.GetAxis("right", "left"));
 
-        // NOUVEAU : ralentit à l'approche d'un obstacle pour pouvoir s'arrêter à DistanceArret
+        // Ralentit à l'approche d'un obstacle pour pouvoir s'arrêter à DistanceArret
         // (v² = 2 × décélération × distance restante ; reculer et tourner restent possibles).
         // On planifie avec la moitié de Deceleration pour garder de la marge (retard des moteurs).
-        if (AntiCollision && avance > 0f)
+        if (AntiCollision && Capteurs == TypeCapteurs.Avant && avance > 0f)
         {
             float vitesseSure = Mathf.Sqrt(Deceleration * Mathf.Max(DistanceObstacle - DistanceArret, 0f));
             avance = Mathf.Min(avance, vitesseSure / MaxSpeed);
@@ -191,6 +201,15 @@ public partial class TestRobot : VehicleBody3D
 
         if (RoueAvant == TypeRoueAvant.RoueFolle)
             UpdateCaster(dt);
+    }
+
+    // Remet le robot là où il a été posé, à l'arrêt
+    public void Replacer()
+    {
+        GlobalTransform = _depart;
+        LinearVelocity = Vector3.Zero;
+        AngularVelocity = Vector3.Zero;
+        _vitesseCible = _virageCible = 0f;
     }
 
     // Rappelée par le constructeur à chaque changement de réglage
@@ -345,7 +364,7 @@ public partial class TestRobot : VehicleBody3D
         noeud.Transform = t;
     }
 
-    // L'élément non choisi est caché et arrêté (les capteurs gardent Detecte à false)
+    // L'élément non choisi est caché et arrêté (ses capteurs ne sont plus mis à jour)
     private static void Activer(Node3D noeud, bool actif)
     {
         if (noeud == null)

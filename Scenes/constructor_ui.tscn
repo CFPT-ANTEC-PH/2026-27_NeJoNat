@@ -478,6 +478,43 @@ theme_override_font_sizes/font_size = 12
 text = "Part de la vitesse donnée aux roues pour tourner. Trop haut : virages brusques."
 autowrap_mode = 3
 
+[node name="Pilot" type="VBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Pilot"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Pilotage"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Pilot"]
+layout_mode = 2
+
+[node name="Previous" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Pilot/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Précédent"
+text = "<"
+
+[node name="Choix" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Pilot/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+
+[node name="Next" type="Button" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Pilot/HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+tooltip_text = "Suivant"
+text = ">"
+
+[node name="Aide" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages/Pilot"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = ""
+autowrap_mode = 3
+
 [node name="Section4" type="Label" parent="Panneau/Marge/Contenu/Scroll/Espace/Reglages"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
@@ -598,7 +635,7 @@ autowrap_mode = 3
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-tooltip_text = "Le robot part tout seul dans la carte interactive"
+tooltip_text = "Ouvre la carte interactive avec ce robot"
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("Jouer")
 theme_override_styles/hover = SubResource("JouerSurvol")

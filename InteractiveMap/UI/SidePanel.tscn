@@ -70,7 +70,7 @@ text = "Constructeur"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
 theme_override_font_sizes/font_size = 13
-text = "Le robot roule tout seul : prépare-lui le terrain."
+text = "Prépare le terrain, puis démarre le robot."
 autowrap_mode = 3
 
 [node name="Mode" type="Label" parent="Panel/Marge/Boite"]
@@ -81,11 +81,40 @@ theme_override_styles/normal = SubResource("Outil")
 text = "Outil : Aucun"
 horizontal_alignment = 1
 
+[node name="TitreRobot" type="Label" parent="Panel/Marge/Boite"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Robot"
+
+[node name="Trait0" type="HSeparator" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="BoutonsRobot" type="HBoxContainer" parent="Panel/Marge/Boite"]
+layout_mode = 2
+
+[node name="Demarrer" type="Button" parent="Panel/Marge/Boite/BoutonsRobot"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+tooltip_text = "Lance ou met en pause tous les robots"
+text = "▶ Démarrer"
+
+[node name="Replacer" type="Button" parent="Panel/Marge/Boite/BoutonsRobot"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+tooltip_text = "Remet chaque robot là où il a été posé"
+text = "↺ Replacer"
+
 [node name="TitreObjets" type="Label" parent="Panel/Marge/Boite"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.75, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "Obstacles"
+text = "Objets"
 
 [node name="Trait1" type="HSeparator" parent="Panel/Marge/Boite"]
 layout_mode = 2
@@ -94,7 +123,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.7, 0.75, 1)
 theme_override_font_sizes/font_size = 12
-text = "Choisis une forme puis clique sur la table pour la poser. Les capteurs avant les détectent."
+text = "Choisis une forme (ou un robot de plus) puis clique sur la table pour la poser. Les capteurs avant détectent les obstacles."
 autowrap_mode = 3
 
 [node name="ListeObjets" type="HBoxContainer" parent="Panel/Marge/Boite"]
@@ -105,7 +134,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "Supprimer les obstacles"
+text = "Supprimer les objets posés"
 
 [node name="TitreLigne" type="Label" parent="Panel/Marge/Boite"]
 layout_mode = 2
@@ -151,7 +180,7 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("Aide")
 text = "Clic droit maintenu : regarder
-ZQSD / WASD : bouger
+  + ZQSD / WASD : bouger
 E / Q : monter / descendre
 Shift : rapide    Molette : vitesse
 Échap : aucun outil"

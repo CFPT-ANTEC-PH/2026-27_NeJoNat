@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cadqn72soyvwr"]
 
-[ext_resource type="Script" uid="uid://c87yhec5k44hm" path="res://Scenes/Cappteurs/CapteurAvant.cs" id="1_uitej"]
+[ext_resource type="Script" uid="uid://c87yhec5k44hm" path="res://Scenes/Capteurs/CapteurAvant.cs" id="1_uitej"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1vivr"]
 albedo_color = Color(0, 0, 1, 1)

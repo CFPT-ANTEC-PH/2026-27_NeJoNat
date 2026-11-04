@@ -2,8 +2,9 @@ using Godot;
 
 namespace RobotMaker.InteractiveMap;
 
-// Caméra libre : clic droit maintenu pour regarder, WASD/ZQSD pour bouger,
-// E/Q monter/descendre, Shift pour aller vite, molette pour régler la vitesse
+// Caméra libre : clic droit maintenu pour regarder et bouger (WASD/ZQSD),
+// E/Q (touches physiques) monter/descendre, Shift pour aller vite, molette pour régler la vitesse.
+// Sans clic droit, le clavier reste au robot en pilotage manuel.
 public partial class FreeCamera : Camera3D
 {
     [Export] public float Vitesse = 10f;
@@ -40,11 +41,14 @@ public partial class FreeCamera : Camera3D
 
     public override void _Process(double delta)
     {
+        if (Input.MouseMode != Input.MouseModeEnum.Captured)
+            return;
+
         Vector2 entree = Input.GetVector("left", "right", "up", "down");
         Vector3 deplacement = Basis * new Vector3(entree.X, 0f, entree.Y);
 
-        if (Input.IsKeyPressed(Key.E)) deplacement += Vector3.Up;
-        if (Input.IsKeyPressed(Key.Q)) deplacement += Vector3.Down;
+        if (Input.IsPhysicalKeyPressed(Key.E)) deplacement += Vector3.Up;
+        if (Input.IsPhysicalKeyPressed(Key.Q)) deplacement += Vector3.Down;
 
         float vitesse = Vitesse * (Input.IsKeyPressed(Key.Shift) ? MultiplicateurRapide : 1f);
         Position += deplacement.LimitLength(1f) * vitesse * (float)delta;

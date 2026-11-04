@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://checsya4dg4kq"]
 
-[ext_resource type="Script" uid="uid://cl8tif2shw6di" path="res://Scenes/main-meu/MainMenu.cs" id="1_yhhve"]
+[ext_resource type="Script" uid="uid://cl8tif2shw6di" path="res://Scenes/main-menu/MainMenu.cs" id="1_yhhve"]
 [ext_resource type="Theme" path="res://Assets/ThemeMenu.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="Carte"]

@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using RobotMaker.Scripts;
 
 namespace RobotMaker.InteractiveMap;
 
@@ -21,7 +22,7 @@ public partial class SidePanel : CanvasLayer
         var liste = GetNode<HBoxContainer>("%ListeObjets");
         foreach (PackedScene scene in Objets)
         {
-            string nom = scene.ResourcePath.GetFile().GetBaseName();
+            string nom = scene.ResourcePath.GetFile().GetBaseName().Capitalize();
             var bouton = new Button { Text = nom, FocusMode = Control.FocusModeEnum.None, ToggleMode = true,
                 SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
             bouton.Pressed += () => Choisir(scene, false, nom, bouton);
@@ -37,6 +38,24 @@ public partial class SidePanel : CanvasLayer
         GetNode<Button>("%EffacerLigne").Pressed += () => Ligne.Effacer();
         GetNode<Button>("%Constructeur").Pressed += () => GetTree().ChangeSceneToFile("res://Scenes/constructor.tscn");
         Choisir(null, false, "Aucun", null);
+
+        // Les robots attendent « Démarrer » : on peut d'abord tracer la ligne et poser les obstacles
+        var demarrer = GetNode<Button>("%Demarrer");
+        demarrer.Toggled += Marche;
+        Marche(false);
+        GetNode<Button>("%Replacer").Pressed += () =>
+        {
+            foreach (Node n in GetTree().GetNodesInGroup(Robot.Groupe))
+                ((Robot)n).Replacer();
+        };
+
+        void Marche(bool enMarche)
+        {
+            Robot.Arret = !enMarche;
+            demarrer.Text = enMarche ? "⏸ Pause" : "▶ Démarrer";
+            foreach (Node n in GetTree().GetNodesInGroup(Robot.Groupe))
+                ((Robot)n).Freeze = !enMarche;
+        }
     }
 
     public override void _UnhandledInput(InputEvent e)

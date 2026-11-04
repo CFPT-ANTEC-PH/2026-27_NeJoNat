@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bhqhflk7spe5x"]
 
 [ext_resource type="ArrayMesh" uid="uid://bj31smjp460lb" path="res://Assets/Models/BaseRobot/supportCapt.obj" id="1_supp"]
-[ext_resource type="PackedScene" uid="uid://cadqn72soyvwr" path="res://Scenes/Cappteurs/CapteurAvant.tscn" id="2_capt"]
+[ext_resource type="PackedScene" uid="uid://cadqn72soyvwr" path="res://Scenes/Capteurs/CapteurAvant.tscn" id="2_capt"]
 
 [node name="CapteursAvant" type="Node3D" unique_id=702915384]
 

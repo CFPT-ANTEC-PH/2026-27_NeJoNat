@@ -5,12 +5,12 @@ namespace RobotMaker.Scripts;
 
 // Pilotage automatique : le robot décide seul avance / tourne à partir de ses capteurs.
 // Mêmes conventions que le clavier : avance et tourne dans [-1, 1], tourne > 0 = à gauche (+X local).
-public partial class TestRobot
+public partial class Robot
 {
     public enum TypePilotage { Manuel, Auto }
 
     [ExportGroup("Pilotage automatique")]
-    [Export] public TypePilotage Pilotage = TypePilotage.Manuel;
+    [Export] public TypePilotage Pilotage = TypePilotage.Auto;
     [Export(PropertyHint.Range, "0.1,1,0.05")] public float VitesseAuto = 0.4f;  // part de MaxSpeed
     [Export] public float GainLigne = 1.5f;          // force du virage par rapport à l'écart de la ligne
     [Export] public float DistanceEvitement = 2f;    // m : en dessous, le robot tourne pour éviter l'obstacle

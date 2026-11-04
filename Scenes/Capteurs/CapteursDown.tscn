@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dlnm3mtnjvngw"]
 
 [ext_resource type="ArrayMesh" uid="uid://bax5k3y2sya01" path="res://Assets/Models/BaseRobot/supportCapt_Down.obj" id="1_cenrn"]
-[ext_resource type="PackedScene" uid="uid://ta2nmyaj730i" path="res://Scenes/Cappteurs/capteur-route.tscn" id="2_route"]
+[ext_resource type="PackedScene" uid="uid://ta2nmyaj730i" path="res://Scenes/Capteurs/capteur-route.tscn" id="2_route"]
 
 [node name="CapteursDown" type="Node3D" unique_id=31504777]
 

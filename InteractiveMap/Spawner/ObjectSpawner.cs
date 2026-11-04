@@ -1,4 +1,5 @@
 using Godot;
+using RobotMaker.Scripts;
 
 namespace RobotMaker.InteractiveMap;
 
@@ -18,8 +19,10 @@ public partial class ObjectSpawner : Node3D
             return;
 
         var objet = Selection.Instantiate<Node3D>();
+        // Placé avant d'entrer dans l'arbre : le robot retient cette position pour « Replacer »
+        float hauteur = objet is Robot ? 0.1f : HauteurLacher;
+        objet.Position = ToLocal(point + Vector3.Up * hauteur);
         AddChild(objet);
-        objet.GlobalPosition = point + Vector3.Up * HauteurLacher;
     }
 
     public void Vider()

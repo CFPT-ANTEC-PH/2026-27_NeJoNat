@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RobotMaker.Scripts;
 
-// Un robot = un fichier user://robots/<nom>.cfg avec ses réglages (TestRobot.Choix).
+// Un robot = un fichier user://robots/<nom>.cfg avec ses réglages (Robot.Choix).
 // ConfigFile garde les types Godot (Color, enums...) sans conversion.
 public static class Sauvegarde
 {
@@ -24,7 +24,7 @@ public static class Sauvegarde
         foreach ((string cle, Variant valeur) in choix)
             cfg.SetValue(Section, cle, valeur);
 
-        string nom = choix[nameof(TestRobot.NomRobot)].AsString();
+        string nom = choix[nameof(Robot.NomRobot)].AsString();
         Error err = cfg.Save(Fichier(nom));
         if (err != Error.Ok)
             GD.PushError($"Sauvegarde du robot « {nom} » impossible : {err}");
@@ -49,7 +49,7 @@ public static class Sauvegarde
         {
             var cfg = new ConfigFile();
             if (cfg.Load(Dossier + f) == Error.Ok)
-                robots.Add((Dossier + f, cfg.GetValue(Section, nameof(TestRobot.NomRobot), f.GetBaseName()).AsString()));
+                robots.Add((Dossier + f, cfg.GetValue(Section, nameof(Robot.NomRobot), f.GetBaseName()).AsString()));
         }
         return robots.OrderBy(r => r.Item2).ToList();
     }

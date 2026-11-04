@@ -82,12 +82,12 @@ public partial class CameraOrbit : Node3D
 
         // Suit le robot en douceur
         Vector3 cible = Target.GlobalPosition + Vector3.Up * Hauteur;
-        GlobalPosition = GlobalPosition.Lerp(cible, SuiviDouceur * dt);
+        GlobalPosition = GlobalPosition.Lerp(cible, 1f - Mathf.Exp(-SuiviDouceur * dt));  // stable même si les FPS chutent
 
         // Applique la rotation de la souris
         Rotation = new Vector3(_pitch, _yaw, 0f);
 
         // Zoom progressif
-        _arm.SpringLength = Mathf.Lerp(_arm.SpringLength, Distance, 10f * dt);
+        _arm.SpringLength = Mathf.Lerp(_arm.SpringLength, Distance, 1f - Mathf.Exp(-10f * dt));
     }
 }

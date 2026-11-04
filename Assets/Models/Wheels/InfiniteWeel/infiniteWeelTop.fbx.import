@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bjqxu7x121slh"
-path="res://.godot/imported/infiniteWeelTop.fbx-0b5e7d8aa6150efbccd0b07e2958ba03.scn"
+path="res://.godot/imported/infiniteWeelTop.fbx-d305fb2c04b177b4aba4f9deb0292cb2.scn"
 
 [deps]
 
-source_file="res://Assets/Models/Wells/InfiniteWeel/infiniteWeelTop.fbx"
-dest_files=["res://.godot/imported/infiniteWeelTop.fbx-0b5e7d8aa6150efbccd0b07e2958ba03.scn"]
+source_file="res://Assets/Models/Wheels/InfiniteWeel/infiniteWeelTop.fbx"
+dest_files=["res://.godot/imported/infiniteWeelTop.fbx-d305fb2c04b177b4aba4f9deb0292cb2.scn"]
 
 [params]
 
@@ -43,12 +43,12 @@ _subresources={
 "materials": {
 "MetalMat": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://Assets/Models/Wells/InfiniteWeel/MetalMat.tres",
+"use_external/fallback_path": "res://Assets/Models/Wheels/InfiniteWeel/MetalMat.tres",
 "use_external/path": "uid://c7bd2xm8830s6"
 },
 "ShapeMat": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://Assets/Models/Wells/InfiniteWeel/ShapeMat.tres",
+"use_external/fallback_path": "res://Assets/Models/Wheels/InfiniteWeel/ShapeMat.tres",
 "use_external/path": "uid://bok0ai6f40l1t"
 }
 }

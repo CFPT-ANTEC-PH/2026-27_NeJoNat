@@ -20,3 +20,6 @@ mono_crash.*.json
 .idea
 
 .vs/
+
+# Sauvegardes de projet générées par Godot
+*.csproj.old*
