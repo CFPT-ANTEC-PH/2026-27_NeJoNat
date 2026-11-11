@@ -201,7 +201,10 @@ public partial class Robot : VehicleBody3D
         // On planifie avec la moitié de Deceleration pour garder de la marge (retard des moteurs).
         if (AntiCollision && Capteurs == TypeCapteurs.Avant && avance > 0f)
         {
-            float vitesseSure = Mathf.Sqrt(Deceleration * Mathf.Max(DistanceObstacle - DistanceArret, 0f));
+            // Distance d'arrêt plus grande que la portée : l'obstacle n'est vu qu'une fois trop près, pile à l'arrêt.
+            // On garde au moins la moitié de la portée pour freiner.
+            float arret = Mathf.Min(DistanceArret, PorteeCapteurs / 2f);
+            float vitesseSure = Mathf.Sqrt(Deceleration * Mathf.Max(DistanceObstacle - arret, 0f));
             avance = Mathf.Min(avance, vitesseSure / MaxSpeed);
         }
 

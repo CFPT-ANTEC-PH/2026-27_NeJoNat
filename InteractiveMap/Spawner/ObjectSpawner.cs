@@ -34,6 +34,12 @@ public partial class ObjectSpawner : Node3D
         }
         objet.Position = ToLocal(point + Vector3.Up * hauteur);
         AddChild(objet);
+        // Posé dans un autre robot, un objet ou un mur : on n'en veut pas (comme au glisser-déposer)
+        if (objet is Robot r && r.Chevauche(r.GlobalTransform))
+        {
+            objet.QueueFree();
+            return null;
+        }
         return objet;
     }
 

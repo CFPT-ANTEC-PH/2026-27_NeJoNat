@@ -34,6 +34,7 @@ public partial class TestPoseRobots : Node3D
             && voie(a) > voie(b) + 0.3f                        // formes de collision propres à chaque robot
             && a.GlobalPosition.IsEqualApprox(new Vector3(4, 0.1f, 0))
             && GetTree().GetNodesInGroup(Robot.Groupe).Count == 3;
+        ok &= spawner.Poser(new Vector3(4, 0, 0)) == null;   // posé sur le robot « Rapide » : refusé
 
         GD.Print(ok ? "TestPoseRobots OK" : $"TestPoseRobots ECHEC : {a.NomRobot}/{a.Moteur}, {b.NomRobot}/{b.Capteurs}/{b.Moteur}, "
                  + $"{c.NomRobot}/{c.Moteur}, voies {voie(a):0.00}/{voie(b):0.00}, position {a.GlobalPosition}");

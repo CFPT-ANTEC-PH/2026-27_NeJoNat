@@ -67,6 +67,9 @@ public partial class SidePanel : CanvasLayer
         }
     }
 
+    // La pause ne concerne que la carte : sinon l'aperçu du constructeur démarrerait gelé
+    public override void _ExitTree() => Robot.Arret = false;
+
     // Liste des robots sauvegardés : celui choisi est posé au clic, avec ses propres réglages
     private void BrancherPoseRobot()
     {

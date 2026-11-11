@@ -56,7 +56,7 @@ public partial class MainMenu : Control
         string nom = texte.StripEdges();
         _creer.Disabled = nom == "";
         _aideNom.Text = nom != "" && Sauvegarde.Existe(nom)
-            ? "Un robot porte déjà ce nom : il sera remplacé à la sauvegarde."
+            ? "Un robot porte déjà ce nom (ou un nom qui donne le même fichier, : / ? * deviennent _) : il sera remplacé à la sauvegarde."
             : _texteAideNom;
     }
 
@@ -106,6 +106,12 @@ public partial class MainMenu : Control
                 if (supprimer.Text != "Sûr ?")
                 {
                     supprimer.Text = "Sûr ?";
+                    // Pas confirmé dans les 3 s : on oublie
+                    GetTree().CreateTimer(3).Timeout += () =>
+                    {
+                        if (IsInstanceValid(supprimer))
+                            supprimer.Text = "✕";
+                    };
                     return;
                 }
                 Sauvegarde.Supprimer(fichier);
