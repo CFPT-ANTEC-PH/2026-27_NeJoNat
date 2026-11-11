@@ -56,7 +56,7 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | `Scripts/` | `Robot.cs` (conduite, réglages, dimensions), `RobotAuto.cs` (pilotage automatique), constructeur, sauvegarde, caméra |
 | `InteractiveMap/` | carte interactive : dessin de ligne au sol, ajout d'objets, caméra libre |
 | `Assets/` | modèles 3D (Blender) |
-| `Tests/` | tests automatiques (rotation, stabilité, suivi de ligne, pose, déplacement et infos des robots, sauvegarde, poussée d'une balle, roulement, évitement en douceur) |
+| `Tests/` | tests automatiques (rotation, stabilité, suivi de ligne, pose, déplacement et infos des robots, sauvegarde, poussée d'une balle, roulement, évitement en douceur, objets au repos) |
 
 ### Échelle
 
@@ -87,6 +87,7 @@ godot --headless res://Tests/TestSauvegarde.tscn
 godot --headless --fixed-fps 60 res://Tests/TestPousserBalle.tscn
 godot --headless --fixed-fps 60 res://Tests/TestRoulement.tscn
 godot --headless --fixed-fps 60 res://Tests/TestEvitement.tscn
+godot --headless --fixed-fps 60 res://Tests/TestObjetsRepos.tscn
 ```
 
 Chaque test affiche `OK` ou `ECHEC` et quitte avec le code 0 ou 1.

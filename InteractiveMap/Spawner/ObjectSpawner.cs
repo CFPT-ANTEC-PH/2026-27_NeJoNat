@@ -4,10 +4,10 @@ using RobotMaker.Scripts;
 
 namespace RobotMaker.InteractiveMap;
 
-// Pose l'objet sélectionné dans le menu là où on clique (il tombe de HauteurLacher)
+// Pose l'objet sélectionné dans le menu là où on clique (sa base tombe de HauteurLacher)
 public partial class ObjectSpawner : Node3D
 {
-    [Export] public float HauteurLacher = 1f;
+    [Export] public float HauteurLacher = 1f;   // u, hauteur de chute sous la base de l'objet (1 u = 10 cm)
 
     public PackedScene Selection;
     public Dictionary<string, Variant> ConfigRobot;   // réglages des robots posés (null = ceux du constructeur)
@@ -25,7 +25,9 @@ public partial class ObjectSpawner : Node3D
     {
         var objet = Selection.Instantiate<Node3D>();
         // Placé avant d'entrer dans l'arbre : le robot retient cette position pour « Replacer »
-        float hauteur = HauteurLacher;
+        // Lâché de HauteurLacher sous sa base (son centre est à mi-hauteur) : un objet qui apparaît pile
+        // au contact de la table, comme le cylindre de 20 cm, oscille sans fin dans le moteur physique de Godot
+        float hauteur = HauteurLacher + (objet.GetNodeOrNull<MeshInstance3D>("MeshInstance3D") is { } mesh ? -mesh.GetAabb().Position.Y : 0f);
         if (objet is Robot robot)
         {
             robot.Config = ConfigRobot;
