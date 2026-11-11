@@ -8,6 +8,8 @@ public partial class CapteurRoute : CsgBox3D
 {
     [Export] public float Portee = 1f;                           // distance max jusqu'au sol en unités (1 u = 10 cm)
     [Export(PropertyHint.Layers3DPhysics)] public uint Masque = 2;
+    [Export(PropertyHint.Range, "0,0.2,0.005")] public float ProbaErreur = 0f;   // chance qu'une mesure soit fausse (0 = capteur parfait)
+    // ponytail: 0 par défaut, le suivi de ligne ne tolère pas encore le bruit (dès 1 %, il sort au trou du tracé)
 
     [ExportGroup("Couleurs")]
     [Export] public Color CouleurSol = new(1f, 1f, 1f);
@@ -31,7 +33,8 @@ public partial class CapteurRoute : CsgBox3D
         Vector3 arrivee = depart - GlobalBasis.Y.Normalized() * Portee;
 
         var requete = PhysicsRayQueryParameters3D.Create(depart, arrivee, Masque);
-        SurLigne = GetWorld3D().DirectSpaceState.IntersectRay(requete).Count > 0;
+        // De temps en temps, le capteur lit l'inverse (reflet, poussière)
+        SurLigne = GetWorld3D().DirectSpaceState.IntersectRay(requete).Count > 0 ^ GD.Randf() < ProbaErreur;
 
         _materiau.AlbedoColor = SurLigne ? CouleurLigne : CouleurSol;
     }

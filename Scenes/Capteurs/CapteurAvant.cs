@@ -7,6 +7,7 @@ public partial class CapteurAvant : CsgBox3D
     [Export] public float Portee = 3f;                           // distance de détection en unités (1 u = 10 cm)
     [Export] public Vector3 DirectionLocale = Vector3.Back;      // +Z local du capteur
     [Export(PropertyHint.Layers3DPhysics)] public uint Masque = 1;
+    [Export(PropertyHint.Range, "0,0.2,0.005")] public float Bruit = 0.02f;   // écart-type de la mesure, en part de la distance (0 = capteur parfait)
 
     [ExportGroup("Couleurs")]
     [Export] public Color CouleurLibre = new(0.1f, 0.2f, 1f);
@@ -55,7 +56,8 @@ public partial class CapteurAvant : CsgBox3D
         if (resultat.Count > 0)
         {
             Point = (Vector3)resultat["position"];
-            Distance = depart.DistanceTo(Point);
+            // Comme un vrai capteur, la distance lue n'est jamais tout à fait la bonne
+            Distance = Mathf.Max(depart.DistanceTo(Point) * (1f + (float)GD.Randfn(0, Bruit)), 0f);
             Objet = (Node)resultat["collider"];
             Detecte = true;
         }

@@ -57,8 +57,11 @@ public partial class Robot : VehicleBody3D
     [Export] public float Force = 300f;          // force max d'un moteur (kg·u/s²)
     [Export] public float Gain = 800f;           // force par u/s d'écart entre consigne et vitesse réelle
     [Export] public float BrakeForce = 2f;       // frein de parking quand le robot est arrêté
-    [Export] public float AccelLaterale = 4f;    // u/s² max en virage (au-delà, risque de se renverser)
-    [Export(PropertyHint.Range, "0,1,0.05")] public float GripLateral = 1f;  // 1 = les roues motrices ne glissent jamais de côté, 0 = physique de Godot seule
+    [Export] public float VitesseAVide = 1.3f;   // moteur à courant continu : sa force baisse avec la vitesse, nulle à VitesseAVide × MaxSpeed
+    [Export(PropertyHint.Range, "0.05,1,0.05")] public float MargeRenversement = 0.25f;  // part de l'accélération latérale qui renverse le robot, à ne pas dépasser en virage
+    [Export(PropertyHint.Range, "0,1,0.05")] public float GripLateral = 1f;  // 1 = les roues motrices ne glissent pas de côté (dans la limite du frottement), 0 = physique de Godot seule
+    [Export] public float FrottementLateral = 1f;    // μ caoutchouc sur la table, × EchelleAdherence : au-delà, les roues glissent de côté
+    [Export] public float LargeurRoues = 0.36f;      // u, largeur du modèle des roues motrices (leur collision)
 
     // Capteurs
     public enum TypeCapteurs { Avant, Bas }
@@ -154,6 +157,7 @@ public partial class Robot : VehicleBody3D
         _adherenceRoues = LeftWheel.WheelFrictionSlip;
         _vitesseBase = MaxSpeed;
         _forceBase = Force;
+        CreerFormesRoues();
         PreparerDimensions();
         Appliquer();
 
@@ -217,7 +221,7 @@ public partial class Robot : VehicleBody3D
         // et vitesse de rotation = 2 × virage / voie. On réduit le virage quand on va vite.
         float virageMax = MaxSpeed * TurnFactor;
         if (Mathf.Abs(_vitesseCible) > 0.01f)
-            virageMax = Mathf.Min(virageMax, AccelLaterale * Voie / (2f * Mathf.Abs(_vitesseCible)));
+            virageMax = Mathf.Min(virageMax, MargeRenversement * AccelRenversement * Voie / (2f * Mathf.Abs(_vitesseCible)));
         _virageCible = Mathf.MoveToward(_virageCible, tourne * virageMax, Acceleration * dt);
 
         // Conduite différentielle asservie en vitesse (comme un moteur avec encodeur) :
@@ -230,7 +234,8 @@ public partial class Robot : VehicleBody3D
         LeftWheel.Brake = arrete ? BrakeForce : 0f;
         RightWheel.Brake = arrete ? BrakeForce : 0f;
 
-        TenirEssieu();
+        TenirEssieu(dt);
+        SuivreRoues();
 
         if (RoueAvant == TypeRoueAvant.RoueFolle)
             UpdateCaster(dt);
@@ -277,6 +282,37 @@ public partial class Robot : VehicleBody3D
     {
         AppliquerChoix();
         AppliquerDimensions();
+
+        // Rayon un peu plus petit que la roue : le cylindre ne touche pas le sol, c'est le rayon de la roue qui porte le robot
+        foreach ((VehicleWheel3D roue, CollisionShape3D forme) in _formesRoues)
+        {
+            var cylindre = (CylinderShape3D)forme.Shape;
+            cylindre.Radius = roue.WheelRadius * 0.9f;
+            cylindre.Height = LargeurRoues * EchelleRoues;
+        }
+        SuivreRoues();
+    }
+
+    // Les VehicleWheel3D ne sont que des rayons vers le sol : sans ces cylindres, une roue traverserait murs et objets.
+    // ponytail: roues motrices seulement, la roue avant est petite et sous le châssis
+    private readonly List<(VehicleWheel3D Roue, CollisionShape3D Forme)> _formesRoues = new();
+
+    private void CreerFormesRoues()
+    {
+        foreach (VehicleWheel3D roue in new[] { LeftWheel, RightWheel })
+        {
+            // Axe du cylindre (Y) couché sur l'axe des roues (X)
+            var forme = new CollisionShape3D { Shape = new CylinderShape3D(), Basis = new Basis(Vector3.Back, Mathf.Pi / 2f) };
+            AddChild(forme);
+            _formesRoues.Add((roue, forme));
+        }
+    }
+
+    // Godot place le nœud de chaque roue là où la suspension la met : le cylindre la suit
+    private void SuivreRoues()
+    {
+        foreach ((VehicleWheel3D roue, CollisionShape3D forme) in _formesRoues)
+            forme.Position = roue.Position;
     }
 
     private void AppliquerChoix()
@@ -441,8 +477,7 @@ public partial class Robot : VehicleBody3D
     // Nécessaire car le frottement latéral de VehicleWheel3D calcule les vitesses depuis l'origine
     // du robot (à l'arrière) au lieu de son centre de masse décalé (center_of_mass) : il pousse
     // l'essieu de côté et le robot pivotait vers l'avant en glissant.
-    // ponytail: pas de limite de frottement, ajouter μ × poids si on veut des dérapages réalistes
-    private void TenirEssieu()
+    private void TenirEssieu(float dt)
     {
         if (GripLateral <= 0f || !(LeftWheel.IsInContact() || RightWheel.IsInContact()))
             return;
@@ -455,8 +490,19 @@ public partial class Robot : VehicleBody3D
         // Masse « vue » par une impulsion latérale en ce point (translation + rotation)
         Vector3 r = point - etat.CenterOfMass;
         float k = etat.InverseMass + cote.Dot((etat.InverseInertiaTensor * r.Cross(cote)).Cross(r));
-        ApplyImpulse(cote * (-vLat / k * GripLateral), point);
+        // Les roues ne tiennent que μ × poids sur l'essieu : poussé de côté ou avec peu d'adhérence, le robot glisse
+        float max = FrottementLateral * EchelleAdherence * Mass * GetGravity().Length() * PartPoidsEssieu * dt;
+        ApplyImpulse(cote * Mathf.Clamp(-vLat / k * GripLateral, -max, max), point);
     }
+
+    // Part du poids sur les roues motrices (le reste est sur la roue avant), d'après la position du centre de masse
+    private float PartPoidsEssieu => Mathf.Clamp(
+        (FrontWheel.Position.Z - CenterOfMass.Z) / (FrontWheel.Position.Z - LeftWheel.Position.Z), 0f, 1f);
+
+    // u/s² latérale qui ferait basculer le robot : g × demi-voie / hauteur du centre de masse au-dessus du sol
+    // (le sol est sous les roues motrices : centre de la roue moins son rayon)
+    private float AccelRenversement =>
+        GetGravity().Length() * Voie / 2f / Mathf.Max(CenterOfMass.Y - (LeftWheel.Position.Y - LeftWheel.WheelRadius), 0.01f);
 
     private static Vector3 Contact(VehicleWheel3D roue) =>
         roue.IsInContact() ? roue.GetContactPoint() : roue.GlobalPosition - roue.GlobalBasis.Y * (roue.WheelRestLength + roue.WheelRadius);
@@ -464,7 +510,12 @@ public partial class Robot : VehicleBody3D
     private float ForceMoteur(VehicleWheel3D roue, float vitesseVoulue)
     {
         float vitesseRoue = VitesseAuPoint(roue.GlobalPosition).Dot(GlobalBasis.Z);
-        return Mathf.Clamp((vitesseVoulue - vitesseRoue) * Gain, -Force, Force);
+        float force = (vitesseVoulue - vitesseRoue) * Gain;
+        // Moteur à courant continu : quand il entraîne, sa force baisse avec la vitesse. Pour freiner, il a toute sa force.
+        float limite = force * vitesseRoue > 0f
+            ? Force * Mathf.Max(1f - Mathf.Abs(vitesseRoue) / (VitesseAVide * MaxSpeed), 0f)
+            : Force;
+        return Mathf.Clamp(force, -limite, limite);
     }
 
     // Vitesse d'un point du robot (translation + rotation autour du centre de masse)
