@@ -14,10 +14,13 @@ size = Vector3(1.3000001, 0.6996094, 0.48339844)
 [sub_resource type="BoxShape3D" id="BoxShape3D_8vrlf"]
 size = Vector3(0.6, 1, 0.6)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_bas"]
+size = Vector3(1.3, 0.6996094, 0.84)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_1vivr"]
 size = Vector3(1.2523804, 0.38183594, 2.0111694)
 
-[node name="Robot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "RoueFolle", "Glisseur", "CasterPivot", "CasterMesh", "ChassisMesh", "ChassisCollision", "AvantCollision", "SupportAvant", "SupportBas", "CapteurGauche", "CapteurCentre", "CapteurDroite")]
+[node name="Robot" type="VehicleBody3D" unique_id=183795887 node_paths=PackedStringArray("LeftWheel", "RightWheel", "FrontWheel", "RoueFolle", "Glisseur", "CasterPivot", "CasterMesh", "ChassisMesh", "ChassisCollision", "CollisionsAvant", "CollisionsBas", "SupportAvant", "SupportBas", "CapteurGauche", "CapteurCentre", "CapteurDroite")]
 mass = 1.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.45, 1.25)
@@ -31,7 +34,8 @@ CasterPivot = NodePath("FlyWeel/Pivot")
 CasterMesh = NodePath("FlyWeel/Pivot/WeelFront")
 ChassisMesh = NodePath("Base")
 ChassisCollision = NodePath("ColisionBase")
-AvantCollision = NodePath("ColisionFront")
+CollisionsAvant = [NodePath("ColisionFront"), NodePath("ColisionFront2"), NodePath("ColisionFront3")]
+CollisionsBas = [NodePath("ColisionBas")]
 SupportAvant = NodePath("CapteursAvant")
 SupportBas = NodePath("CapteursDown")
 CapteurGauche = NodePath("CapteursAvant/CapteurAvant_Left")
@@ -50,6 +54,10 @@ shape = SubResource("BoxShape3D_8vrlf")
 [node name="ColisionFront3" type="CollisionShape3D" parent="." unique_id=644032918]
 transform = Transform3D(0.6268971, 0, 0.7791021, 0, 1, 0, -0.7791021, 0, 0.6268971, 0.5997186, 0.61924905, 2.319346)
 shape = SubResource("BoxShape3D_8vrlf")
+
+[node name="ColisionBas" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.61924905, 2.68)
+shape = SubResource("BoxShape3D_bas")
 
 [node name="ColisionBase" type="CollisionShape3D" parent="." unique_id=48840141]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007232666, 0.79345703, 1.248011)

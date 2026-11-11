@@ -35,7 +35,9 @@ public partial class Robot : VehicleBody3D
     [Export(PropertyHint.Range, "0.7,1.4,0.05")] public float EchelleRoues = 1f;     // roues motrices : le châssis garde sa hauteur
     [Export] public Node3D ChassisMesh;
     [Export] public CollisionShape3D ChassisCollision;   // doit être une BoxShape3D : sert de référence de taille
-    [Export] public CollisionShape3D AvantCollision;
+    // Collisions de chaque support capteurs (boîtes) : seules celles du support choisi sont actives
+    [Export] public Godot.Collections.Array<CollisionShape3D> CollisionsAvant = new();
+    [Export] public Godot.Collections.Array<CollisionShape3D> CollisionsBas = new();
 
     [ExportGroup("Apparence")]
     [Export] public string NomRobot = "Robot";   // choisi dans le menu principal
@@ -119,8 +121,9 @@ public partial class Robot : VehicleBody3D
 
     // Valeurs de la scène, pour recalculer les dimensions depuis l'origine à chaque changement
     private readonly Dictionary<Node3D, Transform3D> _origines = new();
-    private BoxShape3D _boxChassis, _boxAvant;
-    private Vector3 _tailleChassis, _tailleAvant, _centreMasse;
+    private BoxShape3D _boxChassis;
+    private Vector3 _tailleChassis, _centreMasse;
+    private readonly Dictionary<CollisionShape3D, Vector3> _taillesSupports = new();   // taille d'origine des boîtes des supports
     private float _rayonRoues;
     private float _vitesseBase, _forceBase;
 
@@ -259,7 +262,7 @@ public partial class Robot : VehicleBody3D
     public bool Chevauche(Transform3D t)
     {
         var espace = GetWorld3D().DirectSpaceState;
-        foreach (CollisionShape3D forme in GetChildren().OfType<CollisionShape3D>())
+        foreach (CollisionShape3D forme in GetChildren().OfType<CollisionShape3D>().Where(f => !f.Disabled))
         {
             var requete = new PhysicsShapeQueryParameters3D
             {
@@ -294,6 +297,13 @@ public partial class Robot : VehicleBody3D
             cylindre.Height = LargeurRoues * EchelleRoues;
         }
         SuivreRoues();
+
+        // Inertie d'un pavé plein de la taille du robot (largeur aux roues, longueur du châssis, hauteur des roues).
+        // Sinon Godot la déduit des boîtes de collision actives, et le robot tournerait autrement selon le support
+        // capteurs, alors que sa masse est dans le châssis, la batterie et les moteurs.
+        float w = Voie + LargeurRoues * EchelleRoues, h = 2f * LeftWheel.WheelRadius;
+        float l = _boxChassis?.Size.Z ?? 2f;   // 2 u : longueur du châssis d'origine
+        Inertia = Mass / 12f * new Vector3(h * h + l * l, w * w + l * l, w * w + h * h);
     }
 
     // Les VehicleWheel3D ne sont que des rayons vers le sol : sans ces cylindres, une roue traverserait murs et objets.
@@ -322,6 +332,10 @@ public partial class Robot : VehicleBody3D
     {
         Activer(SupportAvant, Capteurs == TypeCapteurs.Avant);
         Activer(SupportBas, Capteurs == TypeCapteurs.Bas);
+        foreach (CollisionShape3D forme in CollisionsAvant)
+            forme.Disabled = Capteurs != TypeCapteurs.Avant;
+        foreach (CollisionShape3D forme in CollisionsBas)
+            forme.Disabled = Capteurs != TypeCapteurs.Bas;
 
         // Le glisseur garde la suspension de FrontWheel (il porte le robot) mais n'accroche pas le sol
         Activer(RoueFolle, RoueAvant == TypeRoueAvant.RoueFolle);
@@ -357,7 +371,7 @@ public partial class Robot : VehicleBody3D
             return;
         }
 
-        foreach (Node3D n in new Node3D[] { LeftWheel, RightWheel, FrontWheel, RoueFolle, Glisseur, SupportAvant, SupportBas, ChassisMesh, ChassisCollision, AvantCollision })
+        foreach (Node3D n in new Node3D[] { LeftWheel, RightWheel, FrontWheel, RoueFolle, Glisseur, SupportAvant, SupportBas, ChassisMesh, ChassisCollision }.Concat(CollisionsSupports))
             if (n != null)
                 _origines[n] = n.Transform;
 
@@ -374,11 +388,12 @@ public partial class Robot : VehicleBody3D
         ChassisCollision.Shape = _boxChassis;
         _tailleChassis = _boxChassis.Size;
 
-        if (AvantCollision?.Shape is BoxShape3D avant)
+        foreach (CollisionShape3D forme in CollisionsSupports)
         {
-            _boxAvant = (BoxShape3D)avant.Duplicate();
-            AvantCollision.Shape = _boxAvant;
-            _tailleAvant = _boxAvant.Size;
+            if (forme.Shape is not BoxShape3D boite)
+                continue;
+            forme.Shape = (BoxShape3D)boite.Duplicate();
+            _taillesSupports[forme] = boite.Size;
         }
 
         _centreMasse = CenterOfMass;
@@ -407,10 +422,20 @@ public partial class Robot : VehicleBody3D
         }
 
         // L'avant suit le bout du châssis
-        if (_boxAvant != null)
-            _boxAvant.Size = _tailleAvant + new Vector3(elargit, 0f, 0f);
-        foreach (Node3D n in new Node3D[] { AvantCollision, SupportAvant, SupportBas, RoueFolle, Glisseur, FrontWheel })
+        foreach (Node3D n in new Node3D[] { SupportAvant, SupportBas, RoueFolle, Glisseur, FrontWheel })
             Deplacer(n, new Vector3(0f, 0f, allonge));
+
+        // Collisions des supports : elles avancent avec eux et s'écartent comme les capteurs.
+        // Les boîtes droites s'élargissent avec le châssis, celles en biais (bords du V) gardent leur taille.
+        foreach ((CollisionShape3D forme, Vector3 taille) in _taillesSupports)
+        {
+            Transform3D t = _origines[forme];
+            t.Origin.Z += allonge;
+            t.Origin.X *= EchelleLargeur;
+            forme.Transform = t;
+            bool droite = t.Basis.IsEqualApprox(Basis.Identity);
+            ((BoxShape3D)forme.Shape).Size = taille + new Vector3(droite ? elargit : 0f, 0f, 0f);
+        }
 
         // Supports capteurs : le modèle est étiré en largeur, les capteurs gardent leur taille mais s'écartent
         foreach (Node3D support in new[] { SupportAvant, SupportBas })
@@ -453,6 +478,8 @@ public partial class Robot : VehicleBody3D
             AddChild(roue);
         }
     }
+
+    private IEnumerable<CollisionShape3D> CollisionsSupports => CollisionsAvant.Concat(CollisionsBas).Where(c => c != null);
 
     private void Deplacer(Node3D noeud, Vector3 decalage)
     {
