@@ -17,8 +17,8 @@ Les robots évoluent sur une table de **3 mètres par 6 mètres**, bordée de re
   - **roue folle** : pivote toute seule dans le sens du déplacement
   - **glisseur** : capsule qui glisse au sol
 - 1 support capteurs, au choix :
-  - **capteurs avant** : 3 capteurs d'obstacle (raycast), avec anti-collision qui ralentit et s'arrête avant l'obstacle
-  - **capteurs bas** : 5 capteurs de ligne qui détectent la ligne noire dessinée dans la carte interactive. Le suivi gère les virages serrés et en épingle, les trous dans le tracé et les croisements (il garde la ligne qu'il suivait)
+  - **capteurs avant** : 3 capteurs d'obstacle (raycast, mesure bruitée et filtrée comme un vrai capteur), avec anti-collision qui ralentit et s'arrête avant l'obstacle ; l'évitement tourne progressivement dès que l'obstacle est vu
+  - **capteurs bas** : 5 capteurs de ligne analogiques (de 0 sur le sol à 1 sur la ligne, 0,5 sur son bord) qui détectent la ligne noire dessinée dans la carte interactive. Le suivi gère les virages serrés et en épingle, les trous dans le tracé et les croisements (il garde la ligne qu'il suivait)
 
 ### Personnalisation
 
@@ -56,7 +56,7 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | `Scripts/` | `Robot.cs` (conduite, réglages, dimensions), `RobotAuto.cs` (pilotage automatique), constructeur, sauvegarde, caméra |
 | `InteractiveMap/` | carte interactive : dessin de ligne au sol, ajout d'objets, caméra libre |
 | `Assets/` | modèles 3D (Blender) |
-| `Tests/` | tests automatiques (rotation, stabilité, suivi de ligne, pose, déplacement et infos des robots, sauvegarde, poussée d'une balle, roulement) |
+| `Tests/` | tests automatiques (rotation, stabilité, suivi de ligne, pose, déplacement et infos des robots, sauvegarde, poussée d'une balle, roulement, évitement en douceur) |
 
 ### Échelle
 
@@ -86,6 +86,7 @@ godot --headless --fixed-fps 60 res://Tests/TestStabilite.tscn
 godot --headless res://Tests/TestSauvegarde.tscn
 godot --headless --fixed-fps 60 res://Tests/TestPousserBalle.tscn
 godot --headless --fixed-fps 60 res://Tests/TestRoulement.tscn
+godot --headless --fixed-fps 60 res://Tests/TestEvitement.tscn
 ```
 
 Chaque test affiche `OK` ou `ECHEC` et quitte avec le code 0 ou 1.

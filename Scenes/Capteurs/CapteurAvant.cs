@@ -8,6 +8,7 @@ public partial class CapteurAvant : CsgBox3D
     [Export] public Vector3 DirectionLocale = Vector3.Back;      // +Z local du capteur
     [Export(PropertyHint.Layers3DPhysics)] public uint Masque = 1;
     [Export(PropertyHint.Range, "0,0.2,0.005")] public float Bruit = 0.02f;   // écart-type de la mesure, en part de la distance (0 = capteur parfait)
+    [Export(PropertyHint.Range, "0,0.2,0.01")] public float Lissage = 0.05f;   // s, filtre du programme du robot contre le bruit (0 = mesure brute)
 
     [ExportGroup("Couleurs")]
     [Export] public Color CouleurLibre = new(0.1f, 0.2f, 1f);
@@ -56,8 +57,10 @@ public partial class CapteurAvant : CsgBox3D
         if (resultat.Count > 0)
         {
             Point = (Vector3)resultat["position"];
-            // Comme un vrai capteur, la distance lue n'est jamais tout à fait la bonne
-            Distance = Mathf.Max(depart.DistanceTo(Point) * (1f + (float)GD.Randfn(0, Bruit)), 0f);
+            // Comme un vrai capteur, la distance lue n'est jamais tout à fait la bonne.
+            // Filtre passe-bas comme dans le programme d'un vrai robot ; un obstacle qui apparaît est pris tel quel.
+            float mesure = Mathf.Max(depart.DistanceTo(Point) * (1f + (float)GD.Randfn(0, Bruit)), 0f);
+            Distance = Detecte && Lissage > 0f ? Mathf.Lerp(Distance, mesure, 1f - Mathf.Exp(-(float)delta / Lissage)) : mesure;
             Objet = (Node)resultat["collider"];
             Detecte = true;
         }

@@ -14,6 +14,7 @@ public partial class Robot
     [Export] public TypePilotage Pilotage = TypePilotage.Auto;
     [Export(PropertyHint.Range, "0.1,1,0.05")] public float VitesseAuto = 0.4f;  // part de MaxSpeed
     [Export] public float GainLigne = 1.5f;          // force du virage par rapport à l'écart de la ligne
+    [Export(PropertyHint.Range, "0.05,0.5,0.05")] public float SeuilLigne = 0.25f;   // mesure à partir de laquelle un capteur voit de la ligne (au-dessus de ce que lit un voisin d'une ligne centrée, ~0,14)
     [Export] public float DistanceEvitement = 2f;    // u : en dessous, le robot tourne pour éviter l'obstacle
 
     [Export] public float VitessePivot = 0.8f;       // u/s de chaque roue quand le robot cherche la ligne en pivotant
@@ -30,9 +31,9 @@ public partial class Robot
     private float _allure = 1f;     // part de VitesseAuto : chute d'un coup en virage, remonte doucement en ligne droite
     private float _sensEvitement;   // garde le même sens tant que l'obstacle est là, sinon le robot hésite
 
-    // Capteurs de ligne vus de dessus, de gauche à droite : # = sur la ligne
+    // Capteurs de ligne vus de dessus, de gauche à droite : # = sur la ligne, + = sur le bord, · = sol
     public string EtatLigne => string.Concat(SupportBas.GetChildren().OfType<CapteurRoute>()
-        .OrderByDescending(c => c.Position.X).Select(c => c.SurLigne ? '#' : '·'));
+        .OrderByDescending(c => c.Position.X).Select(c => c.Valeur > 0.75f ? '#' : c.Valeur > 0.25f ? '+' : '·'));
 
     private void ReinitialiserAuto()
     {
@@ -44,23 +45,32 @@ public partial class Robot
     private (float avance, float tourne) CommandeAuto() =>
         Capteurs == TypeCapteurs.Bas ? SuivreLigne() : Explorer();
 
-    // Capteurs bas. Les capteurs voisins qui voient la ligne forment un groupe ; on suit le groupe
+    // Capteurs bas, analogiques. Les capteurs voisins qui voient de la ligne forment un groupe ; on suit le groupe
     // le plus proche de là où était la ligne, pour ne pas être attiré par une autre ligne qui croise.
+    // Position du groupe : moyenne des capteurs pondérée par leur mesure, comme sur une vraie barrette de capteurs :
+    // elle varie en continu quand la ligne glisse d'un capteur à l'autre, le robot tourne donc sans à-coups.
     private (float, float) SuivreLigne()
     {
         _capteursLigne ??= SupportBas.GetChildren().OfType<CapteurRoute>().OrderBy(c => c.Position.X).ToArray();
         float largeur = _capteursLigne.Max(c => Mathf.Abs(c.Position.X));
 
-        var groupes = new List<(float Centre, int Taille)>();
+        var groupes = new List<(float Centre, float Taille)>();
         for (int i = 0; i < _capteursLigne.Length; i++)
         {
-            if (!_capteursLigne[i].SurLigne)
+            if (_capteursLigne[i].Valeur < SeuilLigne)
                 continue;
-            int debut = i;
-            while (i + 1 < _capteursLigne.Length && _capteursLigne[i + 1].SurLigne)
-                i++;
-            float centre = (_capteursLigne[debut].Position.X + _capteursLigne[i].Position.X) / 2f / largeur;
-            groupes.Add((centre, i - debut + 1));
+            // Poids = mesure au-dessus du seuil : un capteur au bord de la ligne compte de plus en plus,
+            // sans faire sauter la position quand le bruit le fait passer d'un côté à l'autre du seuil
+            float somme = 0f, poids = 0f, moment = 0f;
+            for (; i < _capteursLigne.Length && _capteursLigne[i].Valeur >= SeuilLigne; i++)
+            {
+                float p = _capteursLigne[i].Valeur - SeuilLigne;
+                somme += _capteursLigne[i].Valeur;
+                poids += p;
+                moment += p * _capteursLigne[i].Position.X;
+            }
+            if (poids > 0f)
+                groupes.Add((moment / poids / largeur, somme));   // Taille : nombre de capteurs couverts
         }
 
         if (groupes.Count == 0)
@@ -73,10 +83,10 @@ public partial class Robot
         _tempsSuivi += (float)GetPhysicsProcessDeltaTime();
         var g = groupes.MinBy(g => Mathf.Abs(g.Centre - _dernierEcart));
 
-        // Ligne en travers (3 capteurs ou plus) : virage serré, T ou croisement. On ne sait pas encore lequel :
+        // Ligne en travers (près de 3 capteurs couverts ou plus) : virage serré, T ou croisement. On ne sait pas encore lequel :
         // on retient de quel côté elle part et on avance tout droit, lentement. Si la ligne continue devant,
         // on la retrouve ; si c'était un virage, on la perd et on pivote du côté retenu.
-        if (g.Taille >= 3)
+        if (g.Taille >= 2.6f)
         {
             if (Mathf.Abs(g.Centre) > 0.2f)
                 _coteVirage = Mathf.Sign(g.Centre);
@@ -110,12 +120,15 @@ public partial class Robot
         return (0f, cote * VitessePivot / (MaxSpeed * TurnFactor));
     }
 
-    // Capteurs avant : tout droit, et tourne vers le côté le plus libre devant un obstacle
+    // Capteurs avant : tout droit, et tourne vers le côté le plus libre devant un obstacle.
+    // Progressivement : dès que l'obstacle est vu, le virage monte et la vitesse baisse à mesure qu'il approche,
+    // jusqu'à tourner sur place à la moitié de DistanceEvitement.
     private (float, float) Explorer()
     {
         float g = DistanceCapteur(CapteurGauche), c = DistanceCapteur(CapteurCentre), d = DistanceCapteur(CapteurDroite);
+        float proche = Mathf.Min(c, Mathf.Min(g, d));
 
-        if (Mathf.Min(c, Mathf.Min(g, d)) > DistanceEvitement)
+        if (float.IsPositiveInfinity(proche))
         {
             _sensEvitement = 0f;
             return (VitesseAuto, 0f);
@@ -124,7 +137,9 @@ public partial class Robot
         if (_sensEvitement == 0f)
             _sensEvitement = g > d ? 1f : g < d ? -1f : GD.Randf() < 0.5f ? 1f : -1f;
 
-        // Obstacle juste devant : tourne sur place (l'anti-collision freine de toute façon)
-        return (c < DistanceEvitement * 0.5f ? 0f : VitesseAuto * 0.5f, _sensEvitement);
+        // Vu dès la portée des capteurs (ou DistanceEvitement si elle est plus courte) : on commence à tourner tout doucement
+        float debut = Mathf.Max(PorteeCapteurs, DistanceEvitement), fin = DistanceEvitement * 0.5f;
+        float urgence = Mathf.Clamp((debut - proche) / (debut - fin), 0f, 1f);
+        return (VitesseAuto * (1f - urgence), _sensEvitement * urgence);
     }
 }
