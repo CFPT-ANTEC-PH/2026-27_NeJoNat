@@ -54,8 +54,10 @@ public partial class Robot : VehicleBody3D
     [Export] public float TurnFactor = 0.4f;     // part de MaxSpeed donnée à chaque roue pour tourner
     [Export] public float Acceleration = 4f;     // u/s² : montée progressive de la consigne
     [Export] public float Deceleration = 6f;     // u/s² au freinage
-    [Export] public float Force = 300f;          // force max d'un moteur (kg·u/s²)
-    [Export] public float Gain = 800f;           // force par u/s d'écart entre consigne et vitesse réelle
+    [Export] public float Force = 30f;           // force max d'un moteur à la roue (kg·u/s², 30 = 3 N : petit motoréducteur)
+    [Export] public float Gain = 20f;            // force par u/s d'écart entre consigne et vitesse réelle, et par kg de robot
+                                                 // (proportionnel à la masse : sinon un robot léger oscille et s'emballe, un lourd traîne)
+    [Export] public float GainIntegral = 20f;    // terme intégral, par kg : rattrape un retard persistant en Gain / GainIntegral = 1 s
     [Export] public float BrakeForce = 2f;       // frein de parking quand le robot est arrêté
     [Export] public float VitesseAVide = 1.3f;   // moteur à courant continu : sa force baisse avec la vitesse, nulle à VitesseAVide × MaxSpeed
     [Export(PropertyHint.Range, "0.05,1,0.05")] public float MargeRenversement = 0.25f;  // part de l'accélération latérale qui renverse le robot, à ne pas dépasser en virage
@@ -123,6 +125,7 @@ public partial class Robot : VehicleBody3D
     private float _vitesseBase, _forceBase;
 
     private float _vitesseCible;   // u/s, avance
+    private float _integraleG, _integraleD;   // terme intégral de chaque moteur (kg·u/s²)
     private float _virageCible;    // u/s, différence ajoutée/retirée à chaque roue
     private Vector3 _casterOffset; // position du pivot par rapport au centre de la roue avant
 
@@ -187,7 +190,7 @@ public partial class Robot : VehicleBody3D
         if (Freeze)
         {
             LeftWheel.EngineForce = RightWheel.EngineForce = 0f;
-            _vitesseCible = _virageCible = 0f;
+            _vitesseCible = _virageCible = _integraleG = _integraleD = 0f;
             return;
         }
 
@@ -226,8 +229,8 @@ public partial class Robot : VehicleBody3D
 
         // Conduite différentielle asservie en vitesse (comme un moteur avec encodeur) :
         // le robot freine tout seul quand on lâche, et tourne sur place sans dériver
-        LeftWheel.EngineForce = ForceMoteur(LeftWheel, _vitesseCible - _virageCible);
-        RightWheel.EngineForce = ForceMoteur(RightWheel, _vitesseCible + _virageCible);
+        LeftWheel.EngineForce = ForceMoteur(LeftWheel, _vitesseCible - _virageCible, ref _integraleG, dt);
+        RightWheel.EngineForce = ForceMoteur(RightWheel, _vitesseCible + _virageCible, ref _integraleD, dt);
 
         // Frein de parking seulement une fois arrêté, sinon il gênerait l'asservissement
         bool arrete = avance == 0f && tourne == 0f && LinearVelocity.Length() < 0.1f;
@@ -247,7 +250,7 @@ public partial class Robot : VehicleBody3D
         GlobalTransform = _depart;
         LinearVelocity = Vector3.Zero;
         AngularVelocity = Vector3.Zero;
-        _vitesseCible = _virageCible = 0f;
+        _vitesseCible = _virageCible = _integraleG = _integraleD = 0f;
         TempsEnMarche = DistanceParcourue = 0f;
         ReinitialiserAuto();
     }
@@ -507,10 +510,14 @@ public partial class Robot : VehicleBody3D
     private static Vector3 Contact(VehicleWheel3D roue) =>
         roue.IsInContact() ? roue.GetContactPoint() : roue.GlobalPosition - roue.GlobalBasis.Y * (roue.WheelRestLength + roue.WheelRadius);
 
-    private float ForceMoteur(VehicleWheel3D roue, float vitesseVoulue)
+    // Régulation PI, comme un vrai contrôleur de moteur : le terme intégral monte tant que la roue est en retard
+    // (objet à pousser, robot lourd), sinon il faudrait un retard permanent pour fournir la force
+    private float ForceMoteur(VehicleWheel3D roue, float vitesseVoulue, ref float integrale, float dt)
     {
         float vitesseRoue = VitesseAuPoint(roue.GlobalPosition).Dot(GlobalBasis.Z);
-        float force = (vitesseVoulue - vitesseRoue) * Gain;
+        float ecart = vitesseVoulue - vitesseRoue;
+        integrale = Mathf.Clamp(integrale + ecart * GainIntegral * Mass * dt, -Force, Force);   // borné : pas d'emballement si la roue est bloquée
+        float force = ecart * Gain * Mass + integrale;
         // Moteur à courant continu : quand il entraîne, sa force baisse avec la vitesse. Pour freiner, il a toute sa force.
         float limite = force * vitesseRoue > 0f
             ? Force * Mathf.Max(1f - Mathf.Abs(vitesseRoue) / (VitesseAVide * MaxSpeed), 0f)

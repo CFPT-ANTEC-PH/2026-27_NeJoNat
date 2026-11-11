@@ -56,11 +56,22 @@ Le bouton **Play** ouvre la carte interactive avec le robot configuré. Les robo
 | `Scripts/` | `Robot.cs` (conduite, réglages, dimensions), `RobotAuto.cs` (pilotage automatique), constructeur, sauvegarde, caméra |
 | `InteractiveMap/` | carte interactive : dessin de ligne au sol, ajout d'objets, caméra libre |
 | `Assets/` | modèles 3D (Blender) |
-| `Tests/` | tests automatiques (rotation, stabilité, suivi de ligne, pose, déplacement et infos des robots, sauvegarde) |
+| `Tests/` | tests automatiques (rotation, stabilité, suivi de ligne, pose, déplacement et infos des robots, sauvegarde, poussée d'une balle, roulement) |
 
 ### Échelle
 
 **1 unité Godot = 10 cm** : la table fait 30 × 60 unités (3 m × 6 m) avec des rebords de 1 unité (10 cm), le robot environ 1,7 × 2,8 unités (17 × 28 cm). La gravité est donc de 98 unités/s² (= 9,8 m/s²).
+
+### Physique réaliste
+
+Masses, forces et frottements sont ceux d'objets réels :
+
+| Élément | Valeurs |
+|---|---|
+| Robot | 0,5 à 3 kg (1 kg par défaut), moteurs de 3 N à la roue avec régulation de vitesse PI, frottement des roues μ = 1 |
+| Cube | bloc de pin de 10 cm : 0,5 kg, frottement 0,4 |
+| Cylindre | pin, 10 cm × 20 cm : 0,8 kg, frottement 0,4 |
+| Balle | caoutchouc creux de 10 cm : 100 g, rebondit, résistance au roulement (≈ 45 cm parcourus lancée à 30 cm/s) |
 
 ### Tests
 
@@ -73,6 +84,8 @@ godot --headless res://Tests/TestGlisserSurRobot.tscn
 godot --headless res://Tests/TestInfosRobot.tscn
 godot --headless --fixed-fps 60 res://Tests/TestStabilite.tscn
 godot --headless res://Tests/TestSauvegarde.tscn
+godot --headless --fixed-fps 60 res://Tests/TestPousserBalle.tscn
+godot --headless --fixed-fps 60 res://Tests/TestRoulement.tscn
 ```
 
 Chaque test affiche `OK` ou `ECHEC` et quitte avec le code 0 ou 1.

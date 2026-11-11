@@ -1,5 +1,11 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://InteractiveMap/Objects/Roulement.cs" id="1_roul"]
+
+[sub_resource type="PhysicsMaterial" id="Matiere"]
+friction = 0.7
+bounce = 0.6
+
 [sub_resource type="StandardMaterial3D" id="Mat"]
 albedo_color = Color(0.2, 0.4, 0.9, 1)
 
@@ -9,6 +15,10 @@ material = SubResource("Mat")
 [sub_resource type="SphereShape3D" id="Shape"]
 
 [node name="Sphere" type="RigidBody3D"]
+script = ExtResource("1_roul")
+mass = 0.1
+physics_material_override = SubResource("Matiere")
+inertia = Vector3(0.0167, 0.0167, 0.0167)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh")
