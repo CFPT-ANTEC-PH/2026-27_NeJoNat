@@ -1,44 +1,11 @@
-[gd_resource type="Theme" format=3]
-
-[sub_resource type="StyleBoxFlat" id="Bouton"]
-bg_color = Color(0.2, 0.22, 0.26, 1)
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="Survol"]
-bg_color = Color(0.28, 0.31, 0.37, 1)
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxFlat" id="Actif"]
-bg_color = Color(0.16, 0.6, 0.32, 1)
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+[gd_resource type="Theme" format=3 uid="uid://c7c2jhhvfyepa"]
 
 [sub_resource type="StyleBoxFlat" id="Desactive"]
-bg_color = Color(0.2, 0.22, 0.26, 0.4)
 content_margin_left = 10.0
 content_margin_top = 6.0
 content_margin_right = 10.0
 content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.22, 0.26, 0.4)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -46,10 +13,43 @@ corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="Vide"]
 
+[sub_resource type="StyleBoxFlat" id="Survol"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.28, 0.31, 0.37, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Actif"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.16, 0.6, 0.32, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Bouton"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.22, 0.26, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [resource]
-Button/styles/normal = SubResource("Bouton")
-Button/styles/hover = SubResource("Survol")
-Button/styles/pressed = SubResource("Actif")
-Button/styles/hover_pressed = SubResource("Actif")
 Button/styles/disabled = SubResource("Desactive")
 Button/styles/focus = SubResource("Vide")
+Button/styles/hover = SubResource("Survol")
+Button/styles/hover_pressed = SubResource("Actif")
+Button/styles/normal = SubResource("Bouton")
+Button/styles/pressed = SubResource("Actif")

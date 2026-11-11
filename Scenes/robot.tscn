@@ -9,7 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://cyn45uwfi0lm6" path="res://Scenes/FrontWheels/Glisseur.tscn" id="10_gliss"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m13ap"]
-size = Vector3(1.8731995, 0.6996094, 0.48339844)
+size = Vector3(1.3000001, 0.6996094, 0.48339844)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8vrlf"]
+size = Vector3(0.6, 1, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1vivr"]
 size = Vector3(1.2523804, 0.38183594, 2.0111694)
@@ -37,8 +40,16 @@ CapteurDroite = NodePath("CapteursAvant/CapteurAvant_Right")
 DistanceArret = 0.5
 
 [node name="ColisionFront" type="CollisionShape3D" parent="." unique_id=438888380]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.020767212, 0.61924906, 2.5029392)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0073669553, 0.61924905, 2.5029392)
 shape = SubResource("BoxShape3D_m13ap")
+
+[node name="ColisionFront2" type="CollisionShape3D" parent="." unique_id=1325940896]
+transform = Transform3D(0.7660445, 0, 0.64278764, 0, 1, 0, -0.64278764, 0, 0.7660445, -0.6198634, 0.61924905, 2.319346)
+shape = SubResource("BoxShape3D_8vrlf")
+
+[node name="ColisionFront3" type="CollisionShape3D" parent="." unique_id=644032918]
+transform = Transform3D(0.6268971, 0, 0.7791021, 0, 1, 0, -0.7791021, 0, 0.6268971, 0.5997186, 0.61924905, 2.319346)
+shape = SubResource("BoxShape3D_8vrlf")
 
 [node name="ColisionBase" type="CollisionShape3D" parent="." unique_id=48840141]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007232666, 0.79345703, 1.248011)
