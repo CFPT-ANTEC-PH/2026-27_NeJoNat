@@ -342,9 +342,10 @@ public partial class Robot : VehicleBody3D
         Activer(Glisseur, RoueAvant == TypeRoueAvant.Glisseur);
         FrontWheel.WheelFrictionSlip = RoueAvant == TypeRoueAvant.Glisseur ? AdherenceGlisseur : _adherenceRoueFolle;
 
-        float puissance = Moteur switch { TypeMoteur.Lent => 0.6f, TypeMoteur.Rapide => 1.6f, _ => 1f };
-        MaxSpeed = _vitesseBase * puissance;
-        Force = _forceBase * puissance;
+        // Lent : même moteur, plus démultiplié (vitesse × 0,6, force ÷ 0,6). Rapide : moteur plus gros, plus de vitesse et de force.
+        (float vitesse, float force) = Moteur switch { TypeMoteur.Lent => (0.6f, 1f / 0.6f), TypeMoteur.Rapide => (1.6f, 1.6f), _ => (1f, 1f) };
+        MaxSpeed = _vitesseBase * vitesse;
+        Force = _forceBase * force;
 
         LeftWheel.WheelFrictionSlip = _adherenceRoues * EchelleAdherence;
         RightWheel.WheelFrictionSlip = _adherenceRoues * EchelleAdherence;
@@ -552,9 +553,11 @@ public partial class Robot : VehicleBody3D
         return Mathf.Clamp(force, -limite, limite);
     }
 
-    // Vitesse d'un point du robot (translation + rotation autour du centre de masse)
+    // Vitesse d'un point du robot (translation + rotation autour du centre de masse), comme la lirait un encodeur de roue.
+    // Pas BodyGetDirectState : hors de l'intégration, sa vitesse n'a pas encore subi les contacts. Contre un objet
+    // à pousser, elle restait à la consigne alors que le robot n'avançait qu'aux 2/3 : le moteur ne forçait pas plus.
     private Vector3 VitesseAuPoint(Vector3 pointGlobal) =>
-        PhysicsServer3D.BodyGetDirectState(GetRid()).GetVelocityAtLocalPosition(pointGlobal - GlobalPosition);
+        LinearVelocity + AngularVelocity.Cross(pointGlobal - ToGlobal(CenterOfMass));
 
     private void UpdateCaster(float dt)
     {

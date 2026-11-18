@@ -13,7 +13,7 @@ public partial class ConstructorUI : CanvasLayer
     {
         ["RoueFolle"] = ("Roue folle", "Petite roue qui pivote toute seule dans le sens du déplacement."),
         ["Glisseur"] = ("Glisseur", "Patin qui glisse au sol sans accrocher : simple, aucune résistance en virage."),
-        ["Lent"] = ("Lent", "60 % de la vitesse et de la force : précis, idéal pour suivre une ligne serrée."),
+        ["Lent"] = ("Lent", "Plus démultiplié : 60 % de la vitesse mais plus de force. Précis, idéal pour suivre une ligne serrée ou pousser."),
         ["Normal"] = ("Normal", "Vitesse et force de base."),
         ["Rapide"] = ("Rapide", "160 % de la vitesse et de la force : rapide, mais plus dur à contrôler."),
         ["Avant"] = ("Capteurs avant", "3 capteurs d'obstacle : le robot explore la carte et contourne murs et objets."),

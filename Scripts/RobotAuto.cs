@@ -13,9 +13,10 @@ public partial class Robot
     [ExportGroup("Pilotage automatique")]
     [Export] public TypePilotage Pilotage = TypePilotage.Auto;
     [Export(PropertyHint.Range, "0.1,1,0.05")] public float VitesseAuto = 0.4f;  // part de MaxSpeed
-    [Export] public float GainLigne = 1.5f;          // force du virage par rapport à l'écart de la ligne
+    [Export] public float GainLigne = 1.2f;          // force du virage par rapport à l'écart de la ligne
     [Export(PropertyHint.Range, "0.05,0.5,0.05")] public float SeuilLigne = 0.25f;   // mesure à partir de laquelle un capteur voit de la ligne (au-dessus de ce que lit un voisin d'une ligne centrée, ~0,14)
     [Export] public float DistanceEvitement = 2f;    // u : en dessous, le robot tourne pour éviter l'obstacle
+    [Export(PropertyHint.Range, "0.1,1,0.05")] public float VirageEvitement = 0.8f;  // part du virage maximal utilisée pour éviter : au-delà, le robot braque sèchement
 
     [Export] public float VitessePivot = 0.8f;       // u/s de chaque roue quand le robot cherche la ligne en pivotant
     [Export] public float RetourAllure = 0.5f;       // par seconde : vitesse à laquelle le robot réaccélère après un virage
@@ -140,6 +141,6 @@ public partial class Robot
         // Vu dès la portée des capteurs (ou DistanceEvitement si elle est plus courte) : on commence à tourner tout doucement
         float debut = Mathf.Max(PorteeCapteurs, DistanceEvitement), fin = DistanceEvitement * 0.5f;
         float urgence = Mathf.Clamp((debut - proche) / (debut - fin), 0f, 1f);
-        return (VitesseAuto * (1f - urgence), _sensEvitement * urgence);
+        return (VitesseAuto * (1f - urgence), _sensEvitement * urgence * VirageEvitement);
     }
 }
