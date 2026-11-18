@@ -33,6 +33,10 @@ public partial class Robot : VehicleBody3D
     [Export(PropertyHint.Range, "0.7,1.6,0.05")] public float EchelleLongueur = 1f;  // 1 = taille d'origine
     [Export(PropertyHint.Range, "0.7,1.6,0.05")] public float EchelleLargeur = 1f;
     [Export(PropertyHint.Range, "0.7,1.4,0.05")] public float EchelleRoues = 1f;     // roues motrices : le châssis garde sa hauteur
+    // Le robot penche vers l'avant : ses capteurs avant regardent un peu vers le sol et voient les objets bas.
+    // Angle ajouté par la roue avant plus courte ; les suspensions, plus chargées à l'arrière, en reprennent environ 1°.
+    // Au-delà de ~7°, les capteurs avant verraient la table à leur portée maximale (8 u) et la prendraient pour un obstacle.
+    [Export(PropertyHint.Range, "0,6,0.5")] public float Inclinaison = 4f;   // degrés
     [Export] public Node3D ChassisMesh;
     [Export] public CollisionShape3D ChassisCollision;   // doit être une BoxShape3D : sert de référence de taille
     // Collisions de chaque support capteurs (boîtes) : seules celles du support choisi sont actives
@@ -423,8 +427,15 @@ public partial class Robot : VehicleBody3D
         }
 
         // L'avant suit le bout du châssis
-        foreach (Node3D n in new Node3D[] { SupportAvant, SupportBas, RoueFolle, Glisseur, FrontWheel })
+        foreach (Node3D n in new Node3D[] { SupportAvant, SupportBas })
             Deplacer(n, new Vector3(0f, 0f, allonge));
+
+        // Roue avant fixée plus haut sous le châssis (roue plus courte que les roues motrices) : le nez descend de
+        // empattement × tan(Inclinaison). Calculé sur l'empattement allongé, l'angle reste le même quelle que soit la longueur.
+        float empattement = _origines[FrontWheel].Origin.Z - _origines[LeftWheel].Origin.Z + allonge;
+        float rehausse = empattement * Mathf.Tan(Mathf.DegToRad(Inclinaison));
+        foreach (Node3D n in new Node3D[] { RoueFolle, Glisseur, FrontWheel })
+            Deplacer(n, new Vector3(0f, rehausse, allonge));
 
         // Collisions des supports : elles avancent avec eux et s'écartent comme les capteurs.
         // Les boîtes droites s'élargissent avec le châssis, celles en biais (bords du V) gardent leur taille.
@@ -585,6 +596,14 @@ public partial class Robot : VehicleBody3D
 
         // Le pivot suit la suspension pour que la roue visuelle touche le sol
         CasterPivot.GlobalPosition = ToGlobal(FrontWheel.Position + _casterOffset);
+        // Posée sur le sol : le centre de la petite roue à un rayon au-dessus du point de contact de la roue physique
+        // (le modèle flottait sinon ~1 cm au-dessus du sol). Corrigé seulement en hauteur, la roue reste sous sa fourche.
+        if (CasterMesh != null && FrontWheel.IsInContact())
+        {
+            Vector3 haut = GlobalBasis.Y.Normalized();
+            Vector3 centre = FrontWheel.GetContactPoint() + haut * FrontWheel.WheelRadius;
+            CasterPivot.GlobalPosition += haut * (centre - CasterMesh.GlobalPosition).Dot(haut);
+        }
 
         if (vitesse > 0.1f)
         {
