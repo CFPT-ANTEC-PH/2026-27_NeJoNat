@@ -74,27 +74,6 @@ Masses, forces et frottements sont ceux d'objets réels :
 | Cylindre | pin, 10 cm × 20 cm : 0,8 kg, frottement 0,4 |
 | Balle | caoutchouc creux de 10 cm : 100 g, rebondit, résistance au roulement (≈ 45 cm parcourus lancée à 30 cm/s) |
 
-### Tests
-
-```
-godot --headless res://Tests/TestRotation.tscn
-godot --headless --fixed-fps 60 res://Tests/TestSuiviLigne.tscn   # 9 parcours, --fixed-fps les fait tourner en accéléré
-godot --headless res://Tests/TestPoseRobots.tscn
-godot --headless res://Tests/TestDeplacerRobot.tscn
-godot --headless res://Tests/TestGlisserSurRobot.tscn
-godot --headless res://Tests/TestInfosRobot.tscn
-godot --headless --fixed-fps 60 res://Tests/TestStabilite.tscn
-godot --headless res://Tests/TestSauvegarde.tscn
-godot --headless --fixed-fps 60 res://Tests/TestPousserBalle.tscn
-godot --headless --fixed-fps 60 res://Tests/TestPousserObjets.tscn   # cube, cylindre, balle ; robot léger / lourd, moteur lent / rapide
-godot --headless --fixed-fps 60 res://Tests/TestRoulement.tscn
-godot --headless --fixed-fps 60 res://Tests/TestEvitement.tscn
-godot --headless --fixed-fps 60 res://Tests/TestObjetsRepos.tscn
-godot --headless --fixed-fps 60 res://Tests/TestInclinaison.tscn
-```
-
-Chaque test affiche `OK` ou `ECHEC` et quitte avec le code 0 ou 1.
-
 
 ## Outils utilisés
 
